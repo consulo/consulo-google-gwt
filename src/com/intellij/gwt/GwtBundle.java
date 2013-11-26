@@ -16,18 +16,21 @@
 
 package com.intellij.gwt;
 
-import com.intellij.CommonBundle;
-import org.jetbrains.annotations.PropertyKey;
-
 import java.util.ResourceBundle;
 
-public class GwtBundle {
-  private static final ResourceBundle ourBundle = ResourceBundle.getBundle("com.intellij.gwt.GwtBundle");
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.CommonBundle;
 
-  private GwtBundle() {
-  }
+public class GwtBundle
+{
+	private static final ResourceBundle ourBundle = ResourceBundle.getBundle("com.intellij.gwt.GwtBundle");
 
-  public static String message(@PropertyKey(resourceBundle = "com.intellij.gwt.GwtBundle")String key, Object... params) {
-    return CommonBundle.message(ourBundle, key, params);
-  }
+	private GwtBundle()
+	{
+	}
+
+	public static String message(@PropertyKey(resourceBundle = "com.intellij.gwt.GwtBundle") String key, Object... params)
+	{
+		return CommonBundle.message(ourBundle, key, params);
+	}
 }

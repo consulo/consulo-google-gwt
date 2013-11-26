@@ -16,50 +16,60 @@
 
 package com.intellij.gwt.make;
 
-import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
-import com.intellij.openapi.compiler.ValidityState;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.File;
 import java.io.IOException;
 
+import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
+import com.intellij.openapi.compiler.ValidityState;
+
 /**
  * @author nik
  */
-public class GwtItemValidityState implements ValidityState {
-  private static final int OUTPUT_STYILE_ID_SHIFT = 3;
-  private GwtJavaScriptOutputStyle myOutputStyle;
-  private String myOutputDirectoryPath;
+public class GwtItemValidityState implements ValidityState
+{
+	private static final int OUTPUT_STYILE_ID_SHIFT = 3;
+	private GwtJavaScriptOutputStyle myOutputStyle;
+	private String myOutputDirectoryPath;
 
-  public GwtItemValidityState(final GwtJavaScriptOutputStyle outputStyle, final File outputDirectory) {
-    myOutputStyle = outputStyle;
-    myOutputDirectoryPath = outputDirectory.getAbsolutePath();
-  }
+	public GwtItemValidityState(final GwtJavaScriptOutputStyle outputStyle, final File outputDirectory)
+	{
+		myOutputStyle = outputStyle;
+		myOutputDirectoryPath = outputDirectory.getAbsolutePath();
+	}
 
-  public GwtItemValidityState(DataInput is) throws IOException {
-    byte first = is.readByte();
-    if (first <= OUTPUT_STYILE_ID_SHIFT) {
-      //todo[nik] remove later. This code is needed to handle old cache format (before build 8827)
-      myOutputStyle = GwtJavaScriptOutputStyle.byId(first);
-      myOutputDirectoryPath = "";
-    }
-    else {
-      myOutputStyle = GwtJavaScriptOutputStyle.byId(first - OUTPUT_STYILE_ID_SHIFT);
-      myOutputDirectoryPath = is.readUTF();
-    }
-  }
+	public GwtItemValidityState(DataInput is) throws IOException
+	{
+		byte first = is.readByte();
+		if(first <= OUTPUT_STYILE_ID_SHIFT)
+		{
+			//todo[nik] remove later. This code is needed to handle old cache format (before build 8827)
+			myOutputStyle = GwtJavaScriptOutputStyle.byId(first);
+			myOutputDirectoryPath = "";
+		}
+		else
+		{
+			myOutputStyle = GwtJavaScriptOutputStyle.byId(first - OUTPUT_STYILE_ID_SHIFT);
+			myOutputDirectoryPath = is.readUTF();
+		}
+	}
 
-  public boolean equalsTo(ValidityState otherState) {
-    if (!(otherState instanceof GwtItemValidityState)) {
-      return false;
-    }
-    GwtItemValidityState state = (GwtItemValidityState)otherState;
-    return state.myOutputStyle == myOutputStyle && state.myOutputDirectoryPath.equals(myOutputDirectoryPath);
-  }
+	@Override
+	public boolean equalsTo(ValidityState otherState)
+	{
+		if(!(otherState instanceof GwtItemValidityState))
+		{
+			return false;
+		}
+		GwtItemValidityState state = (GwtItemValidityState) otherState;
+		return state.myOutputStyle == myOutputStyle && state.myOutputDirectoryPath.equals(myOutputDirectoryPath);
+	}
 
-  public void save(DataOutput out) throws IOException {
-    out.writeByte(myOutputStyle.getNumericId() + OUTPUT_STYILE_ID_SHIFT);
-    out.writeUTF(myOutputDirectoryPath);
-  }
+	@Override
+	public void save(DataOutput out) throws IOException
+	{
+		out.writeByte(myOutputStyle.getNumericId() + OUTPUT_STYILE_ID_SHIFT);
+		out.writeUTF(myOutputDirectoryPath);
+	}
 }

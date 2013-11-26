@@ -16,6 +16,16 @@
 
 package com.intellij.gwt.i18n;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.template.Template;
@@ -41,180 +51,201 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.pom.java.LanguageLevel;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.text.MessageFormat;
-import java.util.*;
 
 /**
  * @author nik
  */
-public class GwtResourceBundleManager extends ResourceBundleManager {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.i18n.GwtResourceBundleManager");
-  private final PsiManager myPsiManager;
-  private final GwtI18nManager myI18nManager;
-  private final GwtModulesManager myGwtModulesManager;
+public class GwtResourceBundleManager extends ResourceBundleManager
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.i18n.GwtResourceBundleManager");
+	private final PsiManager myPsiManager;
+	private final GwtI18nManager myI18nManager;
+	private final GwtModulesManager myGwtModulesManager;
 
-  public GwtResourceBundleManager(final Project project, PsiManager psiManager, GwtI18nManager gwtI18nManager, GwtModulesManager gwtModulesManager) {
-    super(project);
-    myPsiManager = psiManager;
-    myI18nManager = gwtI18nManager;
-    myGwtModulesManager = gwtModulesManager;
-  }
+	public GwtResourceBundleManager(final Project project, PsiManager psiManager, GwtI18nManager gwtI18nManager, GwtModulesManager gwtModulesManager)
+	{
+		super(project);
+		myPsiManager = psiManager;
+		myI18nManager = gwtI18nManager;
+		myGwtModulesManager = gwtModulesManager;
+	}
 
-  @Nullable
-  public PsiClass getResourceBundle() {
-    return null;
-  }
+	@Nullable
+	public PsiClass getResourceBundle()
+	{
+		return null;
+	}
 
-  @NonNls
-  public String getTemplateName() {
-    return null;
-  }
+	@NonNls
+	public String getTemplateName()
+	{
+		return null;
+	}
 
-  @NonNls
-  public String getConcatenationTemplateName() {
-    return null;
-  }
+	@NonNls
+	public String getConcatenationTemplateName()
+	{
+		return null;
+	}
 
-  public boolean isActive(final PsiFile context) throws ResourceBundleNotFoundException {
-    return myGwtModulesManager.isUnderGwtModule(context.getVirtualFile());
-  }
+	public boolean isActive(final PsiFile context) throws ResourceBundleNotFoundException
+	{
+		return myGwtModulesManager.isUnderGwtModule(context.getVirtualFile());
+	}
 
-  public boolean canShowJavaCodeInfo() {
-    return false;
-  }
+	public boolean canShowJavaCodeInfo()
+	{
+		return false;
+	}
 
-  @Override
-  public String suggestPropertyKey(final @NotNull String value) {
-    return GwtI18nUtil.suggetsPropertyKey(value, JavaPsiFacade.getInstance(myProject).getNameHelper(), LanguageLevel.HIGHEST);
-  }
+	@Override
+	public String suggestPropertyKey(final @NotNull String value)
+	{
+		return GwtI18nUtil.suggetsPropertyKey(value, JavaPsiFacade.getInstance(myProject).getNameHelper(), LanguageLevel.HIGHEST);
+	}
 
-  @Override
-  public List<String> suggestPropertiesFiles() {
-    List<String> paths = new ArrayList<String>();
+	@Override
+	public List<String> suggestPropertiesFiles()
+	{
+		List<String> paths = new ArrayList<String>();
 
-    Collection<VirtualFile> files = PropertiesFilesManager.getInstance().getAllPropertiesFiles();
-    for (VirtualFile file : files) {
-      PsiFile psiFile = myPsiManager.findFile(file);
-      if (psiFile instanceof PropertiesFile) {
-        if (myI18nManager.getPropertiesInterface((PropertiesFile)psiFile) != null) {
-          paths.add(FileUtil.toSystemDependentName(file.getPath()));
-        }
-      }
-    }
-    return paths;
-  }
+		Collection<VirtualFile> files = PropertiesFilesManager.getInstance().getAllPropertiesFiles();
+		for(VirtualFile file : files)
+		{
+			PsiFile psiFile = myPsiManager.findFile(file);
+			if(psiFile instanceof PropertiesFile)
+			{
+				if(myI18nManager.getPropertiesInterface((PropertiesFile) psiFile) != null)
+				{
+					paths.add(FileUtil.toSystemDependentName(file.getPath()));
+				}
+			}
+		}
+		return paths;
+	}
 
-  private void addMethod(final PsiClass anInterface, final String key, final PsiExpression[] parameters) throws IncorrectOperationException {
-    PsiFile psiFile = anInterface.getContainingFile();
-    CodeInsightUtilBase.prepareFileForWrite(psiFile);
-    final VirtualFile virtualFile = psiFile.getVirtualFile();
-    LOG.assertTrue(virtualFile != null);
+	private void addMethod(final PsiClass anInterface, final String key, final PsiExpression[] parameters) throws IncorrectOperationException
+	{
+		PsiFile psiFile = anInterface.getContainingFile();
+		CodeInsightUtilBase.prepareFileForWrite(psiFile);
+		final VirtualFile virtualFile = psiFile.getVirtualFile();
+		LOG.assertTrue(virtualFile != null);
 
-    GwtFacet gwtFacet = GwtFacet.findFacetBySourceFile(myProject, psiFile.getVirtualFile());
-    GwtVersion gwtVersion = GwtFacet.getGwtVersion(gwtFacet);
-    PsiMethod method = GwtI18nUtil.addMethod(anInterface, key, gwtVersion);
-    if (parameters.length > 0) {
-      TemplateBuilder builder = new TemplateBuilder(method);
-      CreateFromUsageUtils.setupMethodParameters(method, builder, parameters[0], PsiSubstitutor.EMPTY, parameters);
-      method = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(method);
+		GwtFacet gwtFacet = GwtFacet.findFacetBySourceFile(myProject, psiFile.getVirtualFile());
+		GwtVersion gwtVersion = GwtFacet.getGwtVersion(gwtFacet);
+		PsiMethod method = GwtI18nUtil.addMethod(anInterface, key, gwtVersion);
+		if(parameters.length > 0)
+		{
+			TemplateBuilder builder = new TemplateBuilder(method);
+			CreateFromUsageUtils.setupMethodParameters(method, builder, parameters[0], PsiSubstitutor.EMPTY, parameters);
+			method = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(method);
 
-      final OpenFileDescriptor descriptor = new OpenFileDescriptor(myProject, virtualFile, method.getTextRange().getStartOffset());
+			final OpenFileDescriptor descriptor = new OpenFileDescriptor(myProject, virtualFile, method.getTextRange().getStartOffset());
 
-      Document document = PsiDocumentManager.getInstance(myProject).getDocument(psiFile);
-      LOG.assertTrue(document != null);
-      RangeMarker methodRange = document.createRangeMarker(method.getTextRange());
-      final Editor editor = FileEditorManager.getInstance(myProject).openTextEditor(descriptor, true);
-      final Template template = builder.buildTemplate();
-      
-      editor.getCaretModel().moveToOffset(methodRange.getStartOffset());
-      editor.getDocument().deleteString(methodRange.getStartOffset(), methodRange.getEndOffset());
+			Document document = PsiDocumentManager.getInstance(myProject).getDocument(psiFile);
+			LOG.assertTrue(document != null);
+			RangeMarker methodRange = document.createRangeMarker(method.getTextRange());
+			final Editor editor = FileEditorManager.getInstance(myProject).openTextEditor(descriptor, true);
+			final Template template = builder.buildTemplate();
 
-      ApplicationManager.getApplication().invokeLater(new Runnable() {
-        public void run() {
-          TemplateManager.getInstance(myProject).startTemplate(editor, template);
-        }
-      });
-    }
-  }
+			editor.getCaretModel().moveToOffset(methodRange.getStartOffset());
+			editor.getDocument().deleteString(methodRange.getStartOffset(), methodRange.getEndOffset());
 
-  @Nullable
-  @Override
-  public PropertyCreationHandler getPropertyCreationHandler() {
-    return new GwtPropertyCreationHandler();
-  }
+			ApplicationManager.getApplication().invokeLater(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					TemplateManager.getInstance(myProject).startTemplate(editor, template);
+				}
+			});
+		}
+	}
 
-  @Nullable
-  @Override
-  public I18nizedTextGenerator getI18nizedTextGenerator() {
-    return new GwtI18nizedTextGenerator();
-  }
+	@Nullable
+	@Override
+	public PropertyCreationHandler getPropertyCreationHandler()
+	{
+		return new GwtPropertyCreationHandler();
+	}
 
-  private class GwtI18nizedTextGenerator extends I18nizedTextGenerator {
-    @NonNls private static final String GET_LOCALIZABLE_INSTANCE_TEMPLATE = "(({0}) " + GwtSdkUtil.GWT_CLASS_NAME + ".create({0}.class))";
+	@Nullable
+	@Override
+	public I18nizedTextGenerator getI18nizedTextGenerator()
+	{
+		return new GwtI18nizedTextGenerator();
+	}
 
-    public String getI18nizedText(final String propertyKey,
-                                  final @Nullable PropertiesFile propertiesFile,
-                                  final PsiLiteralExpression context) {
-      return getI18nizedConcatenationText(propertyKey, "", propertiesFile, context);
-    }
+	private class GwtI18nizedTextGenerator extends I18nizedTextGenerator
+	{
+		@NonNls
+		private static final String GET_LOCALIZABLE_INSTANCE_TEMPLATE = "(({0}) " + GwtSdkUtil.GWT_CLASS_NAME + ".create({0}.class))";
 
-    private String getI18nizedText(@Nullable @NonNls String qualifier, final String propertyKey, final PsiLiteralExpression context, String parameters) {
-      if (qualifier == null) {
-        qualifier = "constants";
-      }
-      String methodName = GwtI18nUtil.convertPropertyName2MethodName(propertyKey,
-                                                                     JavaPsiFacade.getInstance(myPsiManager.getProject()).getNameHelper(), PsiUtil.getLanguageLevel(context));
-      return qualifier + "." + methodName + "(" + parameters + ")";
-    }
+		public String getI18nizedText(final String propertyKey, final @Nullable PropertiesFile propertiesFile, final PsiLiteralExpression context)
+		{
+			return getI18nizedConcatenationText(propertyKey, "", propertiesFile, context);
+		}
 
-    private String getLocalizableInstance(final @NotNull PsiClass anInterface, final @NotNull PsiLiteralExpression context) {
-      PsiClassType type = JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createType(anInterface);
-      Set<String> expressions = I18nUtil.suggestExpressionOfType(type, context);
-      Iterator<String> iterator = expressions.iterator();
-      if (iterator.hasNext()) {
-        return iterator.next();
-      }
-      return MessageFormat.format(GET_LOCALIZABLE_INSTANCE_TEMPLATE, anInterface.getQualifiedName());
-    }
+		private String getI18nizedText(@Nullable @NonNls String qualifier, final String propertyKey, final PsiLiteralExpression context, String parameters)
+		{
+			if(qualifier == null)
+			{
+				qualifier = "constants";
+			}
+			String methodName = GwtI18nUtil.convertPropertyName2MethodName(propertyKey, JavaPsiFacade.getInstance(myPsiManager.getProject()).getNameHelper(),
+					PsiUtil.getLanguageLevel(context));
+			return qualifier + "." + methodName + "(" + parameters + ")";
+		}
 
-    public String getI18nizedConcatenationText(final String propertyKey,
-                                               final String parametersString,
-                                               final @Nullable PropertiesFile propertiesFile,
-                                               final PsiLiteralExpression context) {
-      String qualifier = null;
-      if (propertiesFile != null) {
-        PsiClass anInterface = myI18nManager.getPropertiesInterface(propertiesFile);
-        if (anInterface != null) {
-          qualifier = getLocalizableInstance(anInterface, context);
-        }
-      }
+		private String getLocalizableInstance(final @NotNull PsiClass anInterface, final @NotNull PsiLiteralExpression context)
+		{
+			PsiClassType type = JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createType(anInterface);
+			Set<String> expressions = I18nUtil.suggestExpressionOfType(type, context);
+			Iterator<String> iterator = expressions.iterator();
+			if(iterator.hasNext())
+			{
+				return iterator.next();
+			}
+			return MessageFormat.format(GET_LOCALIZABLE_INSTANCE_TEMPLATE, anInterface.getQualifiedName());
+		}
 
-      return getI18nizedText(qualifier, propertyKey, context, parametersString);
-    }
-  }
+		public String getI18nizedConcatenationText(final String propertyKey, final String parametersString, final @Nullable PropertiesFile propertiesFile,
+				final PsiLiteralExpression context)
+		{
+			String qualifier = null;
+			if(propertiesFile != null)
+			{
+				PsiClass anInterface = myI18nManager.getPropertiesInterface(propertiesFile);
+				if(anInterface != null)
+				{
+					qualifier = getLocalizableInstance(anInterface, context);
+				}
+			}
 
-  private class GwtPropertyCreationHandler implements PropertyCreationHandler {
-    public void createProperty(final Project project,
-                               final Collection<PropertiesFile> propertiesFiles,
-                               final String key,
-                               final String value, final PsiExpression[] parameters) throws IncorrectOperationException {
-      I18nUtil.DEFAULT_PROPERTY_CREATION_HANDLER.createProperty(project, propertiesFiles, key, value, parameters);
-      Iterator<PropertiesFile> iterator = propertiesFiles.iterator();
-      if (iterator.hasNext()) {
-        PropertiesFile propertiesFile = iterator.next();
-        PsiClass anInterface = myI18nManager.getPropertiesInterface(propertiesFile);
-        if (anInterface != null) {
-          addMethod(anInterface, key, parameters);
-        }
-      }
-    }
-  }
+			return getI18nizedText(qualifier, propertyKey, context, parametersString);
+		}
+	}
+
+	private class GwtPropertyCreationHandler implements PropertyCreationHandler
+	{
+		public void createProperty(final Project project, final Collection<PropertiesFile> propertiesFiles, final String key, final String value,
+				final PsiExpression[] parameters) throws IncorrectOperationException
+		{
+			I18nUtil.DEFAULT_PROPERTY_CREATION_HANDLER.createProperty(project, propertiesFiles, key, value, parameters);
+			Iterator<PropertiesFile> iterator = propertiesFiles.iterator();
+			if(iterator.hasNext())
+			{
+				PropertiesFile propertiesFile = iterator.next();
+				PsiClass anInterface = myI18nManager.getPropertiesInterface(propertiesFile);
+				if(anInterface != null)
+				{
+					addMethod(anInterface, key, parameters);
+				}
+			}
+		}
+	}
 }

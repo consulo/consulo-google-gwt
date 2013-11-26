@@ -16,6 +16,21 @@
 
 package com.intellij.gwt.run;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
@@ -30,6 +45,8 @@ import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.make.GwtCompilerPaths;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.gwt.sdk.GwtVersion;
+import com.intellij.openapi.application.ReadAction;
+import com.intellij.openapi.application.Result;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ProjectRootsTraversing;
@@ -37,197 +54,213 @@ import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.Result;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.PathsList;
 import com.intellij.util.SystemProperties;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
  * @author nik
-*/
-public class GwtCommandLineState extends JavaCommandLineState {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.run.GwtCommandLineState");
-  @NonNls private static final String WEB_XML_PATH = "com/google/gwt/dev/etc/tomcat/webapps/ROOT/WEB-INF/web.xml";
-  private final Module myModule;
-  private String myRunPage;
-  private String myVMParameters;
-  private GwtFacet myFacet;
-  private final String myShellParameters;
-  private final String myCustomWebXmlUrl;
+ */
+public class GwtCommandLineState extends JavaCommandLineState
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.run.GwtCommandLineState");
+	@NonNls
+	private static final String WEB_XML_PATH = "com/google/gwt/dev/etc/tomcat/webapps/ROOT/WEB-INF/web.xml";
+	private final Module myModule;
+	private String myRunPage;
+	private String myVMParameters;
+	private GwtFacet myFacet;
+	private final String myShellParameters;
+	private final String myCustomWebXmlUrl;
 
-  public GwtCommandLineState(final GwtFacet facet, final ExecutionEnvironment environment,
-                             final String runPage,
-                             final String vmParameters,
-                             final String shellParameters, final String customWebXmlUrl) {
-    super(environment);
-    myFacet = facet;
-    myShellParameters = shellParameters;
-    myCustomWebXmlUrl = customWebXmlUrl;
-    myModule = myFacet.getModule();
-    myRunPage = runPage;
-    myVMParameters = vmParameters;
-  }
+	public GwtCommandLineState(final GwtFacet facet, final ExecutionEnvironment environment, final String runPage, final String vmParameters,
+			final String shellParameters, final String customWebXmlUrl)
+	{
+		super(environment);
+		myFacet = facet;
+		myShellParameters = shellParameters;
+		myCustomWebXmlUrl = customWebXmlUrl;
+		myModule = myFacet.getModule();
+		myRunPage = runPage;
+		myVMParameters = vmParameters;
+	}
 
-  protected JavaParameters createJavaParameters() throws ExecutionException {
-    final JavaParameters params = new JavaParameters();
+	@Override
+	protected JavaParameters createJavaParameters() throws ExecutionException
+	{
+		final JavaParameters params = new JavaParameters();
 
-    params.setWorkingDirectory(getTempOutputDir());
+		params.setWorkingDirectory(getTempOutputDir());
 
-    params.configureByModule(myModule, JavaParameters.JDK_AND_CLASSES);
+		params.configureByModule(myModule, JavaParameters.JDK_AND_CLASSES);
 
-    if (SystemInfo.isMac) {
-      params.getVMParametersList().add("-XstartOnFirstThread");
-    }
-    params.getVMParametersList().addParametersString(myVMParameters);
+		if(SystemInfo.isMac)
+		{
+			params.getVMParametersList().add("-XstartOnFirstThread");
+		}
+		params.getVMParametersList().addParametersString(myVMParameters);
 
-    final GwtVersion sdkVersion = myFacet.getSdkVersion();
-    final ParametersList programParameters = params.getProgramParametersList();
-    programParameters.add("-style");
-    programParameters.add(myFacet.getConfiguration().getOutputStyle().getId());
-    programParameters.add("-out");
-    programParameters.add(getOutputPath().getAbsolutePath());
-    programParameters.add("-gen");
-    programParameters.add(getGenPath().getAbsolutePath());
-    programParameters.addParametersString(myShellParameters);
-    programParameters.add(myRunPage);
+		final GwtVersion sdkVersion = myFacet.getSdkVersion();
+		final ParametersList programParameters = params.getProgramParametersList();
+		programParameters.add("-style");
+		programParameters.add(myFacet.getConfiguration().getOutputStyle().getId());
+		programParameters.add("-out");
+		programParameters.add(getOutputPath().getAbsolutePath());
+		programParameters.add("-gen");
+		programParameters.add(getGenPath().getAbsolutePath());
+		programParameters.addParametersString(myShellParameters);
+		programParameters.add(myRunPage);
 
-    final PathsList sources = ProjectRootsTraversing.collectRoots(myModule, new ProjectRootsTraversing.RootTraversePolicy(
-      ProjectRootsTraversing.RootTraversePolicy.PRODUCTION_SOURCES, null, null, ProjectRootsTraversing.RootTraversePolicy.RECURSIVE));
+		final PathsList sources = ProjectRootsTraversing.collectRoots(myModule, new ProjectRootsTraversing.RootTraversePolicy(ProjectRootsTraversing
+				.RootTraversePolicy.PRODUCTION_SOURCES, null, null, ProjectRootsTraversing.RootTraversePolicy.RECURSIVE));
 
-    for (String path : sources.getPathList()) {
-      params.getClassPath().addFirst(path);
-    }
+		for(String path : sources.getPathList())
+		{
+			params.getClassPath().addFirst(path);
+		}
 
-    params.getClassPath().addFirst(myFacet.getConfiguration().getSdk().getDevJarPath());
-    params.setMainClass(sdkVersion.getShellClassName());
+		params.getClassPath().addFirst(myFacet.getConfiguration().getSdk().getDevJarPath());
+		params.setMainClass(sdkVersion.getShellClassName());
 
-    return params;
-  }
+		return params;
+	}
 
-  private File getGenPath() {
-    return new File(getTempOutputDir(), "gen");
-  }
+	private File getGenPath()
+	{
+		return new File(getTempOutputDir(), "gen");
+	}
 
-  private File getOutputPath() {
-    return new File(getTempOutputDir(), "www");
-  }
+	private File getOutputPath()
+	{
+		return new File(getTempOutputDir(), "www");
+	}
 
-  private File getTempOutputDir() {
-    return new File(GwtCompilerPaths.getOutputRoot(myModule), "run");
-  }
+	private File getTempOutputDir()
+	{
+		return new File(GwtCompilerPaths.getOutputRoot(myModule), "run");
+	}
 
-  public ExecutionResult execute(@NotNull final Executor executor, @NotNull final ProgramRunner runner) throws ExecutionException {
-    getOutputPath().mkdirs();
-    getGenPath().mkdirs();
+	@Override
+	public ExecutionResult execute(@NotNull final Executor executor, @NotNull final ProgramRunner runner) throws ExecutionException
+	{
+		getOutputPath().mkdirs();
+		getGenPath().mkdirs();
 
-    final File outputDir = getTempOutputDir();
-    if (myCustomWebXmlUrl != null) {
-      File targetWebXml = new File(outputDir.getAbsolutePath() + "/tomcat/webapps/ROOT/WEB-INF/web.xml".replace('/', File.separatorChar));
-      try {
-        targetWebXml.getParentFile().mkdirs();
-        FileUtil.copy(new File(FileUtil.toSystemDependentName(VfsUtil.urlToPath(myCustomWebXmlUrl))), targetWebXml);
-        patchWebXml(targetWebXml);
-      }
-      catch (IOException e) {
-        LOG.info(e);
-      }
-      catch (JDOMException e) {
-        LOG.info(e);
-      }
-    }
+		final File outputDir = getTempOutputDir();
+		if(myCustomWebXmlUrl != null)
+		{
+			File targetWebXml = new File(outputDir.getAbsolutePath() + "/tomcat/webapps/ROOT/WEB-INF/web.xml".replace('/', File.separatorChar));
+			try
+			{
+				targetWebXml.getParentFile().mkdirs();
+				FileUtil.copy(new File(FileUtil.toSystemDependentName(VfsUtil.urlToPath(myCustomWebXmlUrl))), targetWebXml);
+				patchWebXml(targetWebXml);
+			}
+			catch(IOException e)
+			{
+				LOG.info(e);
+			}
+			catch(JDOMException e)
+			{
+				LOG.info(e);
+			}
+		}
 
-    final ExecutionResult result = super.execute(executor, runner);
-    result.getProcessHandler().addProcessListener(new ProcessAdapter() {
-      public void processTerminated(final ProcessEvent event) {
-        FileUtil.delete(outputDir);
-      }
-    });
-    return result;
-  }
+		final ExecutionResult result = super.execute(executor, runner);
+		result.getProcessHandler().addProcessListener(new ProcessAdapter()
+		{
+			@Override
+			public void processTerminated(final ProcessEvent event)
+			{
+				FileUtil.delete(outputDir);
+			}
+		});
+		return result;
+	}
 
-  private void patchWebXml(final File webXml) throws IOException, JDOMException {
-    File devJar = new File(myFacet.getConfiguration().getSdk().getDevJarPath());
-    if (!devJar.exists()) {
-      return;
-    }
-    ZipFile zipFile = new ZipFile(devJar);
-    try {
-      ZipEntry zipEntry = zipFile.getEntry(WEB_XML_PATH);
-      InputStream input = zipFile.getInputStream(zipEntry);
-      Document document = JDOMUtil.loadDocument(input);
+	private void patchWebXml(final File webXml) throws IOException, JDOMException
+	{
+		File devJar = new File(myFacet.getConfiguration().getSdk().getDevJarPath());
+		if(!devJar.exists())
+		{
+			return;
+		}
+		ZipFile zipFile = new ZipFile(devJar);
+		try
+		{
+			ZipEntry zipEntry = zipFile.getEntry(WEB_XML_PATH);
+			InputStream input = zipFile.getInputStream(zipEntry);
+			Document document = JDOMUtil.loadDocument(input);
 
-      Document target = JDOMUtil.loadDocument(webXml);
-      final Element targetRoot = target.getRootElement();
-      new ReadAction() {
-        protected void run(final Result result) {
-          deleteGwtServlets(targetRoot);
-        }
-      }.execute();
+			Document target = JDOMUtil.loadDocument(webXml);
+			final Element targetRoot = target.getRootElement();
+			new ReadAction()
+			{
+				@Override
+				protected void run(final Result result)
+				{
+					deleteGwtServlets(targetRoot);
+				}
+			}.execute();
 
-      //noinspection unchecked
-      for (Element child : (List<Element>)document.getRootElement().getChildren()) {
-        Element copy = (Element)child.clone();
-        copy.setNamespace(targetRoot.getNamespace());
-        //noinspection unchecked
-        for (Element grandChild : (List<Element>)copy.getChildren()) {
-          grandChild.setNamespace(targetRoot.getNamespace());
-        }
-        targetRoot.addContent(copy);
-      }
-      JDOMUtil.writeDocument(target, webXml, SystemProperties.getLineSeparator());
-    }
-    finally {
-      zipFile.close();
-    }
-  }
+			//noinspection unchecked
+			for(Element child : (List<Element>) document.getRootElement().getChildren())
+			{
+				Element copy = (Element) child.clone();
+				copy.setNamespace(targetRoot.getNamespace());
+				//noinspection unchecked
+				for(Element grandChild : (List<Element>) copy.getChildren())
+				{
+					grandChild.setNamespace(targetRoot.getNamespace());
+				}
+				targetRoot.addContent(copy);
+			}
+			JDOMUtil.writeDocument(target, webXml, SystemProperties.getLineSeparator());
+		}
+		finally
+		{
+			zipFile.close();
+		}
+	}
 
-  private void deleteGwtServlets(final Element root) {
-    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myModule.getProject());
-    GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule);
+	private void deleteGwtServlets(final Element root)
+	{
+		JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myModule.getProject());
+		GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule);
 
-    List<Element> toRemove = new ArrayList<Element>();
-    Set<String> servletNamesToRemove = new HashSet<String>();
-    
-    //noinspection unchecked
-    for (Element servlet : (List<Element>)root.getChildren("servlet", root.getNamespace())) {
-      String className = servlet.getChildTextTrim("servlet-class", root.getNamespace());
-      if (className != null) {
-        PsiClass psiClass = psiFacade.findClass(className, scope);
-        if (RemoteServiceUtil.isRemoteServiceImplementation(psiClass)) {
-          toRemove.add(servlet);
-          servletNamesToRemove.add(servlet.getChildTextTrim("servlet-name", root.getNamespace()));
-        }
-      }
-    }
+		List<Element> toRemove = new ArrayList<Element>();
+		Set<String> servletNamesToRemove = new HashSet<String>();
 
-    //noinspection unchecked
-    for (Element mapping : ((List<Element>)root.getChildren("servlet-mapping", root.getNamespace()))) {
-      String servletName = mapping.getChildTextTrim("servlet-name", root.getNamespace());
-      if (servletNamesToRemove.contains(servletName)) {
-        toRemove.add(mapping);
-      }
-    }
+		//noinspection unchecked
+		for(Element servlet : (List<Element>) root.getChildren("servlet", root.getNamespace()))
+		{
+			String className = servlet.getChildTextTrim("servlet-class", root.getNamespace());
+			if(className != null)
+			{
+				PsiClass psiClass = psiFacade.findClass(className, scope);
+				if(RemoteServiceUtil.isRemoteServiceImplementation(psiClass))
+				{
+					toRemove.add(servlet);
+					servletNamesToRemove.add(servlet.getChildTextTrim("servlet-name", root.getNamespace()));
+				}
+			}
+		}
 
-    for (Element element : toRemove) {
-      root.removeContent(element);
-    }
-  }
+		//noinspection unchecked
+		for(Element mapping : ((List<Element>) root.getChildren("servlet-mapping", root.getNamespace())))
+		{
+			String servletName = mapping.getChildTextTrim("servlet-name", root.getNamespace());
+			if(servletNamesToRemove.contains(servletName))
+			{
+				toRemove.add(mapping);
+			}
+		}
+
+		for(Element element : toRemove)
+		{
+			root.removeContent(element);
+		}
+	}
 }

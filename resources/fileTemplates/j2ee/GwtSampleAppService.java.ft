@@ -5,23 +5,25 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 #parse("File Header.java")
-public interface ${NAME} extends RemoteService {
-    // Sample interface method of remote interface
-    String getMessage(String msg);
+public interface ${NAME} extends RemoteService{
+		// Sample interface method of remote interface
+		String getMessage(String msg);
 
-    /**
-     * Utility/Convenience class.
-     * Use ${NAME}.App.getInstance () to access static instance of ${NAME}Async
-     */
-    public static class App {
-      private static ${NAME}Async app = null;
+/**
+ * Utility/Convenience class.
+ * Use ${NAME}.App.getInstance () to access static instance of ${NAME}Async
+ */
+public static class App
+{
+	private static ${NAME}Async app = null;
 
-      public static synchronized ${NAME}Async getInstance() {
-        if (app == null) {
-            app = (${NAME}Async) GWT.create(${NAME}.class);
-            ((ServiceDefTarget) app).setServiceEntryPoint(GWT.getModuleBaseURL() + "${RELATIVE_SERVLET_PATH}");
-        }
-        return app;
-      }
-    }
+	public static synchronized ${NAME}Async getInstance()
+	{
+		if(app == null)
+		{
+			app = (${NAME}Async) GWT.create(${NAME}. class);
+			((ServiceDefTarget) app).setServiceEntryPoint(GWT.getModuleBaseURL() + "${RELATIVE_SERVLET_PATH}");
+		} return app;
+	}
+}
 }

@@ -2,7 +2,7 @@ package ${PACKAGE_NAME};
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class ${NAME} implements IsSerializable {
-  public ${NAME}() {
-  }
-}
+public class ${NAME} implements IsSerializable{
+public${NAME}(){
+		}
+		}

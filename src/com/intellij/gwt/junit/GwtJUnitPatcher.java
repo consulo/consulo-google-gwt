@@ -16,6 +16,8 @@
 
 package com.intellij.gwt.junit;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.JUnitPatcher;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
@@ -32,47 +34,54 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author nik
  */
-public class GwtJUnitPatcher extends JUnitPatcher {
-  @NonNls private static final String GWT_ARGS_PROPERTY = "gwt.args";
+public class GwtJUnitPatcher extends JUnitPatcher
+{
+	@NonNls
+	private static final String GWT_ARGS_PROPERTY = "gwt.args";
 
-  public void patchJavaParameters(@Nullable Module module, JavaParameters javaParameters) {
-    if (module == null) {
-      return;
-    }
+	public void patchJavaParameters(@Nullable Module module, JavaParameters javaParameters)
+	{
+		if(module == null)
+		{
+			return;
+		}
 
-    final GwtFacet facet = FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
-    if (facet == null) {
-      return;
-    }
+		final GwtFacet facet = FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
+		if(facet == null)
+		{
+			return;
+		}
 
-    if (GwtModulesManager.getInstance(module.getProject()).getGwtModules(module).length > 0) {
-      final PathsList classPath = javaParameters.getClassPath();
-      for (VirtualFile file : ModuleRootManager.getInstance(module).getSourceRoots()) {
-        classPath.addFirst(FileUtil.toSystemDependentName(file.getPath()));
-      }
-      classPath.addFirst(facet.getConfiguration().getSdk().getDevJarPath());
-    }
+		if(GwtModulesManager.getInstance(module.getProject()).getGwtModules(module).length > 0)
+		{
+			final PathsList classPath = javaParameters.getClassPath();
+			for(VirtualFile file : ModuleRootManager.getInstance(module).getSourceRoots())
+			{
+				classPath.addFirst(FileUtil.toSystemDependentName(file.getPath()));
+			}
+			classPath.addFirst(facet.getConfiguration().getSdk().getDevJarPath());
+		}
 
-    String testGenPath = GwtCompilerPaths.getTestGenDirectory(module).getAbsolutePath();
-    String testOutputPath = GwtCompilerPaths.getTestOutputDirectory(module).getAbsolutePath();
-    if (!SystemInfo.isWindows || !testGenPath.contains(" ") && !testOutputPath.contains(" ")) {
-      //todo[nik] fix problem with paths containing spaces
-      ParametersList vmParameters = javaParameters.getVMParametersList();
-      @NonNls StringBuilder builder = new StringBuilder();
-      String gwtArgs = vmParameters.getPropertyValue(GWT_ARGS_PROPERTY);
-      if (gwtArgs != null) {
-        builder.append(StringUtil.unquoteString(gwtArgs)).append(' ');
-      }
-      builder.append("-gen ").append(GeneralCommandLine.quote(testGenPath)).append(' ');
-      builder.append("-out ").append(GeneralCommandLine.quote(testOutputPath));
-      @NonNls String prefix = "-D" + GWT_ARGS_PROPERTY + "=";
-      vmParameters.replaceOrAppend(prefix, prefix + builder);
-    }
-  }
+		String testGenPath = GwtCompilerPaths.getTestGenDirectory(module).getAbsolutePath();
+		String testOutputPath = GwtCompilerPaths.getTestOutputDirectory(module).getAbsolutePath();
+		if(!SystemInfo.isWindows || !testGenPath.contains(" ") && !testOutputPath.contains(" "))
+		{
+			//todo[nik] fix problem with paths containing spaces
+			ParametersList vmParameters = javaParameters.getVMParametersList();
+			@NonNls StringBuilder builder = new StringBuilder();
+			String gwtArgs = vmParameters.getPropertyValue(GWT_ARGS_PROPERTY);
+			if(gwtArgs != null)
+			{
+				builder.append(StringUtil.unquoteString(gwtArgs)).append(' ');
+			}
+			builder.append("-gen ").append(GeneralCommandLine.quote(testGenPath)).append(' ');
+			builder.append("-out ").append(GeneralCommandLine.quote(testOutputPath));
+			@NonNls String prefix = "-D" + GWT_ARGS_PROPERTY + "=";
+			vmParameters.replaceOrAppend(prefix, prefix + builder);
+		}
+	}
 }

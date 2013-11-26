@@ -23,29 +23,40 @@ import com.intellij.util.ArrayUtil;
 
 /**
  * @author nik
-*/
-public class GwtToCssClassReference extends BaseGwtReference {
-  public GwtToCssClassReference(final PsiLiteralExpression element) {
-    super(element);
-  }
+ */
+public class GwtToCssClassReference extends BaseGwtReference
+{
+	public GwtToCssClassReference(final PsiLiteralExpression element)
+	{
+		super(element);
+	}
 
-  public PsiElement resolve() {
-    final Object value = myElement.getValue();
-    if (!(value instanceof String)) return null;
+	@Override
+	public PsiElement resolve()
+	{
+		final Object value = myElement.getValue();
+		if(!(value instanceof String))
+		{
+			return null;
+		}
 
-    final GwtModule module = findGwtModule();
-    if (module == null) {
-      return null;
-    }
-    final String cssClass = (String)value;
-    return myGwtModulesManager.findCssDeclarationByClass(module, cssClass);
-  }
+		final GwtModule module = findGwtModule();
+		if(module == null)
+		{
+			return null;
+		}
+		final String cssClass = (String) value;
+		return myGwtModulesManager.findCssDeclarationByClass(module, cssClass);
+	}
 
-  public Object[] getVariants() {
-    final GwtModule module = findGwtModule();
-    if (module == null) {
-      return ArrayUtil.EMPTY_OBJECT_ARRAY;
-    }
-    return myGwtModulesManager.getAllCssClassNames(module);
-  }
+	@Override
+	public Object[] getVariants()
+	{
+		final GwtModule module = findGwtModule();
+		if(module == null)
+		{
+			return ArrayUtil.EMPTY_OBJECT_ARRAY;
+		}
+		return myGwtModulesManager.getAllCssClassNames(module);
+	}
 }

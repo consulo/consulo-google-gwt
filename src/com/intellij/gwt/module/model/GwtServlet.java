@@ -16,18 +16,19 @@
 
 package com.intellij.gwt.module.model;
 
+import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.Attribute;
 
 /**
  * @author nik
  */
-public interface GwtServlet extends DomElement {
+public interface GwtServlet extends DomElement
+{
 
-  GenericAttributeValue<String> getPath();
+	GenericAttributeValue<String> getPath();
 
-  @Attribute("class")
-  GenericAttributeValue<String> getServletClass();
+	@Attribute("class")
+	GenericAttributeValue<String> getServletClass();
 
 }

@@ -16,6 +16,10 @@
 
 package com.intellij.gwt.actions;
 
+import java.util.ArrayList;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
@@ -31,90 +35,110 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+public class CreateGwtSampleAppAction extends GwtCreateActionBase
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.actions.CreateGwtSampleAppAction");
+	@NonNls
+	private static final String SERVICE_SUFFIX = "Service";
+	@NonNls
+	private static final String SERVICE_ASYNC_SUFFIX = "ServiceAsync";
+	@NonNls
+	private static final String SERVICE_IMPL_SUFFIX = "ServiceImpl";
+	@NonNls
+	private static final String SERVICE_NAME_PROPERTY = "SERVICE_NAME";
+	@NonNls
+	private static final String CLIENT_PACKAGE_PROPERTY = "CLIENT_PACKAGE";
+	@NonNls
+	private static final String RELATIVE_PATH_PROPERTY = "RELATIVE_SERVLET_PATH";
 
-public class CreateGwtSampleAppAction extends GwtCreateActionBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.actions.CreateGwtSampleAppAction");
-  @NonNls private static final String SERVICE_SUFFIX = "Service";
-  @NonNls private static final String SERVICE_ASYNC_SUFFIX = "ServiceAsync";
-  @NonNls private static final String SERVICE_IMPL_SUFFIX = "ServiceImpl";
-  @NonNls private static final String SERVICE_NAME_PROPERTY = "SERVICE_NAME";
-  @NonNls private static final String CLIENT_PACKAGE_PROPERTY = "CLIENT_PACKAGE";
-  @NonNls private static final String RELATIVE_PATH_PROPERTY = "RELATIVE_SERVLET_PATH";
+	public CreateGwtSampleAppAction()
+	{
+		super(GwtBundle.message("newapp.menu.action.text"), GwtBundle.message("newapp.menu.action.description"));
+	}
 
-  public CreateGwtSampleAppAction() {
-    super(GwtBundle.message("newapp.menu.action.text"), GwtBundle.message("newapp.menu.action.description"));
-  }
+	@Override
+	protected boolean requireGwtModule()
+	{
+		return false;
+	}
 
-  protected boolean requireGwtModule() {
-    return false;
-  }
+	@Override
+	protected String getDialogPrompt()
+	{
+		return GwtBundle.message("newapp.dlg.prompt");
+	}
 
-  protected String getDialogPrompt() {
-    return GwtBundle.message("newapp.dlg.prompt");
-  }
+	@Override
+	protected String getDialogTitle()
+	{
+		return GwtBundle.message("newapp.dlg.title");
+	}
 
-  protected String getDialogTitle() {
-    return GwtBundle.message("newapp.dlg.title");
-  }
+	@Override
+	protected void doCheckBeforeCreate(String name, PsiDirectory directory) throws IncorrectOperationException
+	{
+		GwtFacet facet = GwtFacet.findFacetBySourceFile(directory.getProject(), directory.getVirtualFile());
+		LOG.assertTrue(facet != null);
+		if(!facet.getSdkVersion().isGenericsSupported())
+		{
+			final String message = GwtBundle.message("error.message.sample.application.requires.gwt.1.5.or.later");
+			throw new IncorrectOperationException(message);
+		}
 
-  protected void doCheckBeforeCreate(String name, PsiDirectory directory) throws IncorrectOperationException {
-    GwtFacet facet = GwtFacet.findFacetBySourceFile(directory.getProject(), directory.getVirtualFile());
-    LOG.assertTrue(facet != null);
-    if (!facet.getSdkVersion().isGenericsSupported()) {
-      final String message = GwtBundle.message("error.message.sample.application.requires.gwt.1.5.or.later");
-      throw new IncorrectOperationException(message);
-    }
+		PsiUtil.checkIsIdentifier(directory.getManager(), name);
+		directory.checkCreateSubdirectory(name);
+	}
 
-    PsiUtil.checkIsIdentifier(directory.getManager(), name);
-    directory.checkCreateSubdirectory(name);
-  }
+	@Override
+	@NotNull
+	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
+	{
+		name = StringUtil.capitalize(name);
+		final ArrayList<PsiElement> result = new ArrayList<PsiElement>(0);
 
-  @NotNull
-  protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception {
-    name = StringUtil.capitalize(name);
-    final ArrayList<PsiElement> result = new ArrayList<PsiElement>(0);
+		PsiDirectory moduleDir = directory.createSubdirectory(name.toLowerCase());
+		result.add(moduleDir);
+		final PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(moduleDir);
+		if(psiPackage == null)
+		{
+			return PsiElement.EMPTY_ARRAY;
+		}
+		String appPackageName = psiPackage.getQualifiedName();
+		result.add(createFromTemplateInternal(moduleDir, name, name + GwtModulesManager.GWT_XML_SUFFIX, GwtTemplates.GWT_SAMPLE_APP_GWT_XML));
 
-    PsiDirectory moduleDir = directory.createSubdirectory(name.toLowerCase());
-    result.add(moduleDir);
-    final PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(moduleDir);
-    if (psiPackage == null) return PsiElement.EMPTY_ARRAY;
-    String appPackageName = psiPackage.getQualifiedName();
-    result.add(createFromTemplateInternal(moduleDir, name, name + GwtModulesManager.GWT_XML_SUFFIX, GwtTemplates.GWT_SAMPLE_APP_GWT_XML));
+		PsiDirectory clientDir = moduleDir.createSubdirectory(GwtModulesManager.DEFAULT_SOURCE_PATH);
+		result.add(clientDir);
+		String serviceName = name + SERVICE_SUFFIX;
+		result.add(createClassFromTemplate(clientDir, serviceName, GwtTemplates.GWT_SAMPLE_APP_SERVICE_JAVA, RELATIVE_PATH_PROPERTY,
+				appPackageName + "." + name + "/" + serviceName));
+		result.add(createClassFromTemplate(clientDir, name + SERVICE_ASYNC_SUFFIX, GwtTemplates.GWT_SAMPLE_APP_SERVICE_ASYNC_JAVA));
+		result.add(createClassFromTemplate(clientDir, name, GwtTemplates.GWT_SAMPLE_ENTRY_POINT_JAVA));
 
-    PsiDirectory clientDir = moduleDir.createSubdirectory(GwtModulesManager.DEFAULT_SOURCE_PATH);
-    result.add(clientDir);
-    String serviceName = name + SERVICE_SUFFIX;
-    result.add(createClassFromTemplate(clientDir, serviceName, GwtTemplates.GWT_SAMPLE_APP_SERVICE_JAVA,
-                                       RELATIVE_PATH_PROPERTY, appPackageName + "." + name + "/" + serviceName));
-    result.add(createClassFromTemplate(clientDir, name + SERVICE_ASYNC_SUFFIX, GwtTemplates.GWT_SAMPLE_APP_SERVICE_ASYNC_JAVA));
-    result.add(createClassFromTemplate(clientDir, name, GwtTemplates.GWT_SAMPLE_ENTRY_POINT_JAVA));
+		PsiDirectory serverDir = moduleDir.createSubdirectory("server");
+		result.add(serverDir);
+		final PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(clientDir);
+		LOG.assertTrue(aPackage != null);
+		result.add(createFromTemplate(serverDir, name + SERVICE_IMPL_SUFFIX + "." + StdFileTypes.JAVA.getDefaultExtension(),
+				GwtTemplates.GWT_SAMPLE_APP_SERVICE_IMPL_JAVA, SERVICE_NAME_PROPERTY, serviceName, CLIENT_PACKAGE_PROPERTY, aPackage.getQualifiedName()));
 
-    PsiDirectory serverDir = moduleDir.createSubdirectory("server");
-    result.add(serverDir);
-    final PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(clientDir);
-    LOG.assertTrue(aPackage != null);
-    result.add(createFromTemplate(serverDir, name + SERVICE_IMPL_SUFFIX + "." + StdFileTypes.JAVA.getDefaultExtension(),
-                                  GwtTemplates.GWT_SAMPLE_APP_SERVICE_IMPL_JAVA,
-                                  SERVICE_NAME_PROPERTY, serviceName,
-                                  CLIENT_PACKAGE_PROPERTY, aPackage.getQualifiedName()));
+		PsiDirectory publicDir = moduleDir.createSubdirectory(GwtModulesManager.DEFAULT_PUBLIC_PATH);
+		result.add(publicDir);
+		result.add(createFromTemplate(publicDir, name + "." + StdFileTypes.HTML.getDefaultExtension(), GwtTemplates.GWT_SAMPLE_APP_HTML,
+				FileTemplate.ATTRIBUTE_PACKAGE_NAME, appPackageName));
 
-    PsiDirectory publicDir = moduleDir.createSubdirectory(GwtModulesManager.DEFAULT_PUBLIC_PATH);
-    result.add(publicDir);
-    result.add(createFromTemplate(publicDir, name + "." + StdFileTypes.HTML.getDefaultExtension(), GwtTemplates.GWT_SAMPLE_APP_HTML,
-                                  FileTemplate.ATTRIBUTE_PACKAGE_NAME, appPackageName));
+		return result.toArray(new PsiElement[result.size()]);
+	}
 
-    return result.toArray(new PsiElement[result.size()]);
-  }
+	@Override
+	protected String getCommandName()
+	{
+		return GwtBundle.message("newapp.command.name");
+	}
 
-  protected String getCommandName() {
-    return GwtBundle.message("newapp.command.name");
-  }
-
-  protected String getActionName(PsiDirectory directory, String newName) {
-    return GwtBundle.message("newapp.progress.text", newName);
-  }
+	@Override
+	protected String getActionName(PsiDirectory directory, String newName)
+	{
+		return GwtBundle.message("newapp.progress.text", newName);
+	}
 }

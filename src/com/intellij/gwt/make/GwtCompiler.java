@@ -16,17 +16,29 @@
 
 package com.intellij.gwt.make;
 
-import com.intellij.compiler.CompilerConfiguration;
+import java.io.DataInput;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.CompilerUtil;
-import com.intellij.execution.CompileStepBeforeRun;
-import com.intellij.execution.configurations.*;
+import com.intellij.compiler.options.CompileStepBeforeRun;
+import com.intellij.execution.configurations.CommandLineBuilder;
+import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.configurations.JavaParameters;
+import com.intellij.execution.configurations.ParametersList;
+import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.facet.FacetManager;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.facet.GwtFacetType;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.javaee.deployment.DeploymentManager;
 import com.intellij.javaee.deployment.DeploymentModel;
 import com.intellij.javaee.run.configuration.CommonModel;
@@ -34,7 +46,12 @@ import com.intellij.javaee.web.facet.WebFacet;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
-import com.intellij.openapi.compiler.*;
+import com.intellij.openapi.compiler.ClassInstrumentingCompiler;
+import com.intellij.openapi.compiler.CompileContext;
+import com.intellij.openapi.compiler.CompileScope;
+import com.intellij.openapi.compiler.CompilerManager;
+import com.intellij.openapi.compiler.CompilerMessageCategory;
+import com.intellij.openapi.compiler.ValidityState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
@@ -47,207 +64,255 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.DataInput;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+public class GwtCompiler implements ClassInstrumentingCompiler
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.make.GwtCompiler");
+	private Project myProject;
+	private GwtModulesManager myGwtModulesManager;
+	@NonNls
+	public static final String LOG_LEVEL_ARGUMENT = "-logLevel";
+	@NonNls
+	public static final String GEN_AGRUMENT = "-gen";
+	@NonNls
+	public static final String STYLE_ARGUMENT = "-style";
 
-public class GwtCompiler implements ClassInstrumentingCompiler {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.make.GwtCompiler");
-  private Project myProject;
-  private GwtModulesManager myGwtModulesManager;
-  @NonNls public static final String LOG_LEVEL_ARGUMENT = "-logLevel";
-  @NonNls public static final String GEN_AGRUMENT = "-gen";
-  @NonNls public static final String STYLE_ARGUMENT = "-style";
+	public GwtCompiler(Project project, GwtModulesManager modulesManager)
+	{
+		myProject = project;
+		myGwtModulesManager = modulesManager;
+	}
 
-  public GwtCompiler(Project project, GwtModulesManager modulesManager) {
-    myProject = project;
-    myGwtModulesManager = modulesManager;
-  }
+	@Override
+	@NotNull
+	public String getDescription()
+	{
+		return GwtBundle.message("compiler.description.google.compiler");
+	}
 
-  @NotNull
-  public String getDescription() {
-    return GwtBundle.message("compiler.description.google.compiler");
-  }
+	@Override
+	public boolean validateConfiguration(CompileScope scope)
+	{
+		return true;
+	}
 
-  public boolean validateConfiguration(CompileScope scope) {
-    return true;
-  }
+	@Override
+	public void init(@NotNull CompilerManager compilerManager)
+	{
 
-  public ValidityState createValidityState(DataInput in) throws IOException {
-    return new GwtItemValidityState(in);
-  }
+	}
 
-  @NotNull
-  public ProcessingItem[] getProcessingItems(final CompileContext context) {
-    final ArrayList<ProcessingItem> result = new ArrayList<ProcessingItem>();
-    ApplicationManager.getApplication().runReadAction(new Runnable() {
-      public void run() {
-        CompilerConfiguration compilerConfiguration = CompilerConfiguration.getInstance(myProject);
-        RunConfiguration runConfiguration = CompileStepBeforeRun.getRunConfiguration(context);
-        final Module[] modules = context.getCompileScope().getAffectedModules();
-        for (Module module : modules) {
-          GwtFacet facet = FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
-          if (facet == null || !facet.getConfiguration().isRunGwtCompilerOnMake()) continue;
+	@Override
+	public ValidityState createValidityState(DataInput in) throws IOException
+	{
+		return new GwtItemValidityState(in);
+	}
 
-          if (runConfiguration != null) {
-            WebFacet webFacet = facet.getWebFacet();
-            if (!(runConfiguration instanceof CommonModel) || webFacet == null) continue;
+	@Override
+	@NotNull
+	public ProcessingItem[] getProcessingItems(final CompileContext context)
+	{
+		final ArrayList<ProcessingItem> result = new ArrayList<ProcessingItem>();
+		ApplicationManager.getApplication().runReadAction(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				CompilerManager compilerConfiguration = CompilerManager.getInstance(myProject);
+				RunConfiguration runConfiguration = CompileStepBeforeRun.getRunConfiguration(context);
+				final Module[] modules = context.getCompileScope().getAffectedModules();
+				for(Module module : modules)
+				{
+					GwtFacet facet = FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
+					if(facet == null || !facet.getConfiguration().isRunGwtCompilerOnMake())
+					{
+						continue;
+					}
 
-            final CommonModel commonModel = (CommonModel)runConfiguration;
-            DeploymentModel model = commonModel.getDeploymentModel(webFacet);
-            if (model == null || !DeploymentManager.getInstance(myProject).isModuleDeployedOrIncludedInDeployed(model)) {
-              continue;
-            }
-          }
+					if(runConfiguration != null)
+					{
+						WebFacet webFacet = facet.getWebFacet();
+						if(!(runConfiguration instanceof CommonModel) || webFacet == null)
+						{
+							continue;
+						}
 
-          final GwtModule[] gwtModules = myGwtModulesManager.getGwtModules(module);
-          for (GwtModule gwtModule : gwtModules) {
-            if (myGwtModulesManager.isLibraryModule(gwtModule)) {
-              if (LOG.isDebugEnabled()) {
-                LOG.debug("GWT module " + gwtModule.getQualifiedName() + " has not entry points and html files so it won't be compiled.");
-              }
-              continue;
-            }
+						final CommonModel commonModel = (CommonModel) runConfiguration;
+						DeploymentModel model = commonModel.getDeploymentModel(webFacet);
+						if(model == null || !DeploymentManager.getInstance(myProject).isModuleDeployedOrIncludedInDeployed(model))
+						{
+							continue;
+						}
+					}
 
-            VirtualFile moduleFile = gwtModule.getModuleFile();
-            if (compilerConfiguration.isExcludedFromCompilation(moduleFile)) {
-              if (LOG.isDebugEnabled()) {
-                LOG.debug("GWT module '" + gwtModule.getQualifiedName() + "' is excluded from compilation.");
-              }
-              continue;
-            }
+					final GwtModule[] gwtModules = myGwtModulesManager.getGwtModules(module);
+					for(GwtModule gwtModule : gwtModules)
+					{
+						if(myGwtModulesManager.isLibraryModule(gwtModule))
+						{
+							if(LOG.isDebugEnabled())
+							{
+								LOG.debug("GWT module " + gwtModule.getQualifiedName() + " has not entry points and html files so it won't be compiled.");
+							}
+							continue;
+						}
 
-            addFilesRecursively(gwtModule, facet, moduleFile, result);
+						VirtualFile moduleFile = gwtModule.getModuleFile();
+						if(compilerConfiguration.isExcludedFromCompilation(moduleFile))
+						{
+							if(LOG.isDebugEnabled())
+							{
+								LOG.debug("GWT module '" + gwtModule.getQualifiedName() + "' is excluded from compilation.");
+							}
+							continue;
+						}
 
-            for (VirtualFile file : gwtModule.getPublicRoots()) {
-              addFilesRecursively(gwtModule, facet, file, result);
-            }
-            for (VirtualFile file : gwtModule.getSourceRoots()) {
-              addFilesRecursively(gwtModule, facet, file, result);
-            }
-          }
-        }
-      }
-    });
-    return result.toArray(new ProcessingItem[result.size()]);
-  }
+						addFilesRecursively(gwtModule, facet, moduleFile, result);
 
-  private static void addFilesRecursively(final GwtModule module, GwtFacet facet, final VirtualFile file, final List<ProcessingItem> result) {
-    if (!file.isValid() || FileTypeManager.getInstance().isFileIgnored(file.getName())) {
-      return;
-    }
+						for(VirtualFile file : gwtModule.getPublicRoots())
+						{
+							addFilesRecursively(gwtModule, facet, file, result);
+						}
+						for(VirtualFile file : gwtModule.getSourceRoots())
+						{
+							addFilesRecursively(gwtModule, facet, file, result);
+						}
+					}
+				}
+			}
+		});
+		return result.toArray(new ProcessingItem[result.size()]);
+	}
 
-    if (file.isDirectory()) {
-      final VirtualFile[] children = file.getChildren();
-      for (VirtualFile child : children) {
-        addFilesRecursively(module, facet, child, result);
-      }
-    }
-    else {
-      result.add(new GwtModuleFileProcessingItem(facet, module, file));
-    }
-  }
+	private static void addFilesRecursively(final GwtModule module, GwtFacet facet, final VirtualFile file, final List<ProcessingItem> result)
+	{
+		if(!file.isValid() || FileTypeManager.getInstance().isFileIgnored(file.getName()))
+		{
+			return;
+		}
 
-  public ProcessingItem[] process(final CompileContext context, ProcessingItem[] items) {
-    MultiValuesMap<Pair<GwtFacet, GwtModule>, GwtModuleFileProcessingItem> module2Items = new MultiValuesMap<Pair<GwtFacet, GwtModule>, GwtModuleFileProcessingItem>();
-    for (ProcessingItem item : items) {
-      final GwtModuleFileProcessingItem processingItem = (GwtModuleFileProcessingItem)item;
-      module2Items.put(Pair.create(processingItem.getFacet(), processingItem.getModule()), processingItem);
-    }
+		if(file.isDirectory())
+		{
+			final VirtualFile[] children = file.getChildren();
+			for(VirtualFile child : children)
+			{
+				addFilesRecursively(module, facet, child, result);
+			}
+		}
+		else
+		{
+			result.add(new GwtModuleFileProcessingItem(facet, module, file));
+		}
+	}
 
-    final ArrayList<ProcessingItem> compiled = new ArrayList<ProcessingItem>();
+	@Override
+	public ProcessingItem[] process(final CompileContext context, ProcessingItem[] items)
+	{
+		MultiValuesMap<Pair<GwtFacet, GwtModule>, GwtModuleFileProcessingItem> module2Items = new MultiValuesMap<Pair<GwtFacet, GwtModule>,
+				GwtModuleFileProcessingItem>();
+		for(ProcessingItem item : items)
+		{
+			final GwtModuleFileProcessingItem processingItem = (GwtModuleFileProcessingItem) item;
+			module2Items.put(Pair.create(processingItem.getFacet(), processingItem.getModule()), processingItem);
+		}
 
-    for (Pair<GwtFacet, GwtModule> pair : module2Items.keySet()) {
-      if (compile(context, pair.getFirst(), pair.getSecond())) {
-        compiled.addAll(module2Items.get(pair));
-      }
-    }
+		final ArrayList<ProcessingItem> compiled = new ArrayList<ProcessingItem>();
 
-    return compiled.toArray(new ProcessingItem[compiled.size()]);
-  }
+		for(Pair<GwtFacet, GwtModule> pair : module2Items.keySet())
+		{
+			if(compile(context, pair.getFirst(), pair.getSecond()))
+			{
+				compiled.addAll(module2Items.get(pair));
+			}
+		}
 
-  private static boolean compile(final CompileContext context, final GwtFacet facet, final GwtModule gwtModule) {
-    final Ref<VirtualFile> gwtModuleFile = Ref.create(null);
-    final Ref<File> outputDirRef = Ref.create(null);
-    final Ref<String> gwtModuleName = Ref.create(null);
-    final Module module = new ReadAction<Module>() {
-      protected void run(final Result<Module> result) {
-        gwtModuleName.set(gwtModule.getQualifiedName());
-        gwtModuleFile.set(gwtModule.getModuleFile());
-        outputDirRef.set(GwtCompilerPaths.getOutputDirectory(facet));
-        result.setResult(gwtModule.getModule());
-      }
-    }.execute().getResultObject();
+		return compiled.toArray(new ProcessingItem[compiled.size()]);
+	}
 
-    final File generatedDir = GwtCompilerPaths.getDirectoryForGenerated(module);
-    generatedDir.mkdirs();
-    File outputDir = outputDirRef.get();
-    outputDir.mkdirs();
+	private static boolean compile(final CompileContext context, final GwtFacet facet, final GwtModule gwtModule)
+	{
+		final Ref<VirtualFile> gwtModuleFile = Ref.create(null);
+		final Ref<File> outputDirRef = Ref.create(null);
+		final Ref<String> gwtModuleName = Ref.create(null);
+		final Module module = new ReadAction<Module>()
+		{
+			@Override
+			protected void run(final Result<Module> result)
+			{
+				gwtModuleName.set(gwtModule.getQualifiedName());
+				gwtModuleFile.set(gwtModule.getModuleFile());
+				outputDirRef.set(GwtCompilerPaths.getOutputDirectory(facet));
+				result.setResult(gwtModule.getModule());
+			}
+		}.execute().getResultObject();
 
-    try {
-      GeneralCommandLine commandLine = CommandLineBuilder.createFromJavaParameters(createCommand(facet, gwtModule, outputDir, generatedDir, gwtModuleName.get()));
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("GWT Compiler command line: " + commandLine.getCommandLineString());
-      }
-      commandLine.setWorkingDirectory(outputDir);
-      context.getProgressIndicator().setText2(GwtBundle.message("progress.text.compiling.gwt.module.0", gwtModuleName.get()));
+		final File generatedDir = GwtCompilerPaths.getDirectoryForGenerated(module);
+		generatedDir.mkdirs();
+		File outputDir = outputDirRef.get();
+		outputDir.mkdirs();
 
-      GwtCompilerProcessHandler handler = new GwtCompilerProcessHandler(commandLine.createProcess(), context, gwtModuleFile.get().getUrl(), facet.getModule());
-      handler.startNotify();
-      handler.waitFor();
-    }
-    catch (Exception e) {
-      LOG.info(e);
-      context.addMessage(CompilerMessageCategory.ERROR, e.getMessage(), null, -1, -1);
-      return false;
-    }
+		try
+		{
+			GeneralCommandLine commandLine = CommandLineBuilder.createFromJavaParameters(createCommand(facet, gwtModule, outputDir, generatedDir,
+					gwtModuleName.get()));
+			if(LOG.isDebugEnabled())
+			{
+				LOG.debug("GWT Compiler command line: " + commandLine.getCommandLineString());
+			}
+			commandLine.setWorkDirectory(outputDir);
+			context.getProgressIndicator().setText2(GwtBundle.message("progress.text.compiling.gwt.module.0", gwtModuleName.get()));
 
-    CompilerUtil.refreshIODirectories(Collections.singletonList(outputDir));
+			GwtCompilerProcessHandler handler = new GwtCompilerProcessHandler(commandLine.createProcess(), context, gwtModuleFile.get().getUrl(),
+					facet.getModule());
+			handler.startNotify();
+			handler.waitFor();
+		}
+		catch(Exception e)
+		{
+			LOG.info(e);
+			context.addMessage(CompilerMessageCategory.ERROR, e.getMessage(), null, -1, -1);
+			return false;
+		}
 
-    return context.getMessageCount(CompilerMessageCategory.ERROR) == 0;
-  }
+		CompilerUtil.refreshIODirectories(Collections.singletonList(outputDir));
 
-  private static JavaParameters createCommand(GwtFacet facet, final GwtModule module, final File outputDir, final File generatedDir,
-                                              final String gwtModuleName) {
-    final JavaParameters javaParameters = new JavaParameters();
-    javaParameters.setJdk(ModuleRootManager.getInstance(module.getModule()).getSdk());
-    ParametersList vmParameters = javaParameters.getVMParametersList();
-    vmParameters.addParametersString(facet.getConfiguration().getAdditionalCompilerParameters());
-    vmParameters.replaceOrAppend("-Xmx", "-Xmx" + facet.getConfiguration().getCompilerMaxHeapSize() + "m");
+		return context.getMessageCount(CompilerMessageCategory.ERROR) == 0;
+	}
 
-    createClasspath(facet, module.getModule(), javaParameters.getClassPath());
-    final GwtVersion sdkVersion = facet.getSdkVersion();
-    javaParameters.setMainClass(sdkVersion.getCompilerClassName());
-    ParametersList parameters = javaParameters.getProgramParametersList();
-    parameters.add(LOG_LEVEL_ARGUMENT);
-    parameters.add("TRACE");
-    parameters.add(sdkVersion.getCompilerOutputDirParameterName());
-    parameters.add(outputDir.getAbsolutePath());
-    parameters.add(GEN_AGRUMENT);
-    parameters.add(generatedDir.getAbsolutePath());
-    parameters.add(STYLE_ARGUMENT);
-    parameters.add(facet.getConfiguration().getOutputStyle().getId());
-    parameters.add(gwtModuleName);
-    return javaParameters;
-  }
+	private static JavaParameters createCommand(GwtFacet facet, final GwtModule module, final File outputDir, final File generatedDir,
+			final String gwtModuleName)
+	{
+		final JavaParameters javaParameters = new JavaParameters();
+		javaParameters.setJdk(ModuleRootManager.getInstance(module.getModule()).getSdk());
+		ParametersList vmParameters = javaParameters.getVMParametersList();
+		vmParameters.addParametersString(facet.getConfiguration().getAdditionalCompilerParameters());
+		vmParameters.replaceOrAppend("-Xmx", "-Xmx" + facet.getConfiguration().getCompilerMaxHeapSize() + "m");
 
-  private static void createClasspath(final GwtFacet facet, Module module, final PathsList classPath) {
-    ProjectRootsTraversing.collectRoots(module, new ProjectRootsTraversing.RootTraversePolicy(
-      ProjectRootsTraversing.RootTraversePolicy.PRODUCTION_SOURCES, 
-      ProjectRootsTraversing.RootTraversePolicy.ADD_CLASSES,
-      ProjectRootsTraversing.RootTraversePolicy.ADD_CLASSES,
-      ProjectRootsTraversing.RootTraversePolicy.RECURSIVE), classPath);
+		createClasspath(facet, module.getModule(), javaParameters.getClassPath());
+		final GwtVersion sdkVersion = facet.getSdkVersion();
+		javaParameters.setMainClass(sdkVersion.getCompilerClassName());
+		ParametersList parameters = javaParameters.getProgramParametersList();
+		parameters.add(LOG_LEVEL_ARGUMENT);
+		parameters.add("TRACE");
+		parameters.add(sdkVersion.getCompilerOutputDirParameterName());
+		parameters.add(outputDir.getAbsolutePath());
+		parameters.add(GEN_AGRUMENT);
+		parameters.add(generatedDir.getAbsolutePath());
+		parameters.add(STYLE_ARGUMENT);
+		parameters.add(facet.getConfiguration().getOutputStyle().getId());
+		parameters.add(gwtModuleName);
+		return javaParameters;
+	}
 
-    ProjectRootsTraversing.collectRoots(module, new ProjectRootsTraversing.RootTraversePolicy(
-      ProjectClasspathTraversing.GENERAL_OUTPUT, null, null,
-      ProjectRootsTraversing.RootTraversePolicy.RECURSIVE), classPath);
+	private static void createClasspath(final GwtFacet facet, Module module, final PathsList classPath)
+	{
+		ProjectRootsTraversing.collectRoots(module, new ProjectRootsTraversing.RootTraversePolicy(ProjectRootsTraversing.RootTraversePolicy
+				.PRODUCTION_SOURCES, ProjectRootsTraversing.RootTraversePolicy.ADD_CLASSES, ProjectRootsTraversing.RootTraversePolicy.ADD_CLASSES,
+				ProjectRootsTraversing.RootTraversePolicy.RECURSIVE), classPath);
 
-    classPath.addFirst(facet.getConfiguration().getSdk().getDevJarPath());
-  }
+		ProjectRootsTraversing.collectRoots(module, new ProjectRootsTraversing.RootTraversePolicy(ProjectClasspathTraversing.GENERAL_OUTPUT, null, null,
+				ProjectRootsTraversing.RootTraversePolicy.RECURSIVE), classPath);
+
+		classPath.addFirst(facet.getConfiguration().getSdk().getDevJarPath());
+	}
 }

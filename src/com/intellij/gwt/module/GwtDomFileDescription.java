@@ -15,30 +15,38 @@
  */
 package com.intellij.gwt.module;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.impl.GwtModuleImpl;
-import com.intellij.util.xml.DomFileDescription;
-import com.intellij.psi.xml.XmlFile;
 import com.intellij.openapi.module.Module;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.xml.XmlFile;
+import com.intellij.util.xml.DomFileDescription;
 
 /**
  * @author peter
-*/
-public class GwtDomFileDescription extends DomFileDescription<GwtModule> {
-  public GwtDomFileDescription() {
-    super(GwtModule.class, "module");
-  }
+ */
+public class GwtDomFileDescription extends DomFileDescription<GwtModule>
+{
+	public GwtDomFileDescription()
+	{
+		super(GwtModule.class, "module");
+	}
 
-  protected void initializeFileDescription() {
-    registerImplementation(GwtModule.class, GwtModuleImpl.class);
-  }
+	@Override
+	protected void initializeFileDescription()
+	{
+		registerImplementation(GwtModule.class, GwtModuleImpl.class);
+	}
 
-  public boolean isMyFile(@NotNull XmlFile file, final Module module) {
-    return file.getName().endsWith(GwtModulesManager.GWT_XML_SUFFIX) && super.isMyFile(file, module);
-  }
+	@Override
+	public boolean isMyFile(@NotNull XmlFile file, final Module module)
+	{
+		return file.getName().endsWith(GwtModulesManager.GWT_XML_SUFFIX) && super.isMyFile(file, module);
+	}
 
-  public boolean isAutomaticHighlightingEnabled() {
-    return false;
-  }
+	@Override
+	public boolean isAutomaticHighlightingEnabled()
+	{
+		return false;
+	}
 }

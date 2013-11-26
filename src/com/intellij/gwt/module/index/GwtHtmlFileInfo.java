@@ -18,58 +18,72 @@ package com.intellij.gwt.module.index;
 
 import gnu.trove.THashSet;
 
-import java.util.Set;
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author nik
-*/
-class GwtHtmlFileInfo {
-  private long myTimestamp;
-  private Set<String> myGwtModules = null;
+ */
+class GwtHtmlFileInfo
+{
+	private long myTimestamp;
+	private Set<String> myGwtModules = null;
 
-  public GwtHtmlFileInfo(final long timestamp) {
-    myTimestamp = timestamp;
-  }
+	public GwtHtmlFileInfo(final long timestamp)
+	{
+		myTimestamp = timestamp;
+	}
 
-  public GwtHtmlFileInfo(DataInputStream input) throws IOException {
-    myTimestamp = input.readLong();
-    int size = input.readInt();
-    while (size-- > 0) {
-      addGwtModule(input.readUTF());
-    }
-  }
+	public GwtHtmlFileInfo(DataInputStream input) throws IOException
+	{
+		myTimestamp = input.readLong();
+		int size = input.readInt();
+		while(size-- > 0)
+		{
+			addGwtModule(input.readUTF());
+		}
+	}
 
-  public void addGwtModule(final String moduleName) {
-    if (myGwtModules == null) {
-      myGwtModules = new THashSet<String>();
-    }
-    myGwtModules.add(moduleName);
-  }
+	public void addGwtModule(final String moduleName)
+	{
+		if(myGwtModules == null)
+		{
+			myGwtModules = new THashSet<String>();
+		}
+		myGwtModules.add(moduleName);
+	}
 
-  public void write(DataOutputStream output) throws IOException {
-    output.writeLong(myTimestamp);
-    if (myGwtModules == null) {
-      output.writeInt(0);
-    }
-    else {
-      output.writeInt(myGwtModules.size());
-      for (String gwtModule : myGwtModules) {
-        output.writeUTF(gwtModule);
-      }
-    }
-  }
+	public void write(DataOutputStream output) throws IOException
+	{
+		output.writeLong(myTimestamp);
+		if(myGwtModules == null)
+		{
+			output.writeInt(0);
+		}
+		else
+		{
+			output.writeInt(myGwtModules.size());
+			for(String gwtModule : myGwtModules)
+			{
+				output.writeUTF(gwtModule);
+			}
+		}
+	}
 
 
-  public @Nullable Set<String> getGwtModules() {
-    return myGwtModules;
-  }
+	public
+	@Nullable
+	Set<String> getGwtModules()
+	{
+		return myGwtModules;
+	}
 
-  public long getTimestamp() {
-    return myTimestamp;
-  }
+	public long getTimestamp()
+	{
+		return myTimestamp;
+	}
 }

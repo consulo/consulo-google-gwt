@@ -16,6 +16,9 @@
 
 package com.intellij.gwt.inspections;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -29,118 +32,153 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.css.CssElementFactory;
 import com.intellij.psi.css.CssFile;
 import com.intellij.psi.css.CssRuleset;
 import com.intellij.psi.css.CssStylesheet;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class GwtToCssClassReferencesInspection extends BaseGwtInspection {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.inspections.GwtToCssClassReferencesInspection");
+public class GwtToCssClassReferencesInspection extends BaseGwtInspection
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.inspections.GwtToCssClassReferencesInspection");
 
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
-    Project project = holder.getManager().getProject();
-    if (hasGwtFacets(project)) {
-      return new CssReferencesProblemsCollectingVisitor(holder);
-    }
-    return super.buildVisitor(holder, isOnTheFly);
-  }
+	@Override
+	@NotNull
+	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly)
+	{
+		Project project = holder.getManager().getProject();
+		if(hasGwtFacets(project))
+		{
+			return new CssReferencesProblemsCollectingVisitor(holder);
+		}
+		return super.buildVisitor(holder, isOnTheFly);
+	}
 
-  @NotNull
-  public String getDisplayName() {
-    return GwtBundle.message("inspection.unresolved.references.to.css.classes.display.name");
-  }
+	@Override
+	@NotNull
+	public String getDisplayName()
+	{
+		return GwtBundle.message("inspection.unresolved.references.to.css.classes.display.name");
+	}
 
-  @NotNull
-  @NonNls
-  public String getShortName() {
-    return "GWTStyleCheck";
-  }
+	@Override
+	@NotNull
+	@NonNls
+	public String getShortName()
+	{
+		return "GWTStyleCheck";
+	}
 
-  private static class MyLocalQuickFix extends BaseGwtLocalQuickFix {
-    private CssFile myCssFile;
-    private String myClassName;
+	private static class MyLocalQuickFix extends BaseGwtLocalQuickFix
+	{
+		private CssFile myCssFile;
+		private String myClassName;
 
-    public MyLocalQuickFix(PsiLiteralExpression expression, final CssFile cssFile, final String className) {
-      super(GwtBundle.message("quick.fix.create.css.class.name", expression.getText()));
-      myCssFile = cssFile;
-      myClassName = className;
-    }
+		public MyLocalQuickFix(PsiLiteralExpression expression, final CssFile cssFile, final String className)
+		{
+			super(GwtBundle.message("quick.fix.create.css.class.name", expression.getText()));
+			myCssFile = cssFile;
+			myClassName = className;
+		}
 
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      VirtualFile virtualFile = myCssFile.getVirtualFile();
-      if (virtualFile == null) {
-        PsiFile originalFile = myCssFile.getOriginalFile();
-        if (originalFile != null) {
-          virtualFile = originalFile.getVirtualFile();
-        }
-        if (virtualFile == null) return;
-      }
-      
-      if (ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(virtualFile).hasReadonlyFiles()) {
-        return;
-      }
+		@Override
+		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		{
+			VirtualFile virtualFile = myCssFile.getVirtualFile();
+			if(virtualFile == null)
+			{
+				PsiFile originalFile = myCssFile.getOriginalFile();
+				if(originalFile != null)
+				{
+					virtualFile = originalFile.getVirtualFile();
+				}
+				if(virtualFile == null)
+				{
+					return;
+				}
+			}
 
-      try {
-        CssStylesheet stylesheet = myCssFile.getStylesheet();
-        CssRuleset cssRuleset = CssElementFactory.getInstance(project).createRuleset("." + myClassName + "{\n\n}\n");
-        stylesheet.addRuleset(cssRuleset);
-        final CssRuleset[] rulesets = stylesheet.getRulesets();
-        final CssRuleset added = rulesets[rulesets.length - 1];
-        final OpenFileDescriptor fileDescriptor = new OpenFileDescriptor(project, virtualFile, added.getBlock().getTextOffset());
-        FileEditorManager.getInstance(project).openEditor(fileDescriptor, true);
-      }
-      catch (IncorrectOperationException e) {
-        LOG.error(e);
-      }
-    }
-  }
+			if(ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(virtualFile).hasReadonlyFiles())
+			{
+				return;
+			}
 
-  private static class CssReferencesProblemsCollectingVisitor extends JavaElementVisitor {
-    private final ProblemsHolder myProblemsHolder;
+			try
+			{
+				CssStylesheet stylesheet = myCssFile.getStylesheet();
+				CssRuleset cssRuleset = CssElementFactory.getInstance(project).createRuleset("." + myClassName + "{\n\n}\n");
+				stylesheet.addRuleset(cssRuleset);
+				final CssRuleset[] rulesets = stylesheet.getRulesets();
+				final CssRuleset added = rulesets[rulesets.length - 1];
+				final OpenFileDescriptor fileDescriptor = new OpenFileDescriptor(project, virtualFile, added.getBlock().getTextOffset());
+				FileEditorManager.getInstance(project).openEditor(fileDescriptor, true);
+			}
+			catch(IncorrectOperationException e)
+			{
+				LOG.error(e);
+			}
+		}
+	}
 
-    public CssReferencesProblemsCollectingVisitor(ProblemsHolder problemsHolder) {
-      myProblemsHolder = problemsHolder;
-    }
+	private static class CssReferencesProblemsCollectingVisitor extends JavaElementVisitor
+	{
+		private final ProblemsHolder myProblemsHolder;
 
-    @Override public void visitLiteralExpression(PsiLiteralExpression expression) {
-      final GwtToCssClassReference reference = findUnresolvedReference(expression);
-      if (reference != null) {
-        addProblem(expression, reference);
-      }
-    }
+		public CssReferencesProblemsCollectingVisitor(ProblemsHolder problemsHolder)
+		{
+			myProblemsHolder = problemsHolder;
+		}
 
-    @Nullable
-    private static GwtToCssClassReference findUnresolvedReference(final PsiLiteralExpression expression) {
-      final PsiReference[] references = expression.getReferences();
-      for (PsiReference reference : references) {
-        if (reference instanceof GwtToCssClassReference && reference.resolve() == null) {
-          return (GwtToCssClassReference)reference;
-        }
-      }
-      return null;
-    }
+		@Override
+		public void visitLiteralExpression(PsiLiteralExpression expression)
+		{
+			final GwtToCssClassReference reference = findUnresolvedReference(expression);
+			if(reference != null)
+			{
+				addProblem(expression, reference);
+			}
+		}
 
-    private void addProblem(final PsiLiteralExpression expression, final GwtToCssClassReference reference) {
-      MyLocalQuickFix fix = null;
-      final GwtModule module = reference.findGwtModule();
-      if (module != null) {
-        CssFile cssFile = GwtModulesManager.getInstance(expression.getProject()).findPreferableCssFile(module);
-        String className = String.valueOf(expression.getValue());
-        if (cssFile != null && !className.contains(".")) {
-          fix = new MyLocalQuickFix(expression, cssFile, className);
-        }
-      }
-      myProblemsHolder.registerProblem(expression, GwtBundle.message("problem.description.unknown.css.class", expression.getValue()),
-                                                       ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, fix);
-    }
+		@Nullable
+		private static GwtToCssClassReference findUnresolvedReference(final PsiLiteralExpression expression)
+		{
+			final PsiReference[] references = expression.getReferences();
+			for(PsiReference reference : references)
+			{
+				if(reference instanceof GwtToCssClassReference && reference.resolve() == null)
+				{
+					return (GwtToCssClassReference) reference;
+				}
+			}
+			return null;
+		}
 
-    @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
-    }
-  }
+		private void addProblem(final PsiLiteralExpression expression, final GwtToCssClassReference reference)
+		{
+			MyLocalQuickFix fix = null;
+			final GwtModule module = reference.findGwtModule();
+			if(module != null)
+			{
+				CssFile cssFile = GwtModulesManager.getInstance(expression.getProject()).findPreferableCssFile(module);
+				String className = String.valueOf(expression.getValue());
+				if(cssFile != null && !className.contains("."))
+				{
+					fix = new MyLocalQuickFix(expression, cssFile, className);
+				}
+			}
+			myProblemsHolder.registerProblem(expression, GwtBundle.message("problem.description.unknown.css.class", expression.getValue()),
+					ProblemHighlightType.LIKE_UNKNOWN_SYMBOL, fix);
+		}
+
+		@Override
+		public void visitReferenceExpression(PsiReferenceExpression expression)
+		{
+		}
+	}
 }

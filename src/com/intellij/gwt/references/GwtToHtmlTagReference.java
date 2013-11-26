@@ -23,28 +23,41 @@ import com.intellij.util.ArrayUtil;
 
 /**
  * @author nik
-*/
-public class GwtToHtmlTagReference extends BaseGwtReference {
-  public GwtToHtmlTagReference(final PsiLiteralExpression element) {
-    super(element);
-  }
+ */
+public class GwtToHtmlTagReference extends BaseGwtReference
+{
+	public GwtToHtmlTagReference(final PsiLiteralExpression element)
+	{
+		super(element);
+	}
 
-  public PsiElement resolve() {
-    final Object value = myElement.getValue();
-    if (!(value instanceof String)) return null;
+	@Override
+	public PsiElement resolve()
+	{
+		final Object value = myElement.getValue();
+		if(!(value instanceof String))
+		{
+			return null;
+		}
 
-    String id = (String)value;
-    XmlFile xmlFile = getHtmlFileForModule();
-    if (xmlFile == null) return null;
+		String id = (String) value;
+		XmlFile xmlFile = getHtmlFileForModule();
+		if(xmlFile == null)
+		{
+			return null;
+		}
 
-    return myGwtModulesManager.findTagById(xmlFile, id);
-  }
+		return myGwtModulesManager.findTagById(xmlFile, id);
+	}
 
-  public Object[] getVariants() {
-    final XmlFile file = getHtmlFileForModule();
-    if (file != null) {
-      return myGwtModulesManager.getAllIds(file);
-    }
-    return ArrayUtil.EMPTY_OBJECT_ARRAY;
-  }
+	@Override
+	public Object[] getVariants()
+	{
+		final XmlFile file = getHtmlFileForModule();
+		if(file != null)
+		{
+			return myGwtModulesManager.getAllIds(file);
+		}
+		return ArrayUtil.EMPTY_OBJECT_ARRAY;
+	}
 }

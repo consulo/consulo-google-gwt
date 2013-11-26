@@ -16,59 +16,64 @@
 
 package com.intellij.gwt.jsinject;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.Language;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.lang.javascript.JavaScriptSupportLoader;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLanguageInjectionHost;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
 
-import java.util.Arrays;
-import java.util.List;
+public class JsInjector implements MultiHostInjector
+{
+	@Override
+	public void injectLanguages(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement host)
+	{
+		if(((PsiComment) host).getTokenType() == JavaTokenType.C_STYLE_COMMENT)
+		{
+			PsiComment comment = (PsiComment) host;
+			String text = comment.getText();
 
-public class JsInjector implements MultiHostInjector {
-  public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement host) {
-    if (((PsiComment)host).getTokenType() == JavaTokenType.C_STYLE_COMMENT) {
-      PsiComment comment = (PsiComment)host;
-      String text = comment.getText();
+			if(!text.startsWith("/*-{") || !text.endsWith("}-*/"))
+			{
+				return;
+			}
 
-      if (!text.startsWith("/*-{") || !text.endsWith("}-*/")) return;
+			final PsiElement parent = host.getParent();
+			if(parent != null && parent instanceof PsiMethod)
+			{
+				PsiMethod method = (PsiMethod) parent;
+				if(method.getModifierList().hasExplicitModifier("native"))
+				{
+					@NonNls StringBuilder prefix = new StringBuilder();
+					prefix.append("function ");
+					prefix.append(method.getName());
+					prefix.append(" ( ");
+					final PsiParameter[] parameters = method.getParameterList().getParameters();
+					for(int i = 0; i != parameters.length; ++i)
+					{
+						prefix.append(parameters[i].getName());
+						prefix.append(",");
+					}
 
-      final PsiElement parent = host.getParent();
-      if (parent != null && parent instanceof PsiMethod) {
-        PsiMethod method = (PsiMethod)parent;
-        if (method.getModifierList().hasExplicitModifier("native")) {
-          @NonNls StringBuilder prefix = new StringBuilder();
-          prefix.append("function ");
-          prefix.append(method.getName());
-          prefix.append(" ( ");
-          final PsiParameter[] parameters = method.getParameterList().getParameters();
-          for (int i = 0; i != parameters.length; ++i) {
-            prefix.append(parameters[i].getName());
-            prefix.append(",");
-          }
+					prefix.append("$wnd");
+					prefix.append(",");
+					prefix.append("$doc");
 
-          prefix.append("$wnd");
-          prefix.append(",");
-          prefix.append("$doc");
+					prefix.append(") {");
 
-          prefix.append(") {");
-
-          String suffix = "}";
-          Language language = JavaScriptSupportLoader.GWT_DIALECT;
-          TextRange range = new TextRange(4, text.length() - 4);
-          registrar.startInjecting(language)
-            .addPlace(prefix.toString(), suffix, (PsiLanguageInjectionHost)host, range)
-            .doneInjecting();
-        }
-      }
-    }
-  }
-
-  @NotNull
-  public List<? extends Class<? extends PsiElement>> elementsToInjectIn() {
-    return Arrays.asList(PsiComment.class);
-  }
+					String suffix = "}";
+					Language language = JavaScriptSupportLoader.GWT_DIALECT;
+					TextRange range = new TextRange(4, text.length() - 4);
+					registrar.startInjecting(language).addPlace(prefix.toString(), suffix, (PsiLanguageInjectionHost) host, range).doneInjecting();
+				}
+			}
+		}
+	}
 }

@@ -16,48 +16,53 @@
 
 package com.intellij.gwt.module.model;
 
-import com.intellij.util.xml.ResolvingConverter;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.css.CssFile;
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.Converter;
-import com.intellij.psi.css.CssFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * @author nik
  */
-public class CssFileConverter extends Converter<CssFile> {
-  @Nullable
-  public CssFile fromString(final @Nullable String path, final ConvertContext context) {
-    GwtModule module = context.getInvocationElement().<GwtModule>getRoot().getRootElement();
-    final List<VirtualFile> publicRoots = module.getPublicRoots();
+public class CssFileConverter extends Converter<CssFile>
+{
+	@Override
+	@Nullable
+	public CssFile fromString(final @Nullable String path, final ConvertContext context)
+	{
+		GwtModule module = context.getInvocationElement().<GwtModule>getRoot().getRootElement();
+		final List<VirtualFile> publicRoots = module.getPublicRoots();
 
-    if (path == null) {
-      return null;
-    }
+		if(path == null)
+		{
+			return null;
+		}
 
-    for (VirtualFile root : publicRoots) {
-      final VirtualFile cssFile = root.findFileByRelativePath(path);
-      if (cssFile != null) {
-        final PsiManager psiManager = context.getPsiManager();
-        final PsiFile psiFile = psiManager.findFile(cssFile);
-        if (psiFile instanceof CssFile) {
-          return (CssFile)psiFile;
-        }
-      }
-    }
+		for(VirtualFile root : publicRoots)
+		{
+			final VirtualFile cssFile = root.findFileByRelativePath(path);
+			if(cssFile != null)
+			{
+				final PsiManager psiManager = context.getPsiManager();
+				final PsiFile psiFile = psiManager.findFile(cssFile);
+				if(psiFile instanceof CssFile)
+				{
+					return (CssFile) psiFile;
+				}
+			}
+		}
 
-    return null;
-  }
+		return null;
+	}
 
-  public String toString(final CssFile cssFile, final ConvertContext context) {
-    throw new UnsupportedOperationException();
-  }
+	@Override
+	public String toString(final CssFile cssFile, final ConvertContext context)
+	{
+		throw new UnsupportedOperationException();
+	}
 }

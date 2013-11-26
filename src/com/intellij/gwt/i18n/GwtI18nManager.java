@@ -16,37 +16,39 @@
 
 package com.intellij.gwt.i18n;
 
-import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.lang.properties.psi.Property;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.properties.psi.PropertiesFile;
+import com.intellij.lang.properties.psi.Property;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiMethod;
 
 /**
  * @author nik
  */
-public abstract class GwtI18nManager {
+public abstract class GwtI18nManager
+{
 
-  public static GwtI18nManager getInstance(Project project) {
-    return ServiceManager.getService(project, GwtI18nManager.class);
-  }
+	public static GwtI18nManager getInstance(Project project)
+	{
+		return ServiceManager.getService(project, GwtI18nManager.class);
+	}
 
-  @NotNull
-  public abstract PropertiesFile[] getPropertiesFiles(@NotNull PsiClass anInterface);
+	@NotNull
+	public abstract PropertiesFile[] getPropertiesFiles(@NotNull PsiClass anInterface);
 
-  @Nullable
-  public abstract PsiClass getPropertiesInterface(@NotNull PropertiesFile file);
+	@Nullable
+	public abstract PsiClass getPropertiesInterface(@NotNull PropertiesFile file);
 
-  @NotNull
-  public abstract Property[] getProperties(@NotNull PsiMethod method);
+	@NotNull
+	public abstract Property[] getProperties(@NotNull PsiMethod method);
 
-  @Nullable
-  public abstract PsiMethod getMethod(@NotNull Property property);
+	@Nullable
+	public abstract PsiMethod getMethod(@NotNull Property property);
 
-  public abstract boolean isConstantsInterface(@NotNull PsiClass aClass);
+	public abstract boolean isConstantsInterface(@NotNull PsiClass aClass);
 
-  public abstract boolean isLocalizableInterface(@NotNull PsiClass aClass);
+	public abstract boolean isLocalizableInterface(@NotNull PsiClass aClass);
 }

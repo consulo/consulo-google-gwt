@@ -16,29 +16,34 @@
 
 package com.intellij.gwt.references;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.PsiReferenceProviderBase;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author nik
  */
-public class GwtToHtmlReferencesProvider extends PsiReferenceProviderBase {
+public class GwtToHtmlReferencesProvider extends PsiReferenceProviderBase
+{
 
-  @NotNull
-  public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context) {
-    if (element instanceof PsiLiteralExpression) {
-      final PsiLiteralExpression literalExpression = (PsiLiteralExpression)element;
-      if (literalExpression.getValue() instanceof String) {
-        return new PsiReference[]{
-          new GwtToHtmlTagReference(literalExpression)
-        };
-      }
-    }
-    return PsiReference.EMPTY_ARRAY;
-  }
+	@Override
+	@NotNull
+	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context)
+	{
+		if(element instanceof PsiLiteralExpression)
+		{
+			final PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
+			if(literalExpression.getValue() instanceof String)
+			{
+				return new PsiReference[]{
+						new GwtToHtmlTagReference(literalExpression)
+				};
+			}
+		}
+		return PsiReference.EMPTY_ARRAY;
+	}
 
 }

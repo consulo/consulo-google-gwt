@@ -16,17 +16,18 @@
 
 package com.intellij.gwt.module.model;
 
+import com.intellij.psi.css.CssFile;
+import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.Convert;
-import com.intellij.psi.css.CssFile;
 
 /**
  * @author nik
  */
-public interface GwtStylesheetRef extends DomElement {
+public interface GwtStylesheetRef extends DomElement
+{
 
-  @Convert(CssFileConverter.class)
-  GenericAttributeValue<CssFile> getSrc();
+	@Convert(CssFileConverter.class)
+	GenericAttributeValue<CssFile> getSrc();
 
 }

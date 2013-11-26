@@ -2,104 +2,108 @@
   ~ Copyright (c) 2000-2006 JetBrains s.r.o. All Rights Reserved.
   -->
 <idea-plugin>
-  <name>GWT Support</name>
-  <id>com.intellij.gwt</id>
-  <description>Significantly simplifies development of AJAX applications based on Google Web Toolkit</description>
-  <version>1.0</version>
-  <depends>org.consulo.java</depends>
-  <depends>org.mustbe.consulo.javascript</depends>
-  <depends>com.intellij.xml</depends>
-  <depends>com.intellij.properties</depends>
-  <vendor logo="/general/ijLogo.png">JetBrains</vendor>
-  <category>Web/JavaEE Technologies</category>
+	<name>GWT Support</name>
+	<id>com.intellij.gwt</id>
+	<description>Significantly simplifies development of AJAX applications based on Google Web Toolkit</description>
+	<version>1.0</version>
+	<depends>org.consulo.java</depends>
+	<depends>org.mustbe.consulo.javascript</depends>
+	<depends>com.intellij.xml</depends>
+	<depends>com.intellij.properties</depends>
+	<vendor logo="/general/ijLogo.png">JetBrains</vendor>
+	<category>Web/JavaEE Technologies</category>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
-    <junitPatcher implementation="com.intellij.gwt.junit.GwtJUnitPatcher"/>
-    <javaee.web.customBuildParticipant implementation="com.intellij.gwt.make.GwtWebBuildParticipant"/>
-    <antBuildGen implementation="com.intellij.gwt.ant.GwtBuildExtension" order="first"/>
-    <dom.fileDescription implementation="com.intellij.gwt.module.GwtDomFileDescription"/>
-    <fileBasedIndex implementation="com.intellij.gwt.module.index.GwtHtmlFileIndex"/>
+	<extensions defaultExtensionNs="com.intellij">
+		<errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
+		<junitPatcher implementation="com.intellij.gwt.junit.GwtJUnitPatcher"/>
+		<javaee.web.customBuildParticipant implementation="com.intellij.gwt.make.GwtWebBuildParticipant"/>
+		<antBuildGen implementation="com.intellij.gwt.ant.GwtBuildExtension" order="first"/>
+		<dom.fileDescription implementation="com.intellij.gwt.module.GwtDomFileDescription"/>
+		<fileBasedIndex implementation="com.intellij.gwt.module.index.GwtHtmlFileIndex"/>
 
-    <psi.referenceContributor implementation="com.intellij.gwt.references.GwtReferenceContributor"/>
+		<psi.referenceContributor implementation="com.intellij.gwt.references.GwtReferenceContributor"/>
 
-    <resourceBundleManager implementation="com.intellij.gwt.i18n.GwtResourceBundleManager"/>
+		<resourceBundleManager implementation="com.intellij.gwt.i18n.GwtResourceBundleManager"/>
 
-    <applicationService serviceInterface="com.intellij.gwt.sdk.GwtSdkManager"
-                        serviceImplementation="com.intellij.gwt.sdk.impl.GwtSdkManagerImpl"/>
-    <projectService serviceInterface="com.intellij.gwt.module.GwtModulesManager"
-                    serviceImplementation="com.intellij.gwt.module.GwtModulesManagerImpl"/>
-    <projectService serviceInterface="com.intellij.gwt.i18n.GwtI18nManager"
-                    serviceImplementation="com.intellij.gwt.i18n.GwtI18nManagerImpl"/>
+		<applicationService serviceInterface="com.intellij.gwt.sdk.GwtSdkManager"
+							serviceImplementation="com.intellij.gwt.sdk.impl.GwtSdkManagerImpl"/>
+		<projectService serviceInterface="com.intellij.gwt.module.GwtModulesManager"
+						serviceImplementation="com.intellij.gwt.module.GwtModulesManagerImpl"/>
+		<projectService serviceInterface="com.intellij.gwt.i18n.GwtI18nManager"
+						serviceImplementation="com.intellij.gwt.i18n.GwtI18nManagerImpl"/>
 
-    <annotator language="JAVA" implementationClass="com.intellij.gwt.i18n.PropertiesInterfaceAnnotator"/>
+		<annotator language="JAVA" implementationClass="com.intellij.gwt.i18n.PropertiesInterfaceAnnotator"/>
 
-    <css.unusedSymbolExclusion implementation="com.intellij.gwt.module.GwtUnusedCssSymbolInspectionExclusion"/>
+		<css.unusedSymbolExclusion implementation="com.intellij.gwt.module.GwtUnusedCssSymbolInspectionExclusion"/>
 
-    <referencesSearch implementation="com.intellij.gwt.references.search.GwtToHtmlTagIdReferencesSearcher"/>
-    <definitionsSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
-
-    <overridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtOverridingServiceMethodsSearcher"/>
-    <allOverridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtAllOverridingServiceMethodsSearcher"/>
-    <superMethodsSearch implementation="com.intellij.gwt.rpc.GwtAsyncMethodSearcher"/>
-
-    <frameworkSupport implementation="com.intellij.gwt.facet.GwtFacetFrameworkSupportProvider"/>
-    <explodedAndJarBuildGenerator implementation="com.intellij.gwt.ant.GwtExplodedAndJarBuildGenerator"/>
-    <configurationType implementation="com.intellij.gwt.run.GwtRunConfigurationType"/>
-    <lang.elementManipulator forClass="com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl"
-      implementationClass="com.intellij.gwt.jsinject.JsGwtReferenceExpressionManipulator"/>
-    <codeInsight.parameterInfo language="JavaScript" implementationClass="com.intellij.gwt.jsinject.GwtJSParameterInfoHandler"/>
-    <compiler implementation="com.intellij.gwt.make.GwtCompiler"/>
-    <multiHostInjector implementation="com.intellij.gwt.jsinject.JsInjector"/>
-  </extensions>
+		<referencesSearch implementation="com.intellij.gwt.references.search.GwtToHtmlTagIdReferencesSearcher"/>
+		<definitionsSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
 
 
-  <application-components>
-    <component>
-      <implementation-class>com.intellij.gwt.GwtApplicationComponent</implementation-class>
-    </component>
-  </application-components>
+		<frameworkSupport implementation="com.intellij.gwt.facet.GwtFacetFrameworkSupportProvider"/>
+		<explodedAndJarBuildGenerator implementation="com.intellij.gwt.ant.GwtExplodedAndJarBuildGenerator"/>
+		<configurationType implementation="com.intellij.gwt.run.GwtRunConfigurationType"/>
+		<lang.elementManipulator forClass="com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl"
+								 implementationClass="com.intellij.gwt.jsinject.JsGwtReferenceExpressionManipulator"/>
+		<codeInsight.parameterInfo language="JavaScript" implementationClass="com.intellij.gwt.jsinject.GwtJSParameterInfoHandler"/>
+		<compiler implementation="com.intellij.gwt.make.GwtCompiler"/>
+		<multiHostInjector forClass="com.intellij.psi.PsiComment" implementationClass="com.intellij.gwt.jsinject.JsInjector"/>
+	</extensions>
 
-  <project-components>
-    <component>
-      <implementation-class>com.intellij.gwt.refactorings.GwtRefactoringListenerProvider</implementation-class>
-    </component>
-  </project-components>
+	<extensions defaultExtensionNs="org.consulo.java">
+		<overridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtOverridingServiceMethodsSearcher"/>
+		<allOverridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtAllOverridingServiceMethodsSearcher"/>
+		<superMethodsSearch implementation="com.intellij.gwt.rpc.GwtAsyncMethodSearcher"/>
 
-  <actions>
-    <group id="GWT" class="com.intellij.gwt.actions.GwtCreateActionGroup" text="Google Web Toolkit">
-      <action id="GWT.NewTestCase"
-              class="com.intellij.gwt.actions.CreateGwtTestCaseAction"
-              text="GWT Test Case">
-      </action>
-      <action id="GWT.NewModule"
-              class="com.intellij.gwt.actions.CreateGwtModuleAction"
-              text="GWT Module"
-              description="Creates new GWT module skeleton">
-      </action>
-      <action id="GWT.NewEntryPoint"
-              class="com.intellij.gwt.actions.CreateGwtEntryPointAction"
-              text="GWT Entry point"
-              description="Create new GWT class extending EntryPoint">
-      </action>
-      <action id="GWT.NewRemoteService"
-              class="com.intellij.gwt.actions.CreateGwtRemoteServiceAction"
-              text="GWT Remote service"
-              description="Create new GWT interface extending RemoteService, corresponding async version and implementation class">
-      </action>
-      <action id="GWT.NewSerialClass"
-              class="com.intellij.gwt.actions.CreateGwtSerializableClassAction"
-              text="GWT Serializable class"
-              description="Creates new GWT class implementing IsSerializable">
-      </action>
-      <separator/>
-      <action id="GWT.NewAppSample"
-              class="com.intellij.gwt.actions.CreateGwtSampleAppAction"
-              text="GWT Sample application"
-              description="Creates new sample application">
-      </action>
-      <add-to-group group-id="NewGroup" anchor="last"/>
-    </group>
+	</extensions>
 
-  </actions>
+
+	<application-components>
+		<component>
+			<implementation-class>com.intellij.gwt.GwtApplicationComponent</implementation-class>
+		</component>
+	</application-components>
+
+	<project-components>
+		<component>
+			<implementation-class>com.intellij.gwt.refactorings.GwtRefactoringListenerProvider</implementation-class>
+		</component>
+	</project-components>
+
+	<actions>
+		<group id="GWT" class="com.intellij.gwt.actions.GwtCreateActionGroup" text="Google Web Toolkit">
+			<action id="GWT.NewTestCase"
+					class="com.intellij.gwt.actions.CreateGwtTestCaseAction"
+					text="GWT Test Case">
+			</action>
+			<action id="GWT.NewModule"
+					class="com.intellij.gwt.actions.CreateGwtModuleAction"
+					text="GWT Module"
+					description="Creates new GWT module skeleton">
+			</action>
+			<action id="GWT.NewEntryPoint"
+					class="com.intellij.gwt.actions.CreateGwtEntryPointAction"
+					text="GWT Entry point"
+					description="Create new GWT class extending EntryPoint">
+			</action>
+			<action id="GWT.NewRemoteService"
+					class="com.intellij.gwt.actions.CreateGwtRemoteServiceAction"
+					text="GWT Remote service"
+					description="Create new GWT interface extending RemoteService, corresponding async version and implementation class">
+			</action>
+			<action id="GWT.NewSerialClass"
+					class="com.intellij.gwt.actions.CreateGwtSerializableClassAction"
+					text="GWT Serializable class"
+					description="Creates new GWT class implementing IsSerializable">
+			</action>
+			<separator/>
+			<action id="GWT.NewAppSample"
+					class="com.intellij.gwt.actions.CreateGwtSampleAppAction"
+					text="GWT Sample application"
+					description="Creates new sample application">
+			</action>
+			<add-to-group group-id="NewGroup" anchor="last"/>
+		</group>
+
+	</actions>
 </idea-plugin>

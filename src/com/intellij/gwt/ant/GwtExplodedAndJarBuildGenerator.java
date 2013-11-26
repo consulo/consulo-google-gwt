@@ -15,60 +15,68 @@
  */
 package com.intellij.gwt.ant;
 
-import com.intellij.compiler.ant.ExplodedAndJarTargetParameters;
-import com.intellij.compiler.ant.Tag;
-import com.intellij.compiler.ant.BuildProperties;
-import com.intellij.compiler.ant.taskdefs.ZipFileSet;
-import com.intellij.compiler.ant.taskdefs.Copy;
-import com.intellij.compiler.ant.taskdefs.FileSet;
-import com.intellij.compiler.make.ExplodedAndJarBuildGenerator;
-import com.intellij.openapi.compiler.make.BuildInstruction;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.Pair;
-import com.intellij.gwt.make.GwtWebBuildParticipant;
-import com.intellij.gwt.facet.GwtFacet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.compiler.ant.BuildProperties;
+import com.intellij.compiler.ant.ExplodedAndJarTargetParameters;
+import com.intellij.compiler.ant.Tag;
+import com.intellij.compiler.ant.taskdefs.Copy;
+import com.intellij.compiler.ant.taskdefs.FileSet;
+import com.intellij.compiler.ant.taskdefs.ZipFileSet;
+import com.intellij.compiler.make.ExplodedAndJarBuildGenerator;
+import com.intellij.gwt.facet.GwtFacet;
+import com.intellij.gwt.make.GwtWebBuildParticipant;
+import com.intellij.openapi.compiler.make.BuildInstruction;
+import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.Ref;
 
 /**
  * @author peter
  */
-public class GwtExplodedAndJarBuildGenerator extends ExplodedAndJarBuildGenerator{
-  @Nullable
-  public Tag[] generateTagsForExplodedTarget(@NotNull final BuildInstruction instruction, @NotNull final ExplodedAndJarTargetParameters parameters,
-                                             final int instructionCount)
-    throws Exception {
-    Pair<GwtFacet,String> pair = GwtWebBuildParticipant.getGwtModuleInfo(instruction);
-    if (pair != null) {
-      Copy copy = new Copy(BuildProperties.propertyRef(parameters.getExplodedPathParameter()) + "/" + instruction.getOutputRelativePath());
-      copy.add(new FileSet(getGwtCompilerOutputDirectory(pair)));
-      return new Tag[] {copy};
-    }
-    else {
-      return null;
-    }
-  }
+public class GwtExplodedAndJarBuildGenerator extends ExplodedAndJarBuildGenerator
+{
+	@Nullable
+	public Tag[] generateTagsForExplodedTarget(@NotNull final BuildInstruction instruction, @NotNull final ExplodedAndJarTargetParameters
+			parameters, final int instructionCount) throws Exception
+	{
+		Pair<GwtFacet, String> pair = GwtWebBuildParticipant.getGwtModuleInfo(instruction);
+		if(pair != null)
+		{
+			Copy copy = new Copy(BuildProperties.propertyRef(parameters.getExplodedPathParameter()) + "/" + instruction.getOutputRelativePath());
+			copy.add(new FileSet(getGwtCompilerOutputDirectory(pair)));
+			return new Tag[]{copy};
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-  private static String getGwtCompilerOutputDirectory(final Pair<GwtFacet, String> pair) {
-    String sourceRoot = BuildProperties.propertyRef(GwtBuildProperties.getGwtCompilerOutputPropertyName(pair.getFirst()));
-    return sourceRoot + "/" + pair.getSecond();
-  }
+	private static String getGwtCompilerOutputDirectory(final Pair<GwtFacet, String> pair)
+	{
+		String sourceRoot = BuildProperties.propertyRef(GwtBuildProperties.getGwtCompilerOutputPropertyName(pair.getFirst()));
+		return sourceRoot + "/" + pair.getSecond();
+	}
 
-  @Nullable
-  public ZipFileSet[] generateTagsForJarTarget(@NotNull final BuildInstruction instruction, @NotNull final ExplodedAndJarTargetParameters parameters,
-                                       final Ref<Boolean> tempDirUsed) throws Exception {
-    Pair<GwtFacet, String> pair = GwtWebBuildParticipant.getGwtModuleInfo(instruction);
-    if (pair != null) {
-      return new ZipFileSet[]{new ZipFileSet(getGwtCompilerOutputDirectory(pair), instruction.getOutputRelativePath(), true)};
-    }
-    else {
-      return null;
-    }
-  }
+	@Nullable
+	public ZipFileSet[] generateTagsForJarTarget(@NotNull final BuildInstruction instruction, @NotNull final ExplodedAndJarTargetParameters
+			parameters, final Ref<Boolean> tempDirUsed) throws Exception
+	{
+		Pair<GwtFacet, String> pair = GwtWebBuildParticipant.getGwtModuleInfo(instruction);
+		if(pair != null)
+		{
+			return new ZipFileSet[]{new ZipFileSet(getGwtCompilerOutputDirectory(pair), instruction.getOutputRelativePath(), true)};
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-  @Nullable
-  public Tag[] generateJarBuildPrepareTags(@NotNull final BuildInstruction instruction, @NotNull final ExplodedAndJarTargetParameters parameters)
-    throws Exception {
-    return GwtWebBuildParticipant.isCopyGwtOutputInstruction(instruction) ? Tag.EMPTY_ARRAY : null;
-  }
+	@Nullable
+	public Tag[] generateJarBuildPrepareTags(@NotNull final BuildInstruction instruction, @NotNull final ExplodedAndJarTargetParameters parameters)
+			throws Exception
+	{
+		return GwtWebBuildParticipant.isCopyGwtOutputInstruction(instruction) ? Tag.EMPTY_ARRAY : null;
+	}
 }

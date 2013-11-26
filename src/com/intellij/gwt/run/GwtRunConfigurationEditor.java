@@ -16,6 +16,23 @@
 
 package com.intellij.gwt.run;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collection;
+import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
@@ -43,269 +60,340 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.ComboboxWithBrowseButton;
 import com.intellij.ui.RawCommandLineEditor;
 import com.intellij.util.descriptors.ConfigFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collection;
-import java.util.List;
+public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguration>
+{
+	private DefaultComboBoxModel myModulesModel;
+	private DefaultComboBoxModel myPagesModel;
+	private JComboBox myModulesBox;
+	private JPanel myMainPanel;
+	private ComboboxWithBrowseButton myHtmlPageBox;
+	private JLabel myHtmlToOpenLabel;
+	private RawCommandLineEditor myVMParameters;
+	private RawCommandLineEditor myGwtShellParameters;
+	private JCheckBox myPatchWebXmlCheckBox;
+	private TextFieldWithBrowseButton myWebXmlField;
+	private Project myProject;
+	private GwtModulesManager myGwtModulesManager;
 
-public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguration> {
-  private DefaultComboBoxModel myModulesModel;
-  private DefaultComboBoxModel myPagesModel;
-  private JComboBox myModulesBox;
-  private JPanel myMainPanel;
-  private ComboboxWithBrowseButton myHtmlPageBox;
-  private JLabel myHtmlToOpenLabel;
-  private RawCommandLineEditor myVMParameters;
-  private RawCommandLineEditor myGwtShellParameters;
-  private JCheckBox myPatchWebXmlCheckBox;
-  private TextFieldWithBrowseButton myWebXmlField;
-  private Project myProject;
-  private GwtModulesManager myGwtModulesManager;
+	public GwtRunConfigurationEditor(Project project)
+	{
+		myProject = project;
+		myGwtModulesManager = GwtModulesManager.getInstance(myProject);
+		myVMParameters.setDialogCaption(GwtBundle.message("dialog.caption.vm.parameters"));
+		myGwtShellParameters.setDialogCaption(GwtBundle.message("dialog.caption.gwt.shell.parameters"));
+	}
 
-  public GwtRunConfigurationEditor(Project project) {
-    myProject = project;
-    myGwtModulesManager = GwtModulesManager.getInstance(myProject);
-    myVMParameters.setDialogCaption(GwtBundle.message("dialog.caption.vm.parameters"));
-    myGwtShellParameters.setDialogCaption(GwtBundle.message("dialog.caption.gwt.shell.parameters"));
-  }
+	@Override
+	public void resetEditorFrom(GwtRunConfiguration configuration)
+	{
+		myVMParameters.setText(configuration.VM_PARAMETERS);
+		myGwtShellParameters.setText(configuration.SHELL_PARAMETERS);
 
-  public void resetEditorFrom(GwtRunConfiguration configuration) {
-    myVMParameters.setText(configuration.VM_PARAMETERS);
-    myGwtShellParameters.setText(configuration.SHELL_PARAMETERS);
+		myModulesModel.removeAllElements();
+		for(Module module : configuration.getValidModules())
+		{
+			myModulesModel.addElement(module);
+		}
+		Module module = configuration.getModule();
+		myModulesModel.setSelectedItem(module);
 
-    myModulesModel.removeAllElements();
-    for (Module module : configuration.getValidModules()) {
-      myModulesModel.addElement(module);
-    }
-    Module module = configuration.getModule();
-    myModulesModel.setSelectedItem(module);
+		boolean customWebXml = configuration.CUSTOM_WEB_XML != null;
+		myPatchWebXmlCheckBox.setSelected(customWebXml);
+		myWebXmlField.setEnabled(customWebXml);
+		if(customWebXml)
+		{
+			setCustomWebXml(configuration.CUSTOM_WEB_XML);
+		}
+		updateWebXmlPanel(module);
 
-    boolean customWebXml = configuration.CUSTOM_WEB_XML != null;
-    myPatchWebXmlCheckBox.setSelected(customWebXml);
-    myWebXmlField.setEnabled(customWebXml);
-    if (customWebXml) {
-      setCustomWebXml(configuration.CUSTOM_WEB_XML);
-    }
-    updateWebXmlPanel(module);
+		fillPages(module);
+		String pagePath = configuration.getPage();
+		if(pagePath == null)
+		{
+			pagePath = "";
+		}
+		myHtmlPageBox.getComboBox().getEditor().setItem(pagePath);
+	}
 
-    fillPages(module);
-    String pagePath = configuration.getPage();
-    if (pagePath == null) {
-      pagePath = "";
-    }
-    myHtmlPageBox.getComboBox().getEditor().setItem(pagePath);
-  }
+	private void setCustomWebXml(final String url)
+	{
+		myWebXmlField.setText(FileUtil.toSystemDependentName(VfsUtil.urlToPath(url)));
+	}
 
-  private void setCustomWebXml(final String url) {
-    myWebXmlField.setText(FileUtil.toSystemDependentName(VfsUtil.urlToPath(url)));
-  }
+	@Nullable
+	private VirtualFile getFileByPagePath(final Module module, final String pagePath)
+	{
+		final int index = pagePath.indexOf('/');
+		if(index == -1)
+		{
+			return null;
+		}
 
-  @Nullable
-  private VirtualFile getFileByPagePath(final Module module, final String pagePath) {
-    final int index = pagePath.indexOf('/');
-    if (index == -1) return null;
+		GwtModule gwtModule = myGwtModulesManager.findGwtModuleByName(pagePath.substring(0, index), GlobalSearchScope.moduleWithDependenciesScope(module));
+		if(gwtModule == null)
+		{
+			return null;
+		}
 
-    GwtModule gwtModule = myGwtModulesManager.findGwtModuleByName(pagePath.substring(0, index), GlobalSearchScope.moduleWithDependenciesScope(module));
-    if (gwtModule == null) return null;
+		String name = pagePath.substring(index + 1);
+		final List<VirtualFile> publicRoots = gwtModule.getPublicRoots();
+		for(VirtualFile root : publicRoots)
+		{
+			final VirtualFile file = root.findFileByRelativePath(name);
+			if(file != null)
+			{
+				return file;
+			}
+		}
+		return null;
+	}
 
-    String name = pagePath.substring(index + 1);
-    final List<VirtualFile> publicRoots = gwtModule.getPublicRoots();
-    for (VirtualFile root : publicRoots) {
-      final VirtualFile file = root.findFileByRelativePath(name);
-      if (file != null) {
-        return file;
-      }
-    }
-    return null;
-  }
+	@Nullable
+	private String getPath(@NotNull GwtModule gwtModule, @NotNull VirtualFile file)
+	{
+		final String path = myGwtModulesManager.getPathFromPublicRoot(gwtModule, file);
+		return path != null ? getPath(gwtModule, path) : null;
+	}
 
-  @Nullable
-  private String getPath(@NotNull GwtModule gwtModule, @NotNull VirtualFile file) {
-    final String path = myGwtModulesManager.getPathFromPublicRoot(gwtModule, file);
-    return path != null ? getPath(gwtModule, path) : null;
-  }
+	@NotNull
+	public static String getPath(@NotNull GwtModule gwtModule, @NotNull String relativePath)
+	{
+		return gwtModule.getQualifiedName() + "/" + relativePath;
+	}
 
-  @NotNull 
-  public static String getPath(@NotNull GwtModule gwtModule, @NotNull String relativePath) {
-    return gwtModule.getQualifiedName() + "/" + relativePath;
-  }
+	private void fillPages(final Module module)
+	{
+		myPagesModel.removeAllElements();
+		if(module == null)
+		{
+			return;
+		}
 
-  private void fillPages(final Module module) {
-    myPagesModel.removeAllElements();
-    if (module == null) return;
+		final GwtModule[] modules = myGwtModulesManager.getGwtModules(module);
+		for(GwtModule gwtModule : modules)
+		{
+			final Collection<VirtualFile> htmlFiles = GwtHtmlFileIndex.getHtmlFilesByModule(myProject, gwtModule.getQualifiedName());
+			for(VirtualFile htmlFile : htmlFiles)
+			{
+				String path = getPath(gwtModule, htmlFile);
+				if(path != null)
+				{
+					myPagesModel.addElement(path);
+				}
+			}
+		}
+	}
 
-    final GwtModule[] modules = myGwtModulesManager.getGwtModules(module);
-    for (GwtModule gwtModule : modules) {
-      final Collection<VirtualFile> htmlFiles = GwtHtmlFileIndex.getHtmlFilesByModule(myProject, gwtModule.getQualifiedName());
-      for (VirtualFile htmlFile : htmlFiles) {
-        String path = getPath(gwtModule, htmlFile);
-        if (path != null) {
-          myPagesModel.addElement(path);
-        }
-      }
-    }
-  }
+	@Override
+	public void applyEditorTo(GwtRunConfiguration configuration) throws ConfigurationException
+	{
+		configuration.setModule(getSelectedModule());
+		final String path = (String) myHtmlPageBox.getComboBox().getEditor().getItem();
+		configuration.setPage(path);
+		configuration.VM_PARAMETERS = myVMParameters.getText();
+		configuration.SHELL_PARAMETERS = myGwtShellParameters.getText();
+		if(myPatchWebXmlCheckBox.isSelected())
+		{
+			configuration.CUSTOM_WEB_XML = VfsUtil.pathToUrl(FileUtil.toSystemIndependentName(myWebXmlField.getText()));
+		}
+		else
+		{
+			configuration.CUSTOM_WEB_XML = null;
+		}
+	}
 
-  public void applyEditorTo(GwtRunConfiguration configuration) throws ConfigurationException {
-    configuration.setModule(getSelectedModule());
-    final String path = (String)myHtmlPageBox.getComboBox().getEditor().getItem();
-    configuration.setPage(path);
-    configuration.VM_PARAMETERS = myVMParameters.getText();           
-    configuration.SHELL_PARAMETERS = myGwtShellParameters.getText();
-    if (myPatchWebXmlCheckBox.isSelected()) {
-      configuration.CUSTOM_WEB_XML = VfsUtil.pathToUrl(FileUtil.toSystemIndependentName(myWebXmlField.getText()));
-    }
-    else {
-      configuration.CUSTOM_WEB_XML = null;
-    }
-  }
+	private Module getSelectedModule()
+	{
+		return (Module) myModulesBox.getSelectedItem();
+	}
 
-  private Module getSelectedModule() {
-    return (Module)myModulesBox.getSelectedItem();
-  }
+	@Override
+	@NotNull
+	public JComponent createEditor()
+	{
+		myModulesModel = new DefaultComboBoxModel();
+		myModulesBox.setModel(myModulesModel);
+		myPagesModel = new DefaultComboBoxModel();
+		final JComboBox comboBox = myHtmlPageBox.getComboBox();
+		comboBox.setEditable(true);
+		comboBox.setModel(myPagesModel);
+		myHtmlToOpenLabel.setLabelFor(comboBox);
 
-  @NotNull
-  public JComponent createEditor() {
-    myModulesModel = new DefaultComboBoxModel();
-    myModulesBox.setModel(myModulesModel);
-    myPagesModel = new DefaultComboBoxModel();
-    final JComboBox comboBox = myHtmlPageBox.getComboBox();
-    comboBox.setEditable(true);
-    comboBox.setModel(myPagesModel);
-    myHtmlToOpenLabel.setLabelFor(comboBox);
+		myPatchWebXmlCheckBox.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(final ActionEvent e)
+			{
+				myWebXmlField.setEnabled(myPatchWebXmlCheckBox.isSelected());
+			}
+		});
+		myWebXmlField.addBrowseFolderListener(null, null, myProject, createWebXmlChooserDescriptor());
 
-    myPatchWebXmlCheckBox.addActionListener(new ActionListener() {
-      public void actionPerformed(final ActionEvent e) {
-        myWebXmlField.setEnabled(myPatchWebXmlCheckBox.isSelected());
-      }
-    });
-    myWebXmlField.addBrowseFolderListener(null, null, myProject, createWebXmlChooserDescriptor());
+		myModulesBox.setRenderer(new DefaultListCellRenderer()
+		{
+			@Override
+			public Component getListCellRendererComponent(JList list, final Object value, int index, boolean isSelected, boolean cellHasFocus)
+			{
+				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				final Module module = (Module) value;
+				if(module != null)
+				{
+					setIcon(module.getModuleType().getNodeIcon(false));
+					setText(module.getName());
+				}
+				return this;
+			}
+		});
 
-    myModulesBox.setRenderer(new DefaultListCellRenderer() {
-      public Component getListCellRendererComponent(JList list, final Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-        final Module module = (Module)value;
-        if (module != null) {
-          setIcon(module.getModuleType().getNodeIcon(false));
-          setText(module.getName());
-        }
-        return this;
-      }
-    });
+		myModulesBox.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Module module = (Module) myModulesModel.getSelectedItem();
+				fillPages(module);
+				updateWebXmlPanel(module);
+			}
+		});
 
-    myModulesBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        Module module = (Module)myModulesModel.getSelectedItem();
-        fillPages(module);
-        updateWebXmlPanel(module);
-      }
-    });
+		myHtmlPageBox.addBrowseFolderListener(myProject, new HtmlPageActionListener());
 
-    myHtmlPageBox.addBrowseFolderListener(myProject, new HtmlPageActionListener());
+		return myMainPanel;
+	}
 
-    return myMainPanel;
-  }
+	private FileChooserDescriptor createWebXmlChooserDescriptor()
+	{
+		FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, false, false, false, false)
+		{
+			@Override
+			public boolean isFileVisible(final VirtualFile file, final boolean showHiddenFiles)
+			{
+				return super.isFileVisible(file, showHiddenFiles) && (file.isDirectory() || file.getName().equals(DeploymentDescriptorsConstants
+						.WEB_XML_META_DATA.getFileName()));
+			}
+		};
+		final VirtualFile[] roots = ProjectRootManager.getInstance(myProject).getContentRoots();
+		descriptor.getRoots().clear();
+		for(VirtualFile sourceRoot : roots)
+		{
+			descriptor.addRoot(sourceRoot);
+		}
+		return descriptor;
+	}
 
-  private FileChooserDescriptor createWebXmlChooserDescriptor() {
-    FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, false, false, false, false) {
-      public boolean isFileVisible(final VirtualFile file, final boolean showHiddenFiles) {
-        return super.isFileVisible(file, showHiddenFiles) && (file.isDirectory() || file.getName().equals(DeploymentDescriptorsConstants.WEB_XML_META_DATA.getFileName()));
-      }
-    };
-    final VirtualFile[] roots = ProjectRootManager.getInstance(myProject).getContentRoots();
-    descriptor.getRoots().clear();
-    for (VirtualFile sourceRoot : roots) {
-      descriptor.addRoot(sourceRoot);
-    }
-    return descriptor;
-  }
+	private void updateWebXmlPanel(final @Nullable Module module)
+	{
+		boolean visible = updateWebXmlField(module);
+		myWebXmlField.setVisible(visible);
+		myPatchWebXmlCheckBox.setVisible(visible);
+	}
 
-  private void updateWebXmlPanel(final @Nullable Module module) {
-    boolean visible = updateWebXmlField(module);
-    myWebXmlField.setVisible(visible);
-    myPatchWebXmlCheckBox.setVisible(visible);
-  }
+	private boolean updateWebXmlField(final @Nullable Module module)
+	{
+		if(module == null)
+		{
+			return false;
+		}
+		Collection<WebFacet> webFacets = WebFacet.getInstances(module);
+		GwtFacet facet = GwtFacet.getInstance(module);
+		if(webFacets.isEmpty() || facet == null)
+		{
+			return false;
+		}
 
-  private boolean updateWebXmlField(final @Nullable Module module) {
-    if (module == null) return false;
-    Collection<WebFacet> webFacets = WebFacet.getInstances(module);
-    GwtFacet facet = GwtFacet.getInstance(module);
-    if (webFacets.isEmpty() || facet == null) return false;
+		if(myWebXmlField.getText().trim().length() == 0)
+		{
+			WebFacet webFacet = facet.getWebFacet();
+			if(webFacet == null)
+			{
+				webFacet = webFacets.iterator().next();
+			}
+			ConfigFile descriptor = webFacet.getWebXmlDescriptor();
+			if(descriptor != null)
+			{
+				setCustomWebXml(descriptor.getUrl());
+			}
+		}
+		return true;
+	}
 
-    if (myWebXmlField.getText().trim().length() == 0) {
-      WebFacet webFacet = facet.getWebFacet();
-      if (webFacet == null) {
-        webFacet = webFacets.iterator().next();
-      }
-      ConfigFile descriptor = webFacet.getWebXmlDescriptor();
-      if (descriptor != null) {
-        setCustomWebXml(descriptor.getUrl());
-      }
-    }
-    return true;
-  }
+	private FileChooserDescriptor createHtmlFileChooserDescriptor()
+	{
+		final FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, false, false, false, false)
+		{
+			@Override
+			public boolean isFileVisible(VirtualFile file, boolean showHiddenFiles)
+			{
+				return super.isFileVisible(file, showHiddenFiles) && (file.isDirectory() || FileTypeManager.getInstance().getFileTypeByFile(file) ==
+						StdFileTypes.HTML);
+			}
+		};
+		final VirtualFile[] sourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots();
+		descriptor.getRoots().clear();
+		for(VirtualFile sourceRoot : sourceRoots)
+		{
+			descriptor.addRoot(sourceRoot);
+		}
+		return descriptor;
+	}
 
-  private FileChooserDescriptor createHtmlFileChooserDescriptor() {
-    final FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, false, false, false, false) {
-      public boolean isFileVisible(VirtualFile file, boolean showHiddenFiles) {
-        return super.isFileVisible(file, showHiddenFiles) &&
-               (file.isDirectory() || FileTypeManager.getInstance().getFileTypeByFile(file) == StdFileTypes.HTML);
-      }
-    };
-    final VirtualFile[] sourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots();
-    descriptor.getRoots().clear();
-    for (VirtualFile sourceRoot : sourceRoots) {
-      descriptor.addRoot(sourceRoot);
-    }
-    return descriptor;
-  }
+	@Override
+	public void disposeEditor()
+	{
+	}
 
-  public void disposeEditor() {
-  }
+	private class RunPageComponentAccessor implements TextComponentAccessor<JComboBox>
+	{
+		@Override
+		public String getText(final JComboBox component)
+		{
+			String pagePath = component.getEditor().getItem().toString();
+			VirtualFile file = getFileByPagePath(getSelectedModule(), pagePath);
+			return file != null ? file.getPath() : "";
+		}
 
-  private class RunPageComponentAccessor implements TextComponentAccessor<JComboBox> {
-    public String getText(final JComboBox component) {
-      String pagePath = component.getEditor().getItem().toString();
-      VirtualFile file = getFileByPagePath(getSelectedModule(), pagePath);
-      return file != null ? file.getPath() : "";
-    }
+		@Override
+		public void setText(final JComboBox component, final String text)
+		{
+			throw new UnsupportedOperationException();
+		}
+	}
 
-    public void setText(final JComboBox component, final String text) {
-      throw new UnsupportedOperationException();
-    }
-  }
+	private class HtmlPageActionListener extends ComponentWithBrowseButton.BrowseFolderActionListener<JComboBox>
+	{
+		public HtmlPageActionListener()
+		{
+			super(null, null, myHtmlPageBox, myProject, createHtmlFileChooserDescriptor(), new RunPageComponentAccessor());
+		}
 
-  private class HtmlPageActionListener extends ComponentWithBrowseButton.BrowseFolderActionListener<JComboBox> {
-    public HtmlPageActionListener() {
-      super(null, null, myHtmlPageBox, myProject, createHtmlFileChooserDescriptor(), new RunPageComponentAccessor());
-    }
-
-    @Override
-    protected void onFileChoosen(final VirtualFile chosenFile) {
-      List<Pair<GwtModule, String>> pairs = myGwtModulesManager.findGwtModulesByPublicFile(chosenFile);
-      Pair<GwtModule, String> pair = null;
-      if (pairs.size() == 1) {
-        pair = pairs.get(0);
-      }
-      else {
-        String[] gwtModules = new String[pairs.size()];
-        for (int i = 0; i < pairs.size(); i++) {
-          gwtModules[i] = pairs.get(i).getFirst().getQualifiedName();
-        }
-        int answer = Messages.showChooseDialog(myMainPanel, GwtBundle.message("choose.text.select.gwt.module"),
-                                               GwtBundle.message("dialog.title.choose.gwt.module"), gwtModules, gwtModules[0], null);
-        if (answer >= 0) {
-          pair = pairs.get(answer);
-        }
-      }
-      if (pair != null) {
-        myHtmlPageBox.getComboBox().getEditor().setItem(getPath(pair.getFirst(), pair.getSecond()));
-      }
-    }
-  }
+		@Override
+		protected void onFileChoosen(final VirtualFile chosenFile)
+		{
+			List<Pair<GwtModule, String>> pairs = myGwtModulesManager.findGwtModulesByPublicFile(chosenFile);
+			Pair<GwtModule, String> pair = null;
+			if(pairs.size() == 1)
+			{
+				pair = pairs.get(0);
+			}
+			else
+			{
+				String[] gwtModules = new String[pairs.size()];
+				for(int i = 0; i < pairs.size(); i++)
+				{
+					gwtModules[i] = pairs.get(i).getFirst().getQualifiedName();
+				}
+				int answer = Messages.showChooseDialog(myMainPanel, GwtBundle.message("choose.text.select.gwt.module"),
+						GwtBundle.message("dialog.title.choose.gwt.module"), gwtModules, gwtModules[0], null);
+				if(answer >= 0)
+				{
+					pair = pairs.get(answer);
+				}
+			}
+			if(pair != null)
+			{
+				myHtmlPageBox.getComboBox().getEditor().setItem(getPath(pair.getFirst(), pair.getSecond()));
+			}
+		}
+	}
 }

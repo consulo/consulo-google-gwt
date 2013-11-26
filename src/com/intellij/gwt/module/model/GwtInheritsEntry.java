@@ -22,8 +22,9 @@ import com.intellij.util.xml.GenericAttributeValue;
 /**
  * @author nik
  */
-public interface GwtInheritsEntry extends DomElement {
+public interface GwtInheritsEntry extends DomElement
+{
 
-  GenericAttributeValue<String> getName();
+	GenericAttributeValue<String> getName();
 
 }

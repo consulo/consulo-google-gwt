@@ -14,16 +14,19 @@ import com.intellij.psi.PsiElement;
  */
 public class GwtPropertyReference extends PropertyReferenceBase
 {
-  private GwtI18nManager myGwtI18nManager;
-  private final PsiClass myPropertiesInterface;
+	private GwtI18nManager myGwtI18nManager;
+	private final PsiClass myPropertiesInterface;
 
-  public GwtPropertyReference(@NotNull final String key, @NotNull final PsiElement element, @NotNull PsiClass propertiesInterface) {
-    super(key, false, element);
-    myPropertiesInterface = propertiesInterface;
-    myGwtI18nManager = GwtI18nManager.getInstance(propertiesInterface.getProject());
-  }
+	public GwtPropertyReference(@NotNull final String key, @NotNull final PsiElement element, @NotNull PsiClass propertiesInterface)
+	{
+		super(key, false, element);
+		myPropertiesInterface = propertiesInterface;
+		myGwtI18nManager = GwtI18nManager.getInstance(propertiesInterface.getProject());
+	}
 
-  protected List<PropertiesFile> getPropertiesFiles() {
-    return Arrays.asList(myGwtI18nManager.getPropertiesFiles(myPropertiesInterface));
-  }
+	@Override
+	protected List<PropertiesFile> getPropertiesFiles()
+	{
+		return Arrays.asList(myGwtI18nManager.getPropertiesFiles(myPropertiesInterface));
+	}
 }

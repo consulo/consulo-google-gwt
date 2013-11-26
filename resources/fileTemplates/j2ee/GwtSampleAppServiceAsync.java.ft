@@ -7,5 +7,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 #parse("File Header.java")
 public interface ${NAME} {
-  void getMessage(String msg, AsyncCallback<String> async);
+		void getMessage(String msg,AsyncCallback<String>async);
 }

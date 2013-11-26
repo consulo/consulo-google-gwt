@@ -16,31 +16,36 @@
 
 package com.intellij.gwt.references;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.PsiReferenceProviderBase;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author nik
  */
-public class GwtModuleReferencesProvider extends PsiReferenceProviderBase {
+public class GwtModuleReferencesProvider extends PsiReferenceProviderBase
+{
 
-  @NotNull
-  public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context) {
-    if (element instanceof XmlAttributeValue) {
-      return new PsiReference[]{
-        new GwtModuleInXmlAttributeReference((XmlAttributeValue)element)
-      };
-    }
-    if (element instanceof PsiLiteralExpression) {
-      return new PsiReference[]{
-          new GwtModuleInStringLiteralReference((PsiLiteralExpression)element)
-      };
-    }
-    return PsiReference.EMPTY_ARRAY;
-  }
+	@Override
+	@NotNull
+	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context)
+	{
+		if(element instanceof XmlAttributeValue)
+		{
+			return new PsiReference[]{
+					new GwtModuleInXmlAttributeReference((XmlAttributeValue) element)
+			};
+		}
+		if(element instanceof PsiLiteralExpression)
+		{
+			return new PsiReference[]{
+					new GwtModuleInStringLiteralReference((PsiLiteralExpression) element)
+			};
+		}
+		return PsiReference.EMPTY_ARRAY;
+	}
 }

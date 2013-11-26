@@ -16,14 +16,20 @@
 
 package com.intellij.gwt.actions;
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.facet.FacetManager;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.facet.GwtFacetType;
-import com.intellij.gwt.rpc.RemoteServiceUtil;
-import com.intellij.gwt.rpc.GwtServletUtil;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.GwtServlet;
+import com.intellij.gwt.rpc.GwtServletUtil;
+import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.gwt.templates.GwtTemplates;
 import com.intellij.javaee.model.xml.web.WebApp;
 import com.intellij.javaee.web.WebUtil;
@@ -37,122 +43,155 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+public class CreateGwtRemoteServiceAction extends GwtCreateActionBase
+{
+	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.actions.CreateGwtRemoteServiceAction");
+	@NonNls
+	private static final String QUALIFIED_SERVICE_NAME_PROPERTY = "QUALIFIED_SERVICE_NAME";
+	@NonNls
+	private static final String SERVICE_NAME_PROPERTY = "SERVICE_NAME";
+	@NonNls
+	private static final String SERVLET_PATH_PROPERTY = "SERVLET_PATH";
+	@NonNls
+	private static final String RELATIVE_PATH_PROPERTY = "RELATIVE_SERVLET_PATH";
+	@NonNls
+	private static final String SERVER_PACKAGE = "server";
 
-public class CreateGwtRemoteServiceAction extends GwtCreateActionBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.actions.CreateGwtRemoteServiceAction");
-  @NonNls private static final String QUALIFIED_SERVICE_NAME_PROPERTY = "QUALIFIED_SERVICE_NAME";
-  @NonNls private static final String SERVICE_NAME_PROPERTY = "SERVICE_NAME";
-  @NonNls private static final String SERVLET_PATH_PROPERTY = "SERVLET_PATH";
-  @NonNls private static final String RELATIVE_PATH_PROPERTY = "RELATIVE_SERVLET_PATH";
-  @NonNls private static final String SERVER_PACKAGE = "server";
+	public CreateGwtRemoteServiceAction()
+	{
+		super(GwtBundle.message("newservice.menu.action.text"), GwtBundle.message("newservice.menu.action.description"));
+	}
 
-  public CreateGwtRemoteServiceAction() {
-    super(GwtBundle.message("newservice.menu.action.text"), GwtBundle.message("newservice.menu.action.description"));
-  }
+	@Override
+	protected boolean requireGwtModule()
+	{
+		return true;
+	}
 
-  protected boolean requireGwtModule() {
-    return true;
-  }
+	@Override
+	protected String getDialogPrompt()
+	{
+		return GwtBundle.message("newservice.dlg.prompt");
+	}
 
-  protected String getDialogPrompt() {
-    return GwtBundle.message("newservice.dlg.prompt");
-  }
-
-  protected String getDialogTitle() {
-    return GwtBundle.message("newservice.dlg.title");
-  }
-
-
-  protected PsiFile[] getAffectedFiles(final GwtModule gwtModule) {
-    final XmlFile xmlFile = gwtModule.getModuleXmlFile();
-    if (xmlFile != null) {
-      final WebFacet webFacet = WebUtil.getWebFacet(xmlFile);
-      if (webFacet != null) {
-        final WebApp webApp = webFacet.getRoot();
-        if (webApp != null) {
-          return new PsiFile[]{xmlFile, webApp.getRoot().getFile()};
-        }
-      }
-    }
-    return new PsiFile[] {xmlFile};
-  }
-
-  @NotNull
-  protected PsiElement[] doCreate(String serviceName, PsiDirectory directory, final GwtModule gwtModule) throws Exception {
-    ArrayList<PsiElement> res = new ArrayList<PsiElement>(0);
-
-    final String servletPath = GwtServletUtil.getDefaultServletPath(gwtModule, serviceName);
-    final GwtFacet gwtFacet = FacetManager.getInstance(gwtModule.getModule()).getFacetByType(GwtFacetType.ID);
-    LOG.assertTrue(gwtFacet != null);
-
-    final String templateName = gwtFacet.getSdkVersion().getGwtServiceJavaTemplate();
-    final PsiClass serviceClass = createClassFromTemplate(directory, serviceName, templateName,
-                                                          SERVLET_PATH_PROPERTY, servletPath,
-                                                          RELATIVE_PATH_PROPERTY, servletPath.substring(1));
-    res.add(serviceClass);
-    res.add(createClassFromTemplate(directory, serviceName + RemoteServiceUtil.ASYNC_SUFFIX, GwtTemplates.GWT_SERVICE_ASYNC_JAVA));
+	@Override
+	protected String getDialogTitle()
+	{
+		return GwtBundle.message("newservice.dlg.title");
+	}
 
 
-    final VirtualFile gwtModuleDir = gwtModule.getModuleDirectory();
+	@Override
+	protected PsiFile[] getAffectedFiles(final GwtModule gwtModule)
+	{
+		final XmlFile xmlFile = gwtModule.getModuleXmlFile();
+		if(xmlFile != null)
+		{
+			final WebFacet webFacet = WebUtil.getWebFacet(xmlFile);
+			if(webFacet != null)
+			{
+				final WebApp webApp = webFacet.getRoot();
+				if(webApp != null)
+				{
+					return new PsiFile[]{
+							xmlFile,
+							webApp.getRoot().getFile()
+					};
+				}
+			}
+		}
+		return new PsiFile[]{xmlFile};
+	}
 
-    PsiClass servletImpl = generateServletClass(serviceName, directory, gwtModuleDir, serviceClass);
-    if (servletImpl == null) return PsiElement.EMPTY_ARRAY;
+	@Override
+	@NotNull
+	protected PsiElement[] doCreate(String serviceName, PsiDirectory directory, final GwtModule gwtModule) throws Exception
+	{
+		ArrayList<PsiElement> res = new ArrayList<PsiElement>(0);
 
-    XmlFile xml = gwtModule.getModuleXmlFile();
-    if (xml == null) return PsiElement.EMPTY_ARRAY;
+		final String servletPath = GwtServletUtil.getDefaultServletPath(gwtModule, serviceName);
+		final GwtFacet gwtFacet = FacetManager.getInstance(gwtModule.getModule()).getFacetByType(GwtFacetType.ID);
+		LOG.assertTrue(gwtFacet != null);
 
-    final GwtServlet gwtServlet = gwtModule.addServlet();
-    gwtServlet.getPath().setValue(servletPath);
-    gwtServlet.getServletClass().setValue(servletImpl.getQualifiedName());
+		final String templateName = gwtFacet.getSdkVersion().getGwtServiceJavaTemplate();
+		final PsiClass serviceClass = createClassFromTemplate(directory, serviceName, templateName, SERVLET_PATH_PROPERTY, servletPath,
+				RELATIVE_PATH_PROPERTY, servletPath.substring(1));
+		res.add(serviceClass);
+		res.add(createClassFromTemplate(directory, serviceName + RemoteServiceUtil.ASYNC_SUFFIX, GwtTemplates.GWT_SERVICE_ASYNC_JAVA));
 
-    final WebFacet webFacet = WebUtil.getWebFacet(xml);
-    if (webFacet != null) {
-      final WebApp webApp = webFacet.getRoot();
-      if (webApp != null) {
-        GwtServletUtil.registerServletForService(gwtFacet, gwtModule, webApp, servletImpl, serviceName);
-      }
-    }
 
-    return res.toArray(new PsiElement[res.size()]);
-  }
+		final VirtualFile gwtModuleDir = gwtModule.getModuleDirectory();
 
-  protected String getCommandName() {
-    return GwtBundle.message("newservice.command.name");
-  }
+		PsiClass servletImpl = generateServletClass(serviceName, directory, gwtModuleDir, serviceClass);
+		if(servletImpl == null)
+		{
+			return PsiElement.EMPTY_ARRAY;
+		}
 
-  protected String getActionName(PsiDirectory directory, String newName) {
-    return GwtBundle.message("newservice.progress.text", newName);
-  }
+		XmlFile xml = gwtModule.getModuleXmlFile();
+		if(xml == null)
+		{
+			return PsiElement.EMPTY_ARRAY;
+		}
 
-  @Nullable
-  private static PsiClass generateServletClass(String name, PsiDirectory directory, VirtualFile gwtModuleDir,
-                                               final PsiClass serviceClass) throws IncorrectOperationException {
+		final GwtServlet gwtServlet = gwtModule.addServlet();
+		gwtServlet.getPath().setValue(servletPath);
+		gwtServlet.getServletClass().setValue(servletImpl.getQualifiedName());
 
-    final VirtualFile client = gwtModuleDir.findChild("client");
+		final WebFacet webFacet = WebUtil.getWebFacet(xml);
+		if(webFacet != null)
+		{
+			final WebApp webApp = webFacet.getRoot();
+			if(webApp != null)
+			{
+				GwtServletUtil.registerServletForService(gwtFacet, gwtModule, webApp, servletImpl, serviceName);
+			}
+		}
 
-    String pathFromClient = VfsUtil.getRelativePath(directory.getVirtualFile(), client, '/');
+		return res.toArray(new PsiElement[res.size()]);
+	}
 
-    PsiDirectory serverDest = directory.getManager().findDirectory(gwtModuleDir);
-    if (serverDest == null) return null;
+	@Override
+	protected String getCommandName()
+	{
+		return GwtBundle.message("newservice.command.name");
+	}
 
-    final StringTokenizer tokenizer = new StringTokenizer(SERVER_PACKAGE + "/" + pathFromClient, "/");
-    while (tokenizer.hasMoreTokens()) {
-      final String dirName = tokenizer.nextToken();
-      PsiDirectory nextDir = serverDest.findSubdirectory(dirName);
-      if (nextDir == null) {
-        nextDir = serverDest.createSubdirectory(dirName);
-      }
-      serverDest = nextDir;
-    }
+	@Override
+	protected String getActionName(PsiDirectory directory, String newName)
+	{
+		return GwtBundle.message("newservice.progress.text", newName);
+	}
 
-    return createClassFromTemplate(serverDest, name + RemoteServiceUtil.IMPL_SERVICE_SUFFIX, GwtTemplates.GWT_SERVICE_IMPL_JAVA,
-                                   SERVICE_NAME_PROPERTY, serviceClass.getName(),
-                                   QUALIFIED_SERVICE_NAME_PROPERTY, serviceClass.getQualifiedName());
-  }
+	@Nullable
+	private static PsiClass generateServletClass(String name, PsiDirectory directory, VirtualFile gwtModuleDir,
+			final PsiClass serviceClass) throws IncorrectOperationException
+	{
+
+		final VirtualFile client = gwtModuleDir.findChild("client");
+
+		String pathFromClient = VfsUtil.getRelativePath(directory.getVirtualFile(), client, '/');
+
+		PsiDirectory serverDest = directory.getManager().findDirectory(gwtModuleDir);
+		if(serverDest == null)
+		{
+			return null;
+		}
+
+		final StringTokenizer tokenizer = new StringTokenizer(SERVER_PACKAGE + "/" + pathFromClient, "/");
+		while(tokenizer.hasMoreTokens())
+		{
+			final String dirName = tokenizer.nextToken();
+			PsiDirectory nextDir = serverDest.findSubdirectory(dirName);
+			if(nextDir == null)
+			{
+				nextDir = serverDest.createSubdirectory(dirName);
+			}
+			serverDest = nextDir;
+		}
+
+		return createClassFromTemplate(serverDest, name + RemoteServiceUtil.IMPL_SERVICE_SUFFIX, GwtTemplates.GWT_SERVICE_IMPL_JAVA,
+				SERVICE_NAME_PROPERTY, serviceClass.getName(), QUALIFIED_SERVICE_NAME_PROPERTY, serviceClass.getQualifiedName());
+	}
 }

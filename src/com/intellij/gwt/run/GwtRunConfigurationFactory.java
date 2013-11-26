@@ -20,12 +20,16 @@ import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
 
-public class GwtRunConfigurationFactory extends ConfigurationFactory {
-  public GwtRunConfigurationFactory(GwtRunConfigurationType gwtConfigurationType) {
-    super(gwtConfigurationType);
-  }
+public class GwtRunConfigurationFactory extends ConfigurationFactory
+{
+	public GwtRunConfigurationFactory(GwtRunConfigurationType gwtConfigurationType)
+	{
+		super(gwtConfigurationType);
+	}
 
-  public RunConfiguration createTemplateConfiguration(Project project) {
-    return new GwtRunConfiguration(project, this);
-  }
+	@Override
+	public RunConfiguration createTemplateConfiguration(Project project)
+	{
+		return new GwtRunConfiguration(project, this);
+	}
 }

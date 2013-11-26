@@ -22,16 +22,23 @@ import com.intellij.lang.properties.psi.Property;
 /**
  * @author nik
  */
-public class PropertiesListCellRenderer extends PsiElementListCellRenderer<Property> {
-  public String getElementText(final Property element) {
-    return element.getContainingFile().getName();
-  }
+public class PropertiesListCellRenderer extends PsiElementListCellRenderer<Property>
+{
+	@Override
+	public String getElementText(final Property element)
+	{
+		return element.getContainingFile().getName();
+	}
 
-  protected String getContainerText(final Property element, final String name) {
-    return null;
-  }
+	@Override
+	protected String getContainerText(final Property element, final String name)
+	{
+		return null;
+	}
 
-  protected int getIconFlags() {
-    return 0;
-  }
+	@Override
+	protected int getIconFlags()
+	{
+		return 0;
+	}
 }

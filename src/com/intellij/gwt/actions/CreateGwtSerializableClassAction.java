@@ -16,42 +16,56 @@
 
 package com.intellij.gwt.actions;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.templates.GwtTemplates;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 
-public class CreateGwtSerializableClassAction extends GwtCreateActionBase {
-  public CreateGwtSerializableClassAction() {
-    super(GwtBundle.message("newserial.menu.action.text"), GwtBundle.message("newserial.menu.action.description"));
-  }
+public class CreateGwtSerializableClassAction extends GwtCreateActionBase
+{
+	public CreateGwtSerializableClassAction()
+	{
+		super(GwtBundle.message("newserial.menu.action.text"), GwtBundle.message("newserial.menu.action.description"));
+	}
 
-  protected boolean requireGwtModule() {
-    return true;
-  }
+	@Override
+	protected boolean requireGwtModule()
+	{
+		return true;
+	}
 
-  protected String getDialogPrompt() {
-    return GwtBundle.message("newserial.dlg.prompt");
-  }
+	@Override
+	protected String getDialogPrompt()
+	{
+		return GwtBundle.message("newserial.dlg.prompt");
+	}
 
-  protected String getDialogTitle() {
-    return GwtBundle.message("newserial.dlg.title");
-  }
+	@Override
+	protected String getDialogTitle()
+	{
+		return GwtBundle.message("newserial.dlg.title");
+	}
 
-  protected String getCommandName() {
-    return GwtBundle.message("newserial.command.name");
-  }
+	@Override
+	protected String getCommandName()
+	{
+		return GwtBundle.message("newserial.command.name");
+	}
 
-  protected String getActionName(PsiDirectory directory, String newName) {
-    return GwtBundle.message("newserial.progress.text", newName);
-  }
+	@Override
+	protected String getActionName(PsiDirectory directory, String newName)
+	{
+		return GwtBundle.message("newserial.progress.text", newName);
+	}
 
-  @NotNull
-  protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception {
-    return new PsiElement[]{
-      createClassFromTemplate(directory, name, GwtTemplates.GWT_SERIAL_CLASS_JAVA).getContainingFile()
-    };
-  }
+	@Override
+	@NotNull
+	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
+	{
+		return new PsiElement[]{
+				createClassFromTemplate(directory, name, GwtTemplates.GWT_SERIAL_CLASS_JAVA).getContainingFile()
+		};
+	}
 }

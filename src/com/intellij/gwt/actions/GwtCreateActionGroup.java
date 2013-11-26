@@ -16,24 +16,28 @@
 
 package com.intellij.gwt.actions;
 
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacetType;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 
 /**
  * @author nik
  */
-public class GwtCreateActionGroup extends DefaultActionGroup {
-  public GwtCreateActionGroup() {
-    super(GwtBundle.message("action.group.gwt.title"), true);
-    getTemplatePresentation().setDescription(GwtBundle.message("action.group.gwt.description"));
-    getTemplatePresentation().setIcon(GwtFacetType.SMALL_ICON);
-  }
+public class GwtCreateActionGroup extends DefaultActionGroup
+{
+	public GwtCreateActionGroup()
+	{
+		super(GwtBundle.message("action.group.gwt.title"), true);
+		getTemplatePresentation().setDescription(GwtBundle.message("action.group.gwt.description"));
+		getTemplatePresentation().setIcon(GwtFacetType.SMALL_ICON);
+	}
 
 
-  public void update(AnActionEvent e) {
-    e.getPresentation().setVisible(GwtCreateActionBase.isUnderSourceRootsOfModuleWithGwtFacet(e));
-  }
+	@Override
+	public void update(AnActionEvent e)
+	{
+		e.getPresentation().setVisible(GwtCreateActionBase.isUnderSourceRootsOfModuleWithGwtFacet(e));
+	}
 
 }

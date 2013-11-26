@@ -16,6 +16,12 @@
 
 package com.intellij.gwt.inspections;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -27,120 +33,157 @@ import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaRecursiveElementVisitor;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiUtil;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author nik
  */
-public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspection {
-  @NotNull
-  public String getDisplayName() {
-    return GwtBundle.message("inspection.name.classes.not.from.jre.emulation.library.in.client.code");
-  }
+public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspection
+{
+	@Override
+	@NotNull
+	public String getDisplayName()
+	{
+		return GwtBundle.message("inspection.name.classes.not.from.jre.emulation.library.in.client.code");
+	}
 
-  @NotNull
-  @NonNls
-  public String getShortName() {
-    return "NonJREEmulationClassesInClientCode";
-  }
+	@Override
+	@NotNull
+	@NonNls
+	public String getShortName()
+	{
+		return "NonJREEmulationClassesInClientCode";
+	}
 
-  @Nullable
-  public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull final InspectionManager manager, boolean isOnTheFly) {
-    if (!shouldCheck(file)) return null;
+	@Override
+	@Nullable
+	public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull final InspectionManager manager, boolean isOnTheFly)
+	{
+		if(!shouldCheck(file))
+		{
+			return null;
+		}
 
-    final GwtModulesManager gwtModulesManager = GwtModulesManager.getInstance(file.getProject());
-    final VirtualFile virtualFile = file.getVirtualFile();
-    if (virtualFile == null) return null;
+		final GwtModulesManager gwtModulesManager = GwtModulesManager.getInstance(file.getProject());
+		final VirtualFile virtualFile = file.getVirtualFile();
+		if(virtualFile == null)
+		{
+			return null;
+		}
 
-    final List<GwtModule> gwtModules = gwtModulesManager.findGwtModulesByClientSourceFile(virtualFile);
-    if (gwtModules.isEmpty()) return null;
+		final List<GwtModule> gwtModules = gwtModulesManager.findGwtModulesByClientSourceFile(virtualFile);
+		if(gwtModules.isEmpty())
+		{
+			return null;
+		}
 
-    final GwtFacet gwtFacet = GwtFacet.findFacetBySourceFile(file.getProject(), virtualFile);
-    if (gwtFacet == null || !gwtFacet.getConfiguration().getSdk().isValid()) return null;
+		final GwtFacet gwtFacet = GwtFacet.findFacetBySourceFile(file.getProject(), virtualFile);
+		if(gwtFacet == null || !gwtFacet.getConfiguration().getSdk().isValid())
+		{
+			return null;
+		}
 
-    final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
+		final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
 
-    file.accept(new JavaRecursiveElementVisitor() {
-      @Override public void visitDocComment(final PsiDocComment comment) {
-      }
+		file.accept(new JavaRecursiveElementVisitor()
+		{
+			@Override
+			public void visitDocComment(final PsiDocComment comment)
+			{
+			}
 
-      @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
-        final PsiElement resolved = reference.resolve();
-        if (resolved instanceof PsiClass) {
-          PsiClass referencedClass = (PsiClass)resolved;
-          if (referencedClass.isAnnotationType()) return;
+			@Override
+			public void visitReferenceElement(PsiJavaCodeReferenceElement reference)
+			{
+				final PsiElement resolved = reference.resolve();
+				if(resolved instanceof PsiClass)
+				{
+					PsiClass referencedClass = (PsiClass) resolved;
+					if(referencedClass.isAnnotationType())
+					{
+						return;
+					}
 
-          String className = referencedClass.getQualifiedName();
+					String className = referencedClass.getQualifiedName();
 
-          final PsiFile psiFile = referencedClass.getContainingFile();
-          if (psiFile != null) {
-            final VirtualFile vFile = psiFile.getVirtualFile();
-            if (vFile != null) {
-              List<GwtModule> referencedModules = gwtModulesManager.findGwtModulesByClientSourceFile(vFile);
-              if (referencedModules.isEmpty()) {
-                referencedModules = gwtModulesManager.findModulesByClass(reference, referencedClass.getQualifiedName());
-              }
+					final PsiFile psiFile = referencedClass.getContainingFile();
+					if(psiFile != null)
+					{
+						final VirtualFile vFile = psiFile.getVirtualFile();
+						if(vFile != null)
+						{
+							List<GwtModule> referencedModules = gwtModulesManager.findGwtModulesByClientSourceFile(vFile);
+							if(referencedModules.isEmpty())
+							{
+								referencedModules = gwtModulesManager.findModulesByClass(reference, referencedClass.getQualifiedName());
+							}
 
-              boolean inherited = true;
-              for (GwtModule gwtModule : gwtModules) {
-                inherited &= gwtModulesManager.isInheritedOrSelf(gwtModule, referencedModules);
+							boolean inherited = true;
+							for(GwtModule gwtModule : gwtModules)
+							{
+								inherited &= gwtModulesManager.isInheritedOrSelf(gwtModule, referencedModules);
 
-                if (!inherited && !referencedModules.isEmpty()) {
-                  GwtModule referencedModule = referencedModules.get(0);
-                  final String message = GwtBundle.message("problem.description.class.0.is.defined.in.module.1.which.is.not.inherited.in.module.2",
-                                                           className, referencedModule.getQualifiedName(), gwtModule.getQualifiedName());
-                  problems.add(manager.createProblemDescriptor(reference, message, new InheritModuleQuickFix(gwtModule, referencedModule),
-                                                               ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
-                  return;
-                }
-              }
+								if(!inherited && !referencedModules.isEmpty())
+								{
+									GwtModule referencedModule = referencedModules.get(0);
+									final String message = GwtBundle.message("problem.description.class.0.is.defined.in.module.1.which.is.not.inherited.in.module.2",
+											className, referencedModule.getQualifiedName(), gwtModule.getQualifiedName());
+									problems.add(manager.createProblemDescriptor(reference, message, new InheritModuleQuickFix(gwtModule, referencedModule),
+											ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+									return;
+								}
+							}
 
-              if (inherited) {
-                return;
-              }
-            }
-          }
+							if(inherited)
+							{
+								return;
+							}
+						}
+					}
 
-          PsiClass topLevelClass = PsiUtil.getTopLevelClass(referencedClass);
-          if (topLevelClass == null) {
-            topLevelClass = referencedClass;
-          }
-          if (!gwtFacet.getConfiguration().getSdk().containsJreEmulationClass(topLevelClass.getQualifiedName())) {
-            final String message = GwtBundle.message("problem.description.class.0.is.not.presented.in.jre.emulation.library",
-                                                      className);
-            problems.add(manager.createProblemDescriptor(reference, message, ((LocalQuickFix)null),
-                                                         ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
-          }
-        }
-        super.visitReferenceElement(reference);
-      }
-    });
+					PsiClass topLevelClass = PsiUtil.getTopLevelClass(referencedClass);
+					if(topLevelClass == null)
+					{
+						topLevelClass = referencedClass;
+					}
+					if(!gwtFacet.getConfiguration().getSdk().containsJreEmulationClass(topLevelClass.getQualifiedName()))
+					{
+						final String message = GwtBundle.message("problem.description.class.0.is.not.presented.in.jre.emulation.library", className);
+						problems.add(manager.createProblemDescriptor(reference, message, ((LocalQuickFix) null), ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+					}
+				}
+				super.visitReferenceElement(reference);
+			}
+		});
 
-    return problems.toArray(new ProblemDescriptor[problems.size()]);
-  }
+		return problems.toArray(new ProblemDescriptor[problems.size()]);
+	}
 
-  private static class InheritModuleQuickFix extends BaseGwtLocalQuickFix {
-    private GwtModule myGwtModule;
-    private GwtModule myReferencedModule;
+	private static class InheritModuleQuickFix extends BaseGwtLocalQuickFix
+	{
+		private GwtModule myGwtModule;
+		private GwtModule myReferencedModule;
 
-    public InheritModuleQuickFix(final GwtModule gwtModule, final GwtModule referencedModule) {
-      super(GwtBundle.message("quick.fix.name.inherit.module.0.from.1", gwtModule.getQualifiedName(), referencedModule.getQualifiedName()));
-      myGwtModule = gwtModule;
-      myReferencedModule = referencedModule;
-    }
+		public InheritModuleQuickFix(final GwtModule gwtModule, final GwtModule referencedModule)
+		{
+			super(GwtBundle.message("quick.fix.name.inherit.module.0.from.1", gwtModule.getQualifiedName(), referencedModule.getQualifiedName()));
+			myGwtModule = gwtModule;
+			myReferencedModule = referencedModule;
+		}
 
-    public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor problemDescriptor) {
-      if (!ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(myGwtModule.getModuleFile()).hasReadonlyFiles()) {
-        myGwtModule.addInherits().getName().setValue(myReferencedModule.getQualifiedName());
-      }
-    }
-  }
+		@Override
+		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor problemDescriptor)
+		{
+			if(!ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(myGwtModule.getModuleFile()).hasReadonlyFiles())
+			{
+				myGwtModule.addInherits().getName().setValue(myReferencedModule.getQualifiedName());
+			}
+		}
+	}
 }

@@ -16,55 +16,61 @@
 
 package com.intellij.gwt.module.model;
 
+import java.util.List;
+
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.css.CssFile;
-import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.HyphenNameStrategy;
 import com.intellij.util.xml.NameStrategyForAttributes;
-
-import java.util.List;
 
 /**
  * @author nik
  */
 @NameStrategyForAttributes(HyphenNameStrategy.class)
-public interface GwtModule extends DomElement {
-  GwtModule[] EMPTY_ARRAY = new GwtModule[0];
+public interface GwtModule extends DomElement
+{
+	GwtModule[] EMPTY_ARRAY = new GwtModule[0];
 
-  List<GwtEntryPoint> getEntryPoints();
-  GwtEntryPoint addEntryPoint();
+	List<GwtEntryPoint> getEntryPoints();
 
-  List<GwtRelativePath> getSources();
-  GwtRelativePath addSource();
+	GwtEntryPoint addEntryPoint();
 
-  List<GwtRelativePath> getPublics();
-  GwtRelativePath addPublic();
+	List<GwtRelativePath> getSources();
 
-  List<GwtServlet> getServlets();
-  GwtServlet addServlet();
+	GwtRelativePath addSource();
 
-  List<GwtInheritsEntry> getInheritss();
-  GwtInheritsEntry addInherits();
+	List<GwtRelativePath> getPublics();
 
-  List<GwtStylesheetRef> getStylesheets();
+	GwtRelativePath addPublic();
 
-  String getQualifiedName();
+	List<GwtServlet> getServlets();
 
-  VirtualFile getModuleFile();
+	GwtServlet addServlet();
 
-  XmlFile getModuleXmlFile();
+	List<GwtInheritsEntry> getInheritss();
 
-  String getShortName();
+	GwtInheritsEntry addInherits();
 
-  List<VirtualFile> getSourceRoots();
+	List<GwtStylesheetRef> getStylesheets();
 
-  List<VirtualFile> getPublicRoots();
+	String getQualifiedName();
 
-  VirtualFile getModuleDirectory();
+	VirtualFile getModuleFile();
 
-  List<GwtModule> getInherited(final GlobalSearchScope scope);
+	XmlFile getModuleXmlFile();
 
-  List<CssFile> getStylesheetFiles();
+	String getShortName();
+
+	List<VirtualFile> getSourceRoots();
+
+	List<VirtualFile> getPublicRoots();
+
+	VirtualFile getModuleDirectory();
+
+	List<GwtModule> getInherited(final GlobalSearchScope scope);
+
+	List<CssFile> getStylesheetFiles();
 }

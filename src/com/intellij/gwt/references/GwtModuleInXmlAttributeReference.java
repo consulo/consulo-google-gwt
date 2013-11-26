@@ -21,13 +21,17 @@ import com.intellij.psi.xml.XmlAttributeValue;
 /**
  * @author nik
  */
-public class GwtModuleInXmlAttributeReference extends GwtModuleReference<XmlAttributeValue> {
-  public GwtModuleInXmlAttributeReference(final XmlAttributeValue xmlAttributeValue) {
-    super(xmlAttributeValue);
-  }
+public class GwtModuleInXmlAttributeReference extends GwtModuleReference<XmlAttributeValue>
+{
+	public GwtModuleInXmlAttributeReference(final XmlAttributeValue xmlAttributeValue)
+	{
+		super(xmlAttributeValue);
+	}
 
-  protected String getStringValue() {
-    return myElement.getValue();
-  }
+	@Override
+	protected String getStringValue()
+	{
+		return myElement.getValue();
+	}
 
 }

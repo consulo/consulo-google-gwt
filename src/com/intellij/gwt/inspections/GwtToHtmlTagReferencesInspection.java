@@ -16,46 +16,63 @@
 
 package com.intellij.gwt.inspections;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.references.GwtToHtmlTagReference;
-import com.intellij.psi.*;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.JavaElementVisitor;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceExpression;
 
 /**
  * @author nik
  */
-public class GwtToHtmlTagReferencesInspection extends BaseGwtInspection {
-  @NotNull
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
-    return new JavaElementVisitor() {
-      @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
-      }
+public class GwtToHtmlTagReferencesInspection extends BaseGwtInspection
+{
+	@Override
+	@NotNull
+	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	{
+		return new JavaElementVisitor()
+		{
+			@Override
+			public void visitReferenceExpression(PsiReferenceExpression expression)
+			{
+			}
 
-      @Override public void visitLiteralExpression(PsiLiteralExpression expression) {
-        final PsiReference[] references = expression.getReferences();
-        for (PsiReference reference : references) {
-          if (reference instanceof GwtToHtmlTagReference && reference.resolve() == null) {
-            holder.registerProblem(expression,
-                                   GwtBundle.message("problem.description.html.tag.with.id.0.is.not.found", expression.getValue()),
-                                   ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
-          }
-        }
-      }
-    };
-  }
+			@Override
+			public void visitLiteralExpression(PsiLiteralExpression expression)
+			{
+				final PsiReference[] references = expression.getReferences();
+				for(PsiReference reference : references)
+				{
+					if(reference instanceof GwtToHtmlTagReference && reference.resolve() == null)
+					{
+						holder.registerProblem(expression, GwtBundle.message("problem.description.html.tag.with.id.0.is.not.found", expression.getValue()),
+								ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+					}
+				}
+			}
+		};
+	}
 
-  @NotNull
-  public String getDisplayName() {
-    return GwtBundle.message("inspection.name.unresolved.references.to.html.tags");
-  }
+	@Override
+	@NotNull
+	public String getDisplayName()
+	{
+		return GwtBundle.message("inspection.name.unresolved.references.to.html.tags");
+	}
 
-  @NotNull
-  @NonNls
-  public String getShortName() {
-    return "GwtToHtmlReferences";
-  }
+	@Override
+	@NotNull
+	@NonNls
+	public String getShortName()
+	{
+		return "GwtToHtmlReferences";
+	}
 
 }

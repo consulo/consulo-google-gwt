@@ -16,6 +16,7 @@
 
 package com.intellij.gwt.references;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -23,41 +24,59 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.xml.XmlFile;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author nik
  */
-public abstract class BaseGwtReference extends PsiReferenceBase<PsiLiteralExpression> {
-  protected final GwtModulesManager myGwtModulesManager;
+public abstract class BaseGwtReference extends PsiReferenceBase<PsiLiteralExpression>
+{
+	protected final GwtModulesManager myGwtModulesManager;
 
-  public BaseGwtReference(PsiLiteralExpression element) {
-    super(element);
-    myGwtModulesManager = GwtModulesManager.getInstance(myElement.getProject());
-  }
+	public BaseGwtReference(PsiLiteralExpression element)
+	{
+		super(element);
+		myGwtModulesManager = GwtModulesManager.getInstance(myElement.getProject());
+	}
 
-  public @Nullable XmlFile getHtmlFileForModule() {
-    final GwtModule module = findGwtModule();
-    if (module == null) return null;
+	public
+	@Nullable
+	XmlFile getHtmlFileForModule()
+	{
+		final GwtModule module = findGwtModule();
+		if(module == null)
+		{
+			return null;
+		}
 
-    return myGwtModulesManager.findHtmlFileByModule(module);
+		return myGwtModulesManager.findHtmlFileByModule(module);
 
-  }
+	}
 
-  public @Nullable GwtModule findGwtModule() {
-    final PsiFile psiFile = myElement.getContainingFile();
-    if (psiFile == null) return null;
+	public
+	@Nullable
+	GwtModule findGwtModule()
+	{
+		final PsiFile psiFile = myElement.getContainingFile();
+		if(psiFile == null)
+		{
+			return null;
+		}
 
-    VirtualFile virtualFile = psiFile.getVirtualFile();
-    if (virtualFile == null) {
-      final PsiFile originalFile = psiFile.getOriginalFile();
-      if (originalFile != null) {
-        virtualFile = originalFile.getVirtualFile();
-      }
-      if (virtualFile == null) return null;
-    }
+		VirtualFile virtualFile = psiFile.getVirtualFile();
+		if(virtualFile == null)
+		{
+			final PsiFile originalFile = psiFile.getOriginalFile();
+			if(originalFile != null)
+			{
+				virtualFile = originalFile.getVirtualFile();
+			}
+			if(virtualFile == null)
+			{
+				return null;
+			}
+		}
 
-    return myGwtModulesManager.findGwtModuleByClientSourceFile(virtualFile);
+		return myGwtModulesManager.findGwtModuleByClientSourceFile(virtualFile);
 
-  }
+	}
 }

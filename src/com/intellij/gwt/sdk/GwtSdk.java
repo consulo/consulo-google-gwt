@@ -16,25 +16,26 @@
 
 package com.intellij.gwt.sdk;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * @author nik
  */
-public interface GwtSdk {
-  @NotNull
-  GwtVersion getVersion();
+public interface GwtSdk
+{
+	@NotNull
+	GwtVersion getVersion();
 
-  String getDevJarPath();
+	String getDevJarPath();
 
-  boolean containsJreEmulationClass(final String className);
+	boolean containsJreEmulationClass(final String className);
 
-  boolean isValid();
+	boolean isValid();
 
-  String getHomeDirectoryUrl();
+	String getHomeDirectoryUrl();
 
-  @Nullable
-  VirtualFile getUserJar();
+	@Nullable
+	VirtualFile getUserJar();
 }

@@ -16,6 +16,7 @@
 
 package com.intellij.gwt.actions;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.templates.GwtTemplates;
@@ -24,47 +25,65 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
-import org.jetbrains.annotations.NotNull;
 
-public class CreateGwtEntryPointAction extends GwtCreateActionBase {
-  public CreateGwtEntryPointAction() {
-    super(GwtBundle.message("newentrypoint.menu.action.text"), GwtBundle.message("newentrypoint.menu.action.description"));
-  }
+public class CreateGwtEntryPointAction extends GwtCreateActionBase
+{
+	public CreateGwtEntryPointAction()
+	{
+		super(GwtBundle.message("newentrypoint.menu.action.text"), GwtBundle.message("newentrypoint.menu.action.description"));
+	}
 
-  protected boolean requireGwtModule() {
-    return true;
-  }
+	@Override
+	protected boolean requireGwtModule()
+	{
+		return true;
+	}
 
-  protected String getDialogPrompt() {
-    return GwtBundle.message("newentrypoint.dlg.prompt");
-  }
+	@Override
+	protected String getDialogPrompt()
+	{
+		return GwtBundle.message("newentrypoint.dlg.prompt");
+	}
 
-  protected String getDialogTitle() {
-    return GwtBundle.message("newentrypoint.dlg.title");
-  }
+	@Override
+	protected String getDialogTitle()
+	{
+		return GwtBundle.message("newentrypoint.dlg.title");
+	}
 
-  @NotNull
-  protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception {
-    final PsiClass entryPointClass = createClassFromTemplate(directory, name, GwtTemplates.GWT_ENTRY_POINT_JAVA);
+	@Override
+	@NotNull
+	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
+	{
+		final PsiClass entryPointClass = createClassFromTemplate(directory, name, GwtTemplates.GWT_ENTRY_POINT_JAVA);
 
-    XmlFile xml = gwtModule.getModuleXmlFile();
-    if (xml == null) return PsiElement.EMPTY_ARRAY;
+		XmlFile xml = gwtModule.getModuleXmlFile();
+		if(xml == null)
+		{
+			return PsiElement.EMPTY_ARRAY;
+		}
 
-    gwtModule.addEntryPoint().getEntryClass().setValue(entryPointClass.getQualifiedName());
+		gwtModule.addEntryPoint().getEntryClass().setValue(entryPointClass.getQualifiedName());
 
-    return new PsiElement[]{entryPointClass.getContainingFile()};
-  }
+		return new PsiElement[]{entryPointClass.getContainingFile()};
+	}
 
 
-  protected PsiFile[] getAffectedFiles(final GwtModule gwtModule) {
-    return new PsiFile[]{gwtModule.getModuleXmlFile()};
-  }
+	@Override
+	protected PsiFile[] getAffectedFiles(final GwtModule gwtModule)
+	{
+		return new PsiFile[]{gwtModule.getModuleXmlFile()};
+	}
 
-  protected String getCommandName() {
-    return GwtBundle.message("newentrypoint.command.name");
-  }
+	@Override
+	protected String getCommandName()
+	{
+		return GwtBundle.message("newentrypoint.command.name");
+	}
 
-  protected String getActionName(PsiDirectory directory, String newName) {
-    return GwtBundle.message("newentrypoint.progress.text", newName);
-  }
+	@Override
+	protected String getActionName(PsiDirectory directory, String newName)
+	{
+		return GwtBundle.message("newentrypoint.progress.text", newName);
+	}
 }

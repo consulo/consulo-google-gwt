@@ -17,14 +17,14 @@
 package com.intellij.gwt.module.model;
 
 import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.GenericAttributeValue;
 
 /**
  * @author nik
  */
-public interface GwtRelativePath extends DomElement {
+public interface GwtRelativePath extends DomElement
+{
 
-  GenericAttributeValue<String> getPath();
+	GenericAttributeValue<String> getPath();
 
 }

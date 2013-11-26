@@ -16,10 +16,21 @@
 
 package com.intellij.gwt.run;
 
+import java.util.Collection;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.*;
+import com.intellij.execution.configurations.JavaCommandLineState;
+import com.intellij.execution.configurations.JavaRunConfigurationModule;
+import com.intellij.execution.configurations.ModuleBasedConfiguration;
+import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.facet.FacetManager;
@@ -35,105 +46,131 @@ import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule>
+{
+	@NonNls
+	private static final String MODULE = "module";
+	@NonNls
+	private static final String PAGE = "page";
+	public String VM_PARAMETERS = "";
+	public String SHELL_PARAMETERS = "";
+	public String RUN_PAGE = "";
+	public String CUSTOM_WEB_XML;
 
-public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> {
-  @NonNls private static final String MODULE = "module";
-  @NonNls private static final String PAGE = "page";
-  public String VM_PARAMETERS = "";
-  public String SHELL_PARAMETERS = "";
-  public String RUN_PAGE = "";
-  public String CUSTOM_WEB_XML;
+	public GwtRunConfiguration(String name, Project project, GwtRunConfigurationFactory configurationFactory)
+	{
+		super(name, new JavaRunConfigurationModule(project, true), configurationFactory);
+	}
 
-  public GwtRunConfiguration(String name, Project project, GwtRunConfigurationFactory configurationFactory) {
-    super(name, new JavaRunConfigurationModule(project, true), configurationFactory);
-  }
+	public GwtRunConfiguration(Project project, GwtRunConfigurationFactory configurationFactory)
+	{
+		this(GwtBundle.message("default.gwt.run.configuration.name"), project, configurationFactory);
+	}
 
-  public GwtRunConfiguration(Project project, GwtRunConfigurationFactory configurationFactory) {
-    this(GwtBundle.message("default.gwt.run.configuration.name"), project, configurationFactory);
-  }
+	@Override
+	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
+	{
+		return new GwtRunConfigurationEditor(getProject());
+	}
 
-  public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    return new GwtRunConfigurationEditor(getProject());
-  }
+	@Override
+	public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
+	{
+		final Module module = getModule();
+		if(module == null)
+		{
+			throw CantRunException.noModuleConfigured(getConfigurationModule().getModuleName());
+		}
 
-  public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException {
-    final Module module = getModule();
-    if (module == null) {
-      throw CantRunException.noModuleConfigured(getConfigurationModule().getModuleName());
-    }
-
-    final GwtFacet facet = FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
-    if (facet == null) {
-      throw new ExecutionException(GwtBundle.message("error.text.gwt.facet.not.configured.in.module.0", module.getName()));
-    }
-
-
-    final Sdk jdk = ModuleRootManager.getInstance(module).getSdk();
-    if (jdk == null) {
-      throw CantRunException.noJdkForModule(getModule());
-    }
-
-    final JavaCommandLineState state = new GwtCommandLineState(facet, env, RUN_PAGE, VM_PARAMETERS, SHELL_PARAMETERS, CUSTOM_WEB_XML);
-
-    state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject()));
-    return state;
-  }
-
-  public void checkConfiguration() throws RuntimeConfigurationException {
-    getConfigurationModule().checkForWarning();
-  }
+		final GwtFacet facet = FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
+		if(facet == null)
+		{
+			throw new ExecutionException(GwtBundle.message("error.text.gwt.facet.not.configured.in.module.0", module.getName()));
+		}
 
 
-  public Collection<Module> getValidModules() {
-    return getAllModules();
-  }
+		final Sdk jdk = ModuleRootManager.getInstance(module).getSdk();
+		if(jdk == null)
+		{
+			throw CantRunException.noJdkForModule(getModule());
+		}
 
-  protected ModuleBasedConfiguration createInstance() {
-    return new GwtRunConfiguration(getName(), getProject(), GwtRunConfigurationType.getFactory());
-  }
+		final JavaCommandLineState state = new GwtCommandLineState(facet, env, RUN_PAGE, VM_PARAMETERS, SHELL_PARAMETERS, CUSTOM_WEB_XML);
 
-  public @Nullable Module getModule() {
-    return getConfigurationModule().getModule();
-  }
+		state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject()));
+		return state;
+	}
 
-  public void readExternal(Element element) throws InvalidDataException {
-    DefaultJDOMExternalizer.readExternal(this, element);
-    readModule(element);
-    Element module = element.getChild(MODULE);
-    if (module != null) {
-      final String page = module.getAttributeValue(PAGE);
-      if (!StringUtil.isEmpty(page)) {
-        RUN_PAGE = page;
-      }
-    }
-    super.readExternal(element);
-  }
+	@Override
+	public void checkConfiguration() throws RuntimeConfigurationException
+	{
+		getConfigurationModule().checkForWarning();
+	}
 
-  public ModuleBasedConfiguration clone() {
-    return super.clone();
-  }
 
-  public void writeExternal(Element element) throws WriteExternalException {
-    writeModule(element);
-    DefaultJDOMExternalizer.writeExternal(this, element);
-    super.writeExternal(element);
-  }
+	@Override
+	public Collection<Module> getValidModules()
+	{
+		return getAllModules();
+	}
 
-  public void setPage(String runPage) {
-    if (runPage == null) {
-      runPage = "";
-    }
-    RUN_PAGE = runPage;
-  }
+	@Override
+	protected ModuleBasedConfiguration createInstance()
+	{
+		return new GwtRunConfiguration(getName(), getProject(), GwtRunConfigurationType.getFactory());
+	}
 
-  public String getPage() {
-    return RUN_PAGE;
-  }
+	public
+	@Nullable
+	Module getModule()
+	{
+		return getConfigurationModule().getModule();
+	}
+
+	@Override
+	public void readExternal(Element element) throws InvalidDataException
+	{
+		DefaultJDOMExternalizer.readExternal(this, element);
+		readModule(element);
+		Element module = element.getChild(MODULE);
+		if(module != null)
+		{
+			final String page = module.getAttributeValue(PAGE);
+			if(!StringUtil.isEmpty(page))
+			{
+				RUN_PAGE = page;
+			}
+		}
+		super.readExternal(element);
+	}
+
+	@Override
+	public ModuleBasedConfiguration clone()
+	{
+		return super.clone();
+	}
+
+	@Override
+	public void writeExternal(Element element) throws WriteExternalException
+	{
+		writeModule(element);
+		DefaultJDOMExternalizer.writeExternal(this, element);
+		super.writeExternal(element);
+	}
+
+	public void setPage(String runPage)
+	{
+		if(runPage == null)
+		{
+			runPage = "";
+		}
+		RUN_PAGE = runPage;
+	}
+
+	public String getPage()
+	{
+		return RUN_PAGE;
+	}
 
 }

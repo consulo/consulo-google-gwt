@@ -16,30 +16,32 @@
 
 package com.intellij.gwt.sdk;
 
-import com.intellij.openapi.components.ServiceManager;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
+import com.intellij.openapi.components.ServiceManager;
 
 /**
  * @author nik
  */
-public abstract class GwtSdkManager {
+public abstract class GwtSdkManager
+{
 
-  public static GwtSdkManager getInstance() {
-    return ServiceManager.getService(GwtSdkManager.class);
-  }
+	public static GwtSdkManager getInstance()
+	{
+		return ServiceManager.getService(GwtSdkManager.class);
+	}
 
-  @NotNull
-  public abstract GwtSdk getGwtSdk(@NotNull String sdkHomeUrl);
+	@NotNull
+	public abstract GwtSdk getGwtSdk(@NotNull String sdkHomeUrl);
 
-  public abstract void registerGwtSdk(final String gwtSdkUrl);
+	public abstract void registerGwtSdk(final String gwtSdkUrl);
 
-  public abstract void moveToTop(@NotNull GwtSdk sdk);
+	public abstract void moveToTop(@NotNull GwtSdk sdk);
 
-  @Nullable
-  public abstract GwtSdk suggestGwtSdk();
+	@Nullable
+	public abstract GwtSdk suggestGwtSdk();
 
-  public abstract List<String> getAllSdkPaths();
+	public abstract List<String> getAllSdkPaths();
 }

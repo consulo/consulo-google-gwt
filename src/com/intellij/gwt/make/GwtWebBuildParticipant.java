@@ -16,6 +16,9 @@
 
 package com.intellij.gwt.make;
 
+import java.io.File;
+import java.util.Collection;
+
 import com.intellij.compiler.impl.packagingCompiler.BuildInstructionBase;
 import com.intellij.compiler.impl.packagingCompiler.FileCopyInstructionImpl;
 import com.intellij.facet.FacetManager;
@@ -33,40 +36,44 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 
-import java.io.File;
-import java.util.Collection;
-
 /**
  * @author nik
  */
-public class GwtWebBuildParticipant extends CustomWebBuildParticipant {
-  private static final Key<Pair<GwtFacet, String>> GWT_MODULE_INFO_KEY = Key.create("GWT_MODULE_INFO_KEY");
+public class GwtWebBuildParticipant extends CustomWebBuildParticipant
+{
+	private static final Key<Pair<GwtFacet, String>> GWT_MODULE_INFO_KEY = Key.create("GWT_MODULE_INFO_KEY");
 
-  public void registerBuildInstructions(final WebFacet webFacet, BuildRecipe buildRecipe, CompileContext context) {
-    Module module = webFacet.getModule();
+	public void registerBuildInstructions(final WebFacet webFacet, BuildRecipe buildRecipe, CompileContext context)
+	{
+		Module module = webFacet.getModule();
 
-    final Collection<GwtFacet> facets = FacetManager.getInstance(module).getFacetsByType(GwtFacetType.ID);
-    for (GwtFacet facet : facets) {
-      if (facet.getConfiguration().isRunGwtCompilerOnMake() && webFacet.equals(facet.getWebFacet())) {
-        final GwtModule[] modules = GwtModulesManager.getInstance(module.getProject()).getGwtModules(module);
-        for (GwtModule gwtModule : modules) {
-          String qualifiedName = gwtModule.getQualifiedName();
-          final File output = new File(GwtCompilerPaths.getOutputDirectory(facet), qualifiedName);
-          String relativePath = facet.getConfiguration().getPackagingRelativePath(gwtModule);
-          final FileCopyInstructionImpl instruction =
-            new FileCopyInstructionImpl(output, true, module, DeploymentUtil.trimForwardSlashes(relativePath), null);
-          buildRecipe.addInstruction(instruction);
-          instruction.putUserData(GWT_MODULE_INFO_KEY, Pair.create(facet, qualifiedName));
-        }
-      }
-    }
-  }
+		final Collection<GwtFacet> facets = FacetManager.getInstance(module).getFacetsByType(GwtFacetType.ID);
+		for(GwtFacet facet : facets)
+		{
+			if(facet.getConfiguration().isRunGwtCompilerOnMake() && webFacet.equals(facet.getWebFacet()))
+			{
+				final GwtModule[] modules = GwtModulesManager.getInstance(module.getProject()).getGwtModules(module);
+				for(GwtModule gwtModule : modules)
+				{
+					String qualifiedName = gwtModule.getQualifiedName();
+					final File output = new File(GwtCompilerPaths.getOutputDirectory(facet), qualifiedName);
+					String relativePath = facet.getConfiguration().getPackagingRelativePath(gwtModule);
+					final FileCopyInstructionImpl instruction = new FileCopyInstructionImpl(output, true, module, DeploymentUtil.trimForwardSlashes(relativePath),
+							null);
+					buildRecipe.addInstruction(instruction);
+					instruction.putUserData(GWT_MODULE_INFO_KEY, Pair.create(facet, qualifiedName));
+				}
+			}
+		}
+	}
 
-  public static boolean isCopyGwtOutputInstruction(final BuildInstruction instruction) {
-    return getGwtModuleInfo(instruction) != null;
-  }
+	public static boolean isCopyGwtOutputInstruction(final BuildInstruction instruction)
+	{
+		return getGwtModuleInfo(instruction) != null;
+	}
 
-  public static Pair<GwtFacet, String> getGwtModuleInfo(final BuildInstruction instruction) {
-    return ((BuildInstructionBase)instruction).getUserData(GWT_MODULE_INFO_KEY);
-  }
+	public static Pair<GwtFacet, String> getGwtModuleInfo(final BuildInstruction instruction)
+	{
+		return ((BuildInstructionBase) instruction).getUserData(GWT_MODULE_INFO_KEY);
+	}
 }

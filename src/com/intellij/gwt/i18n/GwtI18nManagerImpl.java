@@ -16,153 +16,197 @@
 
 package com.intellij.gwt.i18n;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMethod;
 
 /**
  * @author nik
  */
-public class GwtI18nManagerImpl extends GwtI18nManager {
-  private static final Property[] EMPTY_PROPERTIES_ARRAY = new Property[0];
-  private static final PropertiesFile[] EMPTY_PROPERTIES_FILE_ARRAY = new PropertiesFile[0];
-  private final PsiManager myPsiManager;
-  private final Project myProject;
+public class GwtI18nManagerImpl extends GwtI18nManager
+{
+	private static final Property[] EMPTY_PROPERTIES_ARRAY = new Property[0];
+	private static final PropertiesFile[] EMPTY_PROPERTIES_FILE_ARRAY = new PropertiesFile[0];
+	private final PsiManager myPsiManager;
+	private final Project myProject;
 
-  public GwtI18nManagerImpl(PsiManager psiManager, final Project project) {
-    myProject = project;
-    myPsiManager = psiManager;
-  }
+	public GwtI18nManagerImpl(PsiManager psiManager, final Project project)
+	{
+		myProject = project;
+		myPsiManager = psiManager;
+	}
 
-  private boolean isConstantsOrMessagesInterface(@NotNull PsiClass aClass) {
-    if (!GwtFacet.isInModuleWithGwtFacet(myProject, getOriginalContainingFile(aClass).getVirtualFile()) || !aClass.isInterface()) {
-      return false;
-    }
+	private boolean isConstantsOrMessagesInterface(@NotNull PsiClass aClass)
+	{
+		if(!GwtFacet.isInModuleWithGwtFacet(myProject, getOriginalContainingFile(aClass).getVirtualFile()) || !aClass.isInterface())
+		{
+			return false;
+		}
 
-    return isConstantsInterface(aClass) || isExtendingInterface(aClass, GwtI18nUtil.MESSAGES_INTERFACE_NAME);
-  }
+		return isConstantsInterface(aClass) || isExtendingInterface(aClass, GwtI18nUtil.MESSAGES_INTERFACE_NAME);
+	}
 
-  private boolean isExtendingInterface(final PsiClass aClass, final String superInterfaceName) {
-    if (!aClass.isInterface()) return false;
+	private boolean isExtendingInterface(final PsiClass aClass, final String superInterfaceName)
+	{
+		if(!aClass.isInterface())
+		{
+			return false;
+		}
 
-    final PsiClass constantsClass =
-      JavaPsiFacade.getInstance(myPsiManager.getProject()).findClass(superInterfaceName, aClass.getResolveScope());
-    return constantsClass != null && aClass.isInheritor(constantsClass, true);
-  }
+		final PsiClass constantsClass = JavaPsiFacade.getInstance(myPsiManager.getProject()).findClass(superInterfaceName, aClass.getResolveScope());
+		return constantsClass != null && aClass.isInheritor(constantsClass, true);
+	}
 
-  public boolean isConstantsInterface(@NotNull final PsiClass aClass) {
-    return isExtendingInterface(aClass, GwtI18nUtil.CONSTANTS_INTERFACE_NAME);
-  }
+	@Override
+	public boolean isConstantsInterface(@NotNull final PsiClass aClass)
+	{
+		return isExtendingInterface(aClass, GwtI18nUtil.CONSTANTS_INTERFACE_NAME);
+	}
 
-  public boolean isLocalizableInterface(@NotNull PsiClass aClass) {
-    return isExtendingInterface(aClass, GwtI18nUtil.LOCALIZABLE_INTERFACE_NAME);
-  }
+	@Override
+	public boolean isLocalizableInterface(@NotNull PsiClass aClass)
+	{
+		return isExtendingInterface(aClass, GwtI18nUtil.LOCALIZABLE_INTERFACE_NAME);
+	}
 
-  @NotNull
-  public PropertiesFile[] getPropertiesFiles(@NotNull PsiClass anInterface) {
-    PsiFile containingFile = getOriginalContainingFile(anInterface);
-    final PsiDirectory psiDirectory = containingFile.getContainingDirectory();
-    if (psiDirectory == null || !isConstantsOrMessagesInterface(anInterface)) {
-      return EMPTY_PROPERTIES_FILE_ARRAY;
-    }
+	@Override
+	@NotNull
+	public PropertiesFile[] getPropertiesFiles(@NotNull PsiClass anInterface)
+	{
+		PsiFile containingFile = getOriginalContainingFile(anInterface);
+		final PsiDirectory psiDirectory = containingFile.getContainingDirectory();
+		if(psiDirectory == null || !isConstantsOrMessagesInterface(anInterface))
+		{
+			return EMPTY_PROPERTIES_FILE_ARRAY;
+		}
 
-    final PsiFile[] psiFiles = psiDirectory.getFiles();
-    List<PropertiesFile> files = new ArrayList<PropertiesFile>();
-    for (PsiFile psiFile : psiFiles) {
-      if (psiFile instanceof PropertiesFile) {
-        final PropertiesFile propertiesFile = (PropertiesFile)psiFile;
-        final String fileName = propertiesFile.getName();
-        final String interfaceName = anInterface.getName();
-        if (isFileNameForInterfaceName(fileName, interfaceName)) {
-          files.add(propertiesFile);
-        }
-      }
-    }
-    return files.toArray(new PropertiesFile[files.size()]);
-  }
+		final PsiFile[] psiFiles = psiDirectory.getFiles();
+		List<PropertiesFile> files = new ArrayList<PropertiesFile>();
+		for(PsiFile psiFile : psiFiles)
+		{
+			if(psiFile instanceof PropertiesFile)
+			{
+				final PropertiesFile propertiesFile = (PropertiesFile) psiFile;
+				final String fileName = propertiesFile.getName();
+				final String interfaceName = anInterface.getName();
+				if(isFileNameForInterfaceName(fileName, interfaceName))
+				{
+					files.add(propertiesFile);
+				}
+			}
+		}
+		return files.toArray(new PropertiesFile[files.size()]);
+	}
 
-  private static PsiFile getOriginalContainingFile(final PsiClass anInterface) {
-    PsiFile containingFile = anInterface.getContainingFile();
-    PsiFile originalFile = containingFile.getOriginalFile();
-    if (originalFile != null) {
-      containingFile = originalFile;
-    }
-    return containingFile;
-  }
+	private static PsiFile getOriginalContainingFile(final PsiClass anInterface)
+	{
+		PsiFile containingFile = anInterface.getContainingFile();
+		PsiFile originalFile = containingFile.getOriginalFile();
+		if(originalFile != null)
+		{
+			containingFile = originalFile;
+		}
+		return containingFile;
+	}
 
-  private static boolean isFileNameForInterfaceName(final @Nullable String fileName, final @Nullable String interfaceName) {
-    return fileName != null && interfaceName != null &&
-        (fileName.equals(interfaceName + "." + StdFileTypes.PROPERTIES.getDefaultExtension()) || fileName.startsWith(interfaceName + "_"));
-  }
+	private static boolean isFileNameForInterfaceName(final @Nullable String fileName, final @Nullable String interfaceName)
+	{
+		return fileName != null && interfaceName != null &&
+				(fileName.equals(interfaceName + "." + StdFileTypes.PROPERTIES.getDefaultExtension()) || fileName.startsWith(interfaceName + "_"));
+	}
 
-  @Nullable
-  public PsiClass getPropertiesInterface(@NotNull PropertiesFile file) {
-    final String fileName = file.getName();
-    final PsiDirectory directory = file.getContainingDirectory();
-    if (directory == null || !GwtFacet.isInModuleWithGwtFacet(myProject, file.getVirtualFile())) {
-      return null;
-    }
+	@Override
+	@Nullable
+	public PsiClass getPropertiesInterface(@NotNull PropertiesFile file)
+	{
+		final String fileName = file.getName();
+		final PsiDirectory directory = file.getContainingDirectory();
+		if(directory == null || !GwtFacet.isInModuleWithGwtFacet(myProject, file.getVirtualFile()))
+		{
+			return null;
+		}
 
-    for (PsiFile psiFile : directory.getFiles()) {
-      if (psiFile instanceof PsiJavaFile) {
-        final PsiClass[] psiClasses = ((PsiJavaFile)psiFile).getClasses();
-        for (PsiClass psiClass : psiClasses) {
-          if (isFileNameForInterfaceName(fileName, psiClass.getName()) && isConstantsOrMessagesInterface(psiClass)) {
-            return psiClass;
-          }
-        }
-      }
-    }
+		for(PsiFile psiFile : directory.getFiles())
+		{
+			if(psiFile instanceof PsiJavaFile)
+			{
+				final PsiClass[] psiClasses = ((PsiJavaFile) psiFile).getClasses();
+				for(PsiClass psiClass : psiClasses)
+				{
+					if(isFileNameForInterfaceName(fileName, psiClass.getName()) && isConstantsOrMessagesInterface(psiClass))
+					{
+						return psiClass;
+					}
+				}
+			}
+		}
 
-    return null;
-  }
+		return null;
+	}
 
-  @NotNull
-  public Property[] getProperties(@NotNull PsiMethod method) {
-    final PsiClass aClass = method.getContainingClass();
-    if (aClass == null) {
-      return EMPTY_PROPERTIES_ARRAY;
-    }
+	@Override
+	@NotNull
+	public Property[] getProperties(@NotNull PsiMethod method)
+	{
+		final PsiClass aClass = method.getContainingClass();
+		if(aClass == null)
+		{
+			return EMPTY_PROPERTIES_ARRAY;
+		}
 
-    final PropertiesFile[] files = getPropertiesFiles(aClass);
-    if (files.length == 0) {
-      return EMPTY_PROPERTIES_ARRAY;
-    }
+		final PropertiesFile[] files = getPropertiesFiles(aClass);
+		if(files.length == 0)
+		{
+			return EMPTY_PROPERTIES_ARRAY;
+		}
 
-    final String propertyName = GwtI18nUtil.getPropertyName(method);
-    List<Property> properties = new ArrayList<Property>();
-    for (PropertiesFile file : files) {
-      final Property property = file.findPropertyByKey(propertyName);
-      if (property != null) {
-        properties.add(property);
-      }
-    }
-    return properties.toArray(new Property[properties.size()]);
-  }
+		final String propertyName = GwtI18nUtil.getPropertyName(method);
+		List<Property> properties = new ArrayList<Property>();
+		for(PropertiesFile file : files)
+		{
+			final Property property = file.findPropertyByKey(propertyName);
+			if(property != null)
+			{
+				properties.add(property);
+			}
+		}
+		return properties.toArray(new Property[properties.size()]);
+	}
 
-  @Nullable
-  public PsiMethod getMethod(@NotNull Property property) {
-    final PsiClass psiClass = getPropertiesInterface(property.getContainingFile());
-    if (psiClass == null) {
-      return null;
-    }
+	@Override
+	@Nullable
+	public PsiMethod getMethod(@NotNull Property property)
+	{
+		final PsiClass psiClass = getPropertiesInterface(property.getContainingFile());
+		if(psiClass == null)
+		{
+			return null;
+		}
 
-    final PsiMethod[] psiMethods = psiClass.getMethods();
-    for (PsiMethod psiMethod : psiMethods) {
-      final String propertyName = GwtI18nUtil.getPropertyName(psiMethod);
-      if (propertyName != null && propertyName.equals(property.getUnescapedKey())) {
-        return psiMethod;
-      }
-    }
+		final PsiMethod[] psiMethods = psiClass.getMethods();
+		for(PsiMethod psiMethod : psiMethods)
+		{
+			final String propertyName = GwtI18nUtil.getPropertyName(psiMethod);
+			if(propertyName != null && propertyName.equals(property.getUnescapedKey()))
+			{
+				return psiMethod;
+			}
+		}
 
-    return null;
-  }
+		return null;
+	}
 }

@@ -16,46 +16,54 @@
 
 package com.intellij.gwt.make;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.intellij.gwt.facet.GwtFacet;
+import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.compiler.ValidityState;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.gwt.facet.GwtFacet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author nik
  */
-public class GwtModuleFileProcessingItem implements FileProcessingCompiler.ProcessingItem {
-  private GwtModule myModule;
-  private VirtualFile myFile;
-  private ValidityState myValidityState;
-  private GwtFacet myFacet;
+public class GwtModuleFileProcessingItem implements FileProcessingCompiler.ProcessingItem
+{
+	private GwtModule myModule;
+	private VirtualFile myFile;
+	private ValidityState myValidityState;
+	private GwtFacet myFacet;
 
-  public GwtModuleFileProcessingItem(final GwtFacet facet, final GwtModule module, VirtualFile file) {
-    myModule = module;
-    myFile = file;
-    myFacet = facet;
-    myValidityState = new GwtItemValidityState(myFacet.getConfiguration().getOutputStyle(), GwtCompilerPaths.getOutputDirectory(facet));
-  }
+	public GwtModuleFileProcessingItem(final GwtFacet facet, final GwtModule module, VirtualFile file)
+	{
+		myModule = module;
+		myFile = file;
+		myFacet = facet;
+		myValidityState = new GwtItemValidityState(myFacet.getConfiguration().getOutputStyle(), GwtCompilerPaths.getOutputDirectory(facet));
+	}
 
-  @NotNull
-  public VirtualFile getFile() {
-    return myFile;
-  }
+	@Override
+	@NotNull
+	public VirtualFile getFile()
+	{
+		return myFile;
+	}
 
-  @Nullable
-  public ValidityState getValidityState() {
-    return myValidityState;
-  }
+	@Override
+	@Nullable
+	public ValidityState getValidityState()
+	{
+		return myValidityState;
+	}
 
-  public GwtModule getModule() {
-    return myModule;
-  }
+	public GwtModule getModule()
+	{
+		return myModule;
+	}
 
 
-  public GwtFacet getFacet() {
-    return myFacet;
-  }
+	public GwtFacet getFacet()
+	{
+		return myFacet;
+	}
 }

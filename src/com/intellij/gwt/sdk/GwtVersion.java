@@ -22,27 +22,33 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author nik
  */
-public interface GwtVersion {
-  @NotNull @NonNls
-  String getGwtModuleHtmlTemplate();
+public interface GwtVersion
+{
+	@NotNull
+	@NonNls
+	String getGwtModuleHtmlTemplate();
 
-  @NotNull @NonNls
-  String getGwtServiceJavaTemplate();
+	@NotNull
+	@NonNls
+	String getGwtServiceJavaTemplate();
 
-  boolean isJavaIoSerializableSupported();
+	boolean isJavaIoSerializableSupported();
 
-  boolean isPrivateNoArgConstructorInSerializableClassAllowed();
+	boolean isPrivateNoArgConstructorInSerializableClassAllowed();
 
-  boolean isGenericsSupported();
+	boolean isGenericsSupported();
 
-  boolean isNewExpressionInJavaScriptSupported();
+	boolean isNewExpressionInJavaScriptSupported();
 
-  @NotNull @NonNls
-  String getCompilerClassName();
+	@NotNull
+	@NonNls
+	String getCompilerClassName();
 
-  @NotNull @NonNls
-  String getShellClassName();
+	@NotNull
+	@NonNls
+	String getShellClassName();
 
-  @NotNull @NonNls 
-  String getCompilerOutputDirParameterName();
+	@NotNull
+	@NonNls
+	String getCompilerOutputDirParameterName();
 }
