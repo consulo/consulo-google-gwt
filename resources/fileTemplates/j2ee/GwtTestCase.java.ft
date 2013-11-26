@@ -1,0 +1,10 @@
+package ${PACKAGE_NAME};
+
+import com.google.gwt.junit.client.GWTTestCase;
+
+public class ${NAME} extends GWTTestCase {
+    public String getModuleName() {
+        return "${GWT_MODULE_NAME}";
+    }
+
+}
