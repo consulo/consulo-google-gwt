@@ -17,7 +17,6 @@
 package com.intellij.gwt.actions;
 
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacetType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 

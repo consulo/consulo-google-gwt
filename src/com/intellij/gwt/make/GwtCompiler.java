@@ -35,7 +35,6 @@ import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.facet.FacetManager;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
-import com.intellij.gwt.facet.GwtFacetType;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.sdk.GwtVersion;

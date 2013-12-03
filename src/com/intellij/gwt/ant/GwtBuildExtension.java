@@ -10,6 +10,7 @@ import com.intellij.compiler.ant.BuildProperties;
 import com.intellij.compiler.ant.ChunkBuildExtension;
 import com.intellij.compiler.ant.CompositeGenerator;
 import com.intellij.compiler.ant.GenerationOptions;
+import com.intellij.compiler.ant.Generator;
 import com.intellij.compiler.ant.ModuleChunk;
 import com.intellij.compiler.ant.PropertyFileGenerator;
 import com.intellij.gwt.GwtBundle;
@@ -114,9 +115,9 @@ public class GwtBuildExtension extends ChunkBuildExtension
 			GwtFacet gwtFacet = GwtFacet.getInstance(module);
 			if(gwtFacet != null)
 			{
-				Comment comment = new Comment(GwtBundle.message("ant.target.comment.run.gwt.compiler.for.gwt.module.0",
-						BuildProperties.propertyRef(GwtBuildProperties.getGwtModuleParameter())));
-				generator.add(comment, 1);
+				//Generator comment = new Generator(GwtBundle.message("ant.target.comment.run.gwt.compiler.for.gwt.module.0",
+				//		BuildProperties.propertyRef(GwtBuildProperties.getGwtModuleParameter())));
+				//generator.add(comment, 1);
 				generator.add(new RunGwtCompilerTarget(gwtFacet, genOptions));
 				generator.add(CompileGwtTarget.create(gwtFacet, genOptions, chunk), 1);
 			}

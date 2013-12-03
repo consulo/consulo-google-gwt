@@ -16,32 +16,12 @@
 
 package com.intellij.gwt.make;
 
-import java.io.File;
-import java.util.Collection;
-
-import com.intellij.compiler.impl.packagingCompiler.BuildInstructionBase;
-import com.intellij.compiler.impl.packagingCompiler.FileCopyInstructionImpl;
-import com.intellij.facet.FacetManager;
-import com.intellij.gwt.facet.GwtFacet;
-import com.intellij.gwt.facet.GwtFacetType;
-import com.intellij.gwt.module.GwtModulesManager;
-import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.javaee.web.facet.WebFacet;
-import com.intellij.javaee.web.make.CustomWebBuildParticipant;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.make.BuildInstruction;
-import com.intellij.openapi.compiler.make.BuildRecipe;
-import com.intellij.openapi.deployment.DeploymentUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.Pair;
-
 /**
  * @author nik
  */
-public class GwtWebBuildParticipant extends CustomWebBuildParticipant
+public class GwtWebBuildParticipant// extends CustomWebBuildParticipant
 {
-	private static final Key<Pair<GwtFacet, String>> GWT_MODULE_INFO_KEY = Key.create("GWT_MODULE_INFO_KEY");
+/*	private static final Key<Pair<GwtFacet, String>> GWT_MODULE_INFO_KEY = Key.create("GWT_MODULE_INFO_KEY");
 
 	public void registerBuildInstructions(final WebFacet webFacet, BuildRecipe buildRecipe, CompileContext context)
 	{
@@ -75,5 +55,5 @@ public class GwtWebBuildParticipant extends CustomWebBuildParticipant
 	public static Pair<GwtFacet, String> getGwtModuleInfo(final BuildInstruction instruction)
 	{
 		return ((BuildInstructionBase) instruction).getUserData(GWT_MODULE_INFO_KEY);
-	}
+	} */
 }

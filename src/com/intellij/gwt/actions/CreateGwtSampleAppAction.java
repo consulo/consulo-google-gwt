@@ -32,7 +32,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPackage;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
@@ -99,7 +99,7 @@ public class CreateGwtSampleAppAction extends GwtCreateActionBase
 
 		PsiDirectory moduleDir = directory.createSubdirectory(name.toLowerCase());
 		result.add(moduleDir);
-		final PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(moduleDir);
+		final PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(moduleDir);
 		if(psiPackage == null)
 		{
 			return PsiElement.EMPTY_ARRAY;
@@ -117,7 +117,7 @@ public class CreateGwtSampleAppAction extends GwtCreateActionBase
 
 		PsiDirectory serverDir = moduleDir.createSubdirectory("server");
 		result.add(serverDir);
-		final PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(clientDir);
+		final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(clientDir);
 		LOG.assertTrue(aPackage != null);
 		result.add(createFromTemplate(serverDir, name + SERVICE_IMPL_SUFFIX + "." + StdFileTypes.JAVA.getDefaultExtension(),
 				GwtTemplates.GWT_SAMPLE_APP_SERVICE_IMPL_JAVA, SERVICE_NAME_PROPERTY, serviceName, CLIENT_PACKAGE_PROPERTY, aPackage.getQualifiedName()));

@@ -38,6 +38,7 @@ import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
 import com.intellij.gwt.module.model.GwtModule;
+import com.intellij.icons.AllIcons;
 import com.intellij.javaee.DeploymentDescriptorsConstants;
 import com.intellij.javaee.web.facet.WebFacet;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -58,6 +59,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.ComboboxWithBrowseButton;
+import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.RawCommandLineEditor;
 import com.intellij.util.descriptors.ConfigFile;
 
@@ -230,19 +232,17 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
 		});
 		myWebXmlField.addBrowseFolderListener(null, null, myProject, createWebXmlChooserDescriptor());
 
-		myModulesBox.setRenderer(new DefaultListCellRenderer()
+		myModulesBox.setRenderer(new ListCellRendererWrapper()
 		{
 			@Override
-			public Component getListCellRendererComponent(JList list, final Object value, int index, boolean isSelected, boolean cellHasFocus)
+			public void customize(JList jList, Object value, int i, boolean b, boolean b2)
 			{
-				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				final Module module = (Module) value;
 				if(module != null)
 				{
-					setIcon(module.getModuleType().getNodeIcon(false));
+					setIcon(AllIcons.Nodes.Module);
 					setText(module.getName());
 				}
-				return this;
 			}
 		});
 

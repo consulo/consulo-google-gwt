@@ -6,31 +6,42 @@
 	<id>com.intellij.gwt</id>
 	<description>Significantly simplifies development of AJAX applications based on Google Web Toolkit</description>
 	<version>1.0</version>
+
 	<depends>org.consulo.java</depends>
 	<depends>org.mustbe.consulo.javascript</depends>
 	<depends>com.intellij.xml</depends>
 	<depends>com.intellij.properties</depends>
-	<vendor logo="/general/ijLogo.png">JetBrains</vendor>
+	<depends>com.intellij.java-i18n</depends>
+
+	<vendor>JetBrains</vendor>
 	<category>Web/JavaEE Technologies</category>
+
+	<extensions defaultExtensionNs="com.intellij.java-i18n">
+		<resourceBundleManager implementation="com.intellij.gwt.i18n.GwtResourceBundleManager"/>
+
+	</extensions>
+
+	<extensions defaultExtensionNs="org.consulo.java">
+		<testPatcher implementation="com.intellij.gwt.junit.GwtJUnitPatcher"/>
+	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
 		<errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
-		<junitPatcher implementation="com.intellij.gwt.junit.GwtJUnitPatcher"/>
-		<javaee.web.customBuildParticipant implementation="com.intellij.gwt.make.GwtWebBuildParticipant"/>
+		<!--<javaee.web.customBuildParticipant implementation="com.intellij.gwt.make.GwtWebBuildParticipant"/> -->
 		<antBuildGen implementation="com.intellij.gwt.ant.GwtBuildExtension" order="first"/>
+
 		<dom.fileDescription implementation="com.intellij.gwt.module.GwtDomFileDescription"/>
+
 		<fileBasedIndex implementation="com.intellij.gwt.module.index.GwtHtmlFileIndex"/>
 
 		<psi.referenceContributor implementation="com.intellij.gwt.references.GwtReferenceContributor"/>
 
-		<resourceBundleManager implementation="com.intellij.gwt.i18n.GwtResourceBundleManager"/>
-
-		<applicationService serviceInterface="com.intellij.gwt.sdk.GwtSdkManager"
-							serviceImplementation="com.intellij.gwt.sdk.impl.GwtSdkManagerImpl"/>
 		<projectService serviceInterface="com.intellij.gwt.module.GwtModulesManager"
 						serviceImplementation="com.intellij.gwt.module.GwtModulesManagerImpl"/>
 		<projectService serviceInterface="com.intellij.gwt.i18n.GwtI18nManager"
 						serviceImplementation="com.intellij.gwt.i18n.GwtI18nManagerImpl"/>
+
+		<sdkType implementation="org.mustbe.consulo.google.gwt.sdk.GoogleGwtSdkType" />
 
 		<annotator language="JAVA" implementationClass="com.intellij.gwt.i18n.PropertiesInterfaceAnnotator"/>
 
@@ -39,9 +50,7 @@
 		<referencesSearch implementation="com.intellij.gwt.references.search.GwtToHtmlTagIdReferencesSearcher"/>
 		<definitionsSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
 
-
-		<frameworkSupport implementation="com.intellij.gwt.facet.GwtFacetFrameworkSupportProvider"/>
-		<explodedAndJarBuildGenerator implementation="com.intellij.gwt.ant.GwtExplodedAndJarBuildGenerator"/>
+		<!--<explodedAndJarBuildGenerator implementation="com.intellij.gwt.ant.GwtExplodedAndJarBuildGenerator"/>-->
 		<configurationType implementation="com.intellij.gwt.run.GwtRunConfigurationType"/>
 		<lang.elementManipulator forClass="com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl"
 								 implementationClass="com.intellij.gwt.jsinject.JsGwtReferenceExpressionManipulator"/>

@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.facet.FacetManager;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
-import com.intellij.gwt.facet.GwtFacetType;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.GwtServlet;
 import com.intellij.gwt.rpc.GwtServletUtil;

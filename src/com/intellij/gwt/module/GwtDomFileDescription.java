@@ -16,9 +16,11 @@
 package com.intellij.gwt.module;
 
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.impl.GwtModuleImpl;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomFileDescription;
 
@@ -41,7 +43,11 @@ public class GwtDomFileDescription extends DomFileDescription<GwtModule>
 	@Override
 	public boolean isMyFile(@NotNull XmlFile file, final Module module)
 	{
-		return file.getName().endsWith(GwtModulesManager.GWT_XML_SUFFIX) && super.isMyFile(file, module);
+		if(!(file.getName().endsWith(GwtModulesManager.GWT_XML_SUFFIX) && super.isMyFile(file, module)))
+		{
+			return false;
+		}
+		return ModuleUtilCore.getExtension(file, GoogleGwtModuleExtension.class) != null;
 	}
 
 	@Override

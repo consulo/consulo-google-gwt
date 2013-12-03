@@ -177,6 +177,13 @@ public class GwtJSParameterInfoHandler implements ParameterInfoHandlerWithTabAct
 		return Collections.singleton((Class) JSCallExpression.class);
 	}
 
+	@NotNull
+	@Override
+	public Set<? extends Class> getArgListStopSearchClasses()
+	{
+		return Collections.emptySet();
+	}
+
 	@Override
 	@NotNull
 	public Class<JSArgumentList> getArgumentListClass()

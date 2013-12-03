@@ -15,27 +15,12 @@
  */
 package com.intellij.gwt.ant;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.intellij.compiler.ant.BuildProperties;
-import com.intellij.compiler.ant.ExplodedAndJarTargetParameters;
-import com.intellij.compiler.ant.Tag;
-import com.intellij.compiler.ant.taskdefs.Copy;
-import com.intellij.compiler.ant.taskdefs.FileSet;
-import com.intellij.compiler.ant.taskdefs.ZipFileSet;
-import com.intellij.compiler.make.ExplodedAndJarBuildGenerator;
-import com.intellij.gwt.facet.GwtFacet;
-import com.intellij.gwt.make.GwtWebBuildParticipant;
-import com.intellij.openapi.compiler.make.BuildInstruction;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-
 /**
  * @author peter
  */
-public class GwtExplodedAndJarBuildGenerator extends ExplodedAndJarBuildGenerator
+public class GwtExplodedAndJarBuildGenerator //extends ExplodedAndJarBuildGenerator
 {
-	@Nullable
+/*	@Nullable
 	public Tag[] generateTagsForExplodedTarget(@NotNull final BuildInstruction instruction, @NotNull final ExplodedAndJarTargetParameters
 			parameters, final int instructionCount) throws Exception
 	{
@@ -78,5 +63,5 @@ public class GwtExplodedAndJarBuildGenerator extends ExplodedAndJarBuildGenerato
 			throws Exception
 	{
 		return GwtWebBuildParticipant.isCopyGwtOutputInstruction(instruction) ? Tag.EMPTY_ARRAY : null;
-	}
+	}   */
 }

@@ -65,7 +65,8 @@ public class JSGwtReferenceExpressionImpl extends JSReferenceExpressionImpl
 		TextRange classNameRange = new TextRange(classNameStart.getStartOffsetInParent(), classNameFinish.getStartOffsetInParent() + classNameFinish
 				.getTextLength());
 
-		JavaClassReferenceProvider referenceProvider = new JavaClassReferenceProvider(getResolveScope(), at.getProject());
+		JavaClassReferenceProvider referenceProvider = new JavaClassReferenceProvider();
+
 		PsiReference[] classReferences = referenceProvider.getReferencesByString(classNameRange.substring(getText()), this,
 				classNameRange.getStartOffset());
 

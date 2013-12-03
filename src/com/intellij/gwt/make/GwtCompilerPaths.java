@@ -80,7 +80,7 @@ public class GwtCompilerPaths
 	private static String getOutputDirectoryName(@NotNull Module module)
 	{
 		final String moduleName = module.getName();
-		final String modulePath = module.getModuleFilePath();
+		final String modulePath = module.getModuleDirPath();
 		return moduleName.replace(' ', '_') + "." + Integer.toHexString(modulePath.hashCode());
 	}
 

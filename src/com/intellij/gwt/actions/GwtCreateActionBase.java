@@ -44,7 +44,6 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.io.FileUtil;
@@ -92,7 +91,7 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 				return PsiElement.EMPTY_ARRAY;
 			}
 			facet = GwtFacet.createNewFacet(module);
-			ModulesConfigurator.showFacetSettingsDialog(facet, null);
+			//ModulesConfigurator.showFacetSettingsDialog(facet, null);
 			facet = GwtFacet.getInstance(module);
 			if(facet == null)
 			{

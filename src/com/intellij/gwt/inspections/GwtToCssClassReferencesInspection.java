@@ -18,31 +18,10 @@ package com.intellij.gwt.inspections;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.module.GwtModulesManager;
-import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.gwt.references.GwtToCssClassReference;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.ReadonlyStatusHandler;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.css.CssElementFactory;
-import com.intellij.psi.css.CssFile;
-import com.intellij.psi.css.CssRuleset;
-import com.intellij.psi.css.CssStylesheet;
-import com.intellij.util.IncorrectOperationException;
 
 public class GwtToCssClassReferencesInspection extends BaseGwtInspection
 {
@@ -52,11 +31,11 @@ public class GwtToCssClassReferencesInspection extends BaseGwtInspection
 	@NotNull
 	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly)
 	{
-		Project project = holder.getManager().getProject();
+		/*Project project = holder.getManager().getProject();
 		if(hasGwtFacets(project))
 		{
 			return new CssReferencesProblemsCollectingVisitor(holder);
-		}
+		}                                           */
 		return super.buildVisitor(holder, isOnTheFly);
 	}
 
@@ -75,7 +54,7 @@ public class GwtToCssClassReferencesInspection extends BaseGwtInspection
 		return "GWTStyleCheck";
 	}
 
-	private static class MyLocalQuickFix extends BaseGwtLocalQuickFix
+	/*private static class MyLocalQuickFix extends BaseGwtLocalQuickFix
 	{
 		private CssFile myCssFile;
 		private String myClassName;
@@ -180,5 +159,5 @@ public class GwtToCssClassReferencesInspection extends BaseGwtInspection
 		public void visitReferenceExpression(PsiReferenceExpression expression)
 		{
 		}
-	}
+	}  */
 }

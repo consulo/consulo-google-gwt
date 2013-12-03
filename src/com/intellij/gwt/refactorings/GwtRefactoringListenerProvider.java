@@ -228,7 +228,7 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 				if(className != null && fileName.startsWith(className))
 				{
 					final String suffix = fileName.substring(className.length());
-					elementsToRename.put(file, new Function<String, String>()
+					elementsToRename.put(file.getContainingFile(), new Function<String, String>()
 					{
 						@Override
 						public String fun(final String s)

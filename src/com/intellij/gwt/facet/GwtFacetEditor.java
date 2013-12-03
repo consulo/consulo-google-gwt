@@ -46,8 +46,6 @@ import com.intellij.facet.ui.*;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.gwt.sdk.GwtSdk;
-import com.intellij.gwt.sdk.GwtSdkManager;
 import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.javaee.web.facet.WebFacet;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;

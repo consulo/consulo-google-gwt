@@ -18,16 +18,17 @@ package com.intellij.gwt.junit;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.execution.JUnitPatcher;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import com.intellij.execution.JavaTestPatcher;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
-import com.intellij.facet.FacetManager;
-import com.intellij.gwt.facet.GwtFacet;
-import com.intellij.gwt.facet.GwtFacetType;
 import com.intellij.gwt.make.GwtCompilerPaths;
 import com.intellij.gwt.module.GwtModulesManager;
+import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
@@ -38,7 +39,7 @@ import com.intellij.util.PathsList;
 /**
  * @author nik
  */
-public class GwtJUnitPatcher extends JUnitPatcher
+public class GwtJUnitPatcher implements JavaTestPatcher
 {
 	@NonNls
 	private static final String GWT_ARGS_PROPERTY = "gwt.args";
@@ -50,8 +51,14 @@ public class GwtJUnitPatcher extends JUnitPatcher
 			return;
 		}
 
-		final GwtFacet facet = FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
-		if(facet == null)
+		final GoogleGwtModuleExtension extension = ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
+		if(extension == null)
+		{
+			return;
+		}
+
+		Sdk sdk = extension.getSdk();
+		if(sdk == null)
 		{
 			return;
 		}
@@ -63,7 +70,7 @@ public class GwtJUnitPatcher extends JUnitPatcher
 			{
 				classPath.addFirst(FileUtil.toSystemDependentName(file.getPath()));
 			}
-			classPath.addFirst(facet.getConfiguration().getSdk().getDevJarPath());
+			classPath.addFirst(GwtSdkUtil.getDevJarPath(sdk));
 		}
 
 		String testGenPath = GwtCompilerPaths.getTestGenDirectory(module).getAbsolutePath();
@@ -78,8 +85,8 @@ public class GwtJUnitPatcher extends JUnitPatcher
 			{
 				builder.append(StringUtil.unquoteString(gwtArgs)).append(' ');
 			}
-			builder.append("-gen ").append(GeneralCommandLine.quote(testGenPath)).append(' ');
-			builder.append("-out ").append(GeneralCommandLine.quote(testOutputPath));
+			builder.append("-gen ").append(GeneralCommandLine.inescapableQuote(testGenPath)).append(' ');
+			builder.append("-out ").append(GeneralCommandLine.inescapableQuote(testOutputPath));
 			@NonNls String prefix = "-D" + GWT_ARGS_PROPERTY + "=";
 			vmParameters.replaceOrAppend(prefix, prefix + builder);
 		}

@@ -19,7 +19,6 @@ package com.intellij.gwt;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.InspectionToolProvider;
-import com.intellij.gwt.facet.GwtFacetType;
 import com.intellij.gwt.inspections.*;
 import com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl;
 import com.intellij.gwt.make.GwtCompilerPaths;

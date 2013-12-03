@@ -30,12 +30,14 @@ import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateBuilder;
+import com.intellij.codeInsight.template.TemplateBuilderFactory;
 import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInspection.i18n.I18nUtil;
+import com.intellij.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.gwt.sdk.GwtVersion;
+import com.intellij.lang.properties.PropertiesFileProcessor;
 import com.intellij.lang.properties.PropertiesFilesManager;
 import com.intellij.lang.properties.psi.I18nizedTextGenerator;
 import com.intellij.lang.properties.psi.PropertiesFile;
@@ -111,27 +113,28 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 	@Override
 	public List<String> suggestPropertiesFiles()
 	{
-		List<String> paths = new ArrayList<String>();
+		final List<String> paths = new ArrayList<String>();
 
-		Collection<VirtualFile> files = PropertiesFilesManager.getInstance().getAllPropertiesFiles();
-		for(VirtualFile file : files)
+		PropertiesFilesManager.getInstance(myProject).processAllPropertiesFiles(new PropertiesFileProcessor()
 		{
-			PsiFile psiFile = myPsiManager.findFile(file);
-			if(psiFile instanceof PropertiesFile)
+			@Override
+			public boolean process(String s, PropertiesFile propertiesFile)
 			{
-				if(myI18nManager.getPropertiesInterface((PropertiesFile) psiFile) != null)
+				if(myI18nManager.getPropertiesInterface(propertiesFile) != null)
 				{
-					paths.add(FileUtil.toSystemDependentName(file.getPath()));
+					paths.add(FileUtil.toSystemDependentName(propertiesFile.getVirtualFile().getPath()));
 				}
+				return true;
 			}
-		}
+		});
+
 		return paths;
 	}
 
 	private void addMethod(final PsiClass anInterface, final String key, final PsiExpression[] parameters) throws IncorrectOperationException
 	{
 		PsiFile psiFile = anInterface.getContainingFile();
-		CodeInsightUtilBase.prepareFileForWrite(psiFile);
+		CodeInsightUtilBase.getInstance().prepareFileForWrite(psiFile);
 		final VirtualFile virtualFile = psiFile.getVirtualFile();
 		LOG.assertTrue(virtualFile != null);
 
@@ -140,7 +143,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 		PsiMethod method = GwtI18nUtil.addMethod(anInterface, key, gwtVersion);
 		if(parameters.length > 0)
 		{
-			TemplateBuilder builder = new TemplateBuilder(method);
+			TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(method);
 			CreateFromUsageUtils.setupMethodParameters(method, builder, parameters[0], PsiSubstitutor.EMPTY, parameters);
 			method = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(method);
 
@@ -150,7 +153,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 			LOG.assertTrue(document != null);
 			RangeMarker methodRange = document.createRangeMarker(method.getTextRange());
 			final Editor editor = FileEditorManager.getInstance(myProject).openTextEditor(descriptor, true);
-			final Template template = builder.buildTemplate();
+			final Template template = null;//TODO [VISTALL] TemplateManager.getInstance(myProject).createTemplate()
 
 			editor.getCaretModel().moveToOffset(methodRange.getStartOffset());
 			editor.getDocument().deleteString(methodRange.getStartOffset(), methodRange.getEndOffset());
@@ -204,7 +207,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 		private String getLocalizableInstance(final @NotNull PsiClass anInterface, final @NotNull PsiLiteralExpression context)
 		{
 			PsiClassType type = JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createType(anInterface);
-			Set<String> expressions = I18nUtil.suggestExpressionOfType(type, context);
+			Set<String> expressions = JavaI18nUtil.suggestExpressionOfType(type, context);
 			Iterator<String> iterator = expressions.iterator();
 			if(iterator.hasNext())
 			{
@@ -235,7 +238,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 		public void createProperty(final Project project, final Collection<PropertiesFile> propertiesFiles, final String key, final String value,
 				final PsiExpression[] parameters) throws IncorrectOperationException
 		{
-			I18nUtil.DEFAULT_PROPERTY_CREATION_HANDLER.createProperty(project, propertiesFiles, key, value, parameters);
+			JavaI18nUtil.DEFAULT_PROPERTY_CREATION_HANDLER.createProperty(project, propertiesFiles, key, value, parameters);
 			Iterator<PropertiesFile> iterator = propertiesFiles.iterator();
 			if(iterator.hasNext())
 			{

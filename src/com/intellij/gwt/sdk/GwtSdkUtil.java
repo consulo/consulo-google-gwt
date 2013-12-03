@@ -17,23 +17,20 @@
 package com.intellij.gwt.sdk;
 
 import java.io.File;
-
-import javax.swing.JComponent;
+import java.io.Serializable;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.facet.ui.FacetConfigurationQuickFix;
-import com.intellij.facet.ui.ValidationResult;
-import com.intellij.gwt.GwtBundle;
-import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.gwt.i18n.GwtI18nUtil;
+import com.intellij.gwt.sdk.impl.GwtVersionImpl;
+import com.intellij.ide.highlighter.JarArchiveFileType;
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.libraries.LibraryUtil;
-import com.intellij.openapi.roots.ui.configuration.projectRoot.LibrariesContainer;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.JarFileSystem;
+import com.intellij.openapi.vfs.ArchiveFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 
 /**
@@ -51,21 +48,88 @@ public class GwtSdkUtil
 	private static final String GWT_DEV_MAC_JAR = "gwt-dev-mac.jar";
 	@NonNls
 	public static final String GWT_CLASS_NAME = "com.google.gwt.core.client.GWT";
-	private static final FacetConfigurationQuickFix DOWNLOAD_GWT_FIX = new FacetConfigurationQuickFix(GwtBundle.message("fix.download.gwt"))
-	{
-		public void run(final JComponent place)
-		{
-			BrowserUtil.launchBrowser("http://code.google.com/webtoolkit/download.html");
-		}
-	};
+	@NonNls
+	private static final String EMUL_ROOT = "com/google/gwt/emul/";
+
+	private static final Key<GwtVersion> GWT_VERSION_KEY = Key.create("gwt-version-key");
 
 	private GwtSdkUtil()
 	{
 	}
 
+	public static GwtVersion getVersionOptions(Sdk sdk)
+	{
+		GwtVersion gwtVersion = sdk.getUserData(GWT_VERSION_KEY);
+		if(gwtVersion == null)
+		{
+			return GwtVersionImpl.VERSION_1_0;
+		}
+
+		gwtVersion = detectVersion(sdk);
+		sdk.putUserData(GWT_VERSION_KEY, gwtVersion);
+		return gwtVersion;
+	}
+
+	private static GwtVersion detectVersion(Sdk sdk)
+	{
+		VirtualFile devJar = JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(getDevJarPath(sdk)) +
+				ArchiveFileSystem.ARCHIVE_SEPARATOR);
+		if(devJar != null)
+		{
+			VirtualFile[] files = {devJar};
+			if(LibraryUtil.isClassAvailableInLibrary(files, GwtVersionImpl.GWT_16_COMPILER_MAIN_CLASS))
+			{
+				return GwtVersionImpl.VERSION_1_6_OR_LATER;
+			}
+		}
+
+		VirtualFile userJar = getUserJar(sdk);
+		if(userJar != null)
+		{
+			VirtualFile[] files = {userJar};
+			if(!LibraryUtil.isClassAvailableInLibrary(files, GwtI18nUtil.CONSTANTS_INTERFACE_NAME))
+			{
+				return GwtVersionImpl.VERSION_1_0;
+			}
+			if(userJar.findFileByRelativePath(getJreEmulationClassPath(Iterable.class.getName())) != null)
+			{
+				return GwtVersionImpl.VERSION_1_5;
+			}
+			if(userJar.findFileByRelativePath(getJreEmulationClassPath(Serializable.class.getName())) != null)
+			{
+				return GwtVersionImpl.VERSION_1_4;
+			}
+		}
+
+		return GwtVersionImpl.VERSION_FROM_1_1_TO_1_3;
+	}
+
+	private static String getJreEmulationClassPath(String className)
+	{
+		return EMUL_ROOT + className.replace('.', '/') + JavaFileType.DOT_DEFAULT_EXTENSION;
+	}
+
+	public static String getUserJarPath(Sdk sdk)
+	{
+		return getUserJarPath(sdk.getHomePath());
+	}
+
+	@Nullable
+	public static VirtualFile getUserJar(Sdk sdk)
+	{
+		String jarPath = getUserJarPath(sdk);
+		return JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(jarPath) + ArchiveFileSystem
+				.ARCHIVE_SEPARATOR);
+	}
+
 	public static String getUserJarPath(String base)
 	{
 		return base + File.separator + GWT_USER_JAR;
+	}
+
+	public static String getDevJarPath(Sdk sdk)
+	{
+		return getDevJarPath(sdk.getHomePath());
 	}
 
 	public static String getDevJarPath(String base)
@@ -89,72 +153,5 @@ public class GwtSdkUtil
 			jarName = GWT_DEV_LINUX_JAR;
 		}
 		return jarName;
-	}
-
-	private static ValidationResult checkClass(final @NonNls String className, String gwtPath, final String jarPath)
-	{
-		final VirtualFile jarFile = JarFileSystem.getInstance().refreshAndFindFileByPath(FileUtil.toSystemIndependentName(jarPath) + JarFileSystem
-				.JAR_SEPARATOR);
-		if(jarFile == null)
-		{
-			return invalidGwtInstallation(gwtPath, GwtBundle.message("error.file.not.found.message", jarPath));
-		}
-		if(!LibraryUtil.isClassAvailableInLibrary(new VirtualFile[]{jarFile}, className))
-		{
-			return invalidGwtInstallation(gwtPath, GwtBundle.message("error.class.not.found.in.jar", className, jarFile));
-		}
-		return ValidationResult.OK;
-	}
-
-	private static ValidationResult invalidGwtInstallation(final String gwtPath, final String errorMessage)
-	{
-		return new ValidationResult(GwtBundle.message("error.invalid.gwt.installation.message", gwtPath, errorMessage), DOWNLOAD_GWT_FIX);
-	}
-
-	public static ValidationResult checkGwtSdkPath(final String gwtPath)
-	{
-		if(gwtPath.contains("!"))
-		{
-			return new ValidationResult(GwtBundle.message("error.message.path.to.gwt.sdk.must.not.contain.character"));
-		}
-
-		ValidationResult result = checkClass("com.google.gwt.dev.GWTCompiler", gwtPath, getDevJarPath(gwtPath));
-		if(result.isOk())
-		{
-			result = checkClass("com.google.gwt.dev.GWTShell", gwtPath, getDevJarPath(gwtPath));
-		}
-		if(result.isOk())
-		{
-			result = checkClass(GWT_CLASS_NAME, gwtPath, getUserJarPath(gwtPath));
-		}
-		return result;
-	}
-
-	public static Library findOrCreateGwtUserLibrary(final @NotNull LibrariesContainer container, final @NotNull VirtualFile userJar)
-	{
-		final Library library = findLibrary(container, userJar);
-		if(library != null)
-		{
-			return library;
-		}
-
-		return container.createLibrary("gwt-user", LibrariesContainer.LibraryLevel.PROJECT, new VirtualFile[]{userJar}, new VirtualFile[]{userJar});
-	}
-
-	@Nullable
-	private static Library findLibrary(final LibrariesContainer container, final VirtualFile userJar)
-	{
-		for(Library library : container.getAllLibraries())
-		{
-			final VirtualFile[] files = library.getFiles(OrderRootType.CLASSES);
-			for(VirtualFile file : files)
-			{
-				if(userJar.equals(file))
-				{
-					return library;
-				}
-			}
-		}
-		return null;
 	}
 }

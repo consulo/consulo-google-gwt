@@ -19,8 +19,6 @@ package com.intellij.gwt.facet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.facet.*;
-import com.intellij.gwt.sdk.GwtSdk;
-import com.intellij.gwt.sdk.GwtSdkManager;
 import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;

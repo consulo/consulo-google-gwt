@@ -33,6 +33,7 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
@@ -83,7 +84,7 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
 	{
 		JavaDirectoryService javaDirectoryService = JavaDirectoryService.getInstance();
-		PsiPackage psiPackage = javaDirectoryService.getPackage(directory);
+		PsiJavaPackage psiPackage = javaDirectoryService.getPackage(directory);
 		if(psiPackage == null)
 		{
 			return PsiElement.EMPTY_ARRAY;
@@ -92,7 +93,7 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 		int dot = name.indexOf('.');
 		if(dot != -1)
 		{
-			PsiPackage aPackage;
+			PsiJavaPackage aPackage;
 			while((aPackage = javaDirectoryService.getPackage(directory)) != null && aPackage.getParentPackage() != null)
 			{
 				directory = directory.getParentDirectory();

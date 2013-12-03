@@ -31,6 +31,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
@@ -41,9 +42,9 @@ import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.make.GwtCompilerPaths;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
+import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
@@ -71,18 +72,18 @@ public class GwtCommandLineState extends JavaCommandLineState
 	private final Module myModule;
 	private String myRunPage;
 	private String myVMParameters;
-	private GwtFacet myFacet;
+	private GoogleGwtModuleExtension myGwtModuleExtension;
 	private final String myShellParameters;
 	private final String myCustomWebXmlUrl;
 
-	public GwtCommandLineState(final GwtFacet facet, final ExecutionEnvironment environment, final String runPage, final String vmParameters,
-			final String shellParameters, final String customWebXmlUrl)
+	public GwtCommandLineState(final GoogleGwtModuleExtension gwtModuleExtension, final ExecutionEnvironment environment, final String runPage,
+			final String vmParameters, final String shellParameters, final String customWebXmlUrl)
 	{
 		super(environment);
-		myFacet = facet;
+		myGwtModuleExtension = gwtModuleExtension;
 		myShellParameters = shellParameters;
 		myCustomWebXmlUrl = customWebXmlUrl;
-		myModule = myFacet.getModule();
+		myModule = myGwtModuleExtension.getModule();
 		myRunPage = runPage;
 		myVMParameters = vmParameters;
 	}
@@ -102,10 +103,10 @@ public class GwtCommandLineState extends JavaCommandLineState
 		}
 		params.getVMParametersList().addParametersString(myVMParameters);
 
-		final GwtVersion sdkVersion = myFacet.getSdkVersion();
+		final GwtVersion sdkVersion = GwtSdkUtil.getVersionOptions(myGwtModuleExtension.getSdk());
 		final ParametersList programParameters = params.getProgramParametersList();
 		programParameters.add("-style");
-		programParameters.add(myFacet.getConfiguration().getOutputStyle().getId());
+		programParameters.add(myGwtModuleExtension.getJavaScriptOutputStyle().getId());
 		programParameters.add("-out");
 		programParameters.add(getOutputPath().getAbsolutePath());
 		programParameters.add("-gen");
@@ -121,7 +122,7 @@ public class GwtCommandLineState extends JavaCommandLineState
 			params.getClassPath().addFirst(path);
 		}
 
-		params.getClassPath().addFirst(myFacet.getConfiguration().getSdk().getDevJarPath());
+		params.getClassPath().addFirst(GwtSdkUtil.getDevJarPath(myGwtModuleExtension.getSdk()));
 		params.setMainClass(sdkVersion.getShellClassName());
 
 		return params;
@@ -182,7 +183,7 @@ public class GwtCommandLineState extends JavaCommandLineState
 
 	private void patchWebXml(final File webXml) throws IOException, JDOMException
 	{
-		File devJar = new File(myFacet.getConfiguration().getSdk().getDevJarPath());
+		File devJar = new File(GwtSdkUtil.getDevJarPath(myGwtModuleExtension.getSdk()));
 		if(!devJar.exists())
 		{
 			return;

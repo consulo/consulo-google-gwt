@@ -28,8 +28,6 @@ import com.intellij.facet.ui.FacetEditorContext;
 import com.intellij.facet.ui.FacetEditorTab;
 import com.intellij.facet.ui.FacetValidatorsManager;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.gwt.sdk.GwtSdk;
-import com.intellij.gwt.sdk.GwtSdkManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;

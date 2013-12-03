@@ -18,10 +18,12 @@ package com.intellij.gwt.run;
 
 import java.util.Collection;
 
+import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
@@ -33,15 +35,12 @@ import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.facet.FacetManager;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
-import com.intellij.gwt.facet.GwtFacetType;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
@@ -83,14 +82,14 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 			throw CantRunException.noModuleConfigured(getConfigurationModule().getModuleName());
 		}
 
-		final GwtFacet facet = FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
+		final GoogleGwtModuleExtension facet = ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
 		if(facet == null)
 		{
 			throw new ExecutionException(GwtBundle.message("error.text.gwt.facet.not.configured.in.module.0", module.getName()));
 		}
 
 
-		final Sdk jdk = ModuleRootManager.getInstance(module).getSdk();
+		final Sdk jdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
 		if(jdk == null)
 		{
 			throw CantRunException.noJdkForModule(getModule());
