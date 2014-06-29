@@ -19,7 +19,6 @@ package com.intellij.gwt.module.model;
 import java.util.List;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.css.CssFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomElement;
@@ -72,5 +71,5 @@ public interface GwtModule extends DomElement
 
 	List<GwtModule> getInherited(final GlobalSearchScope scope);
 
-	List<CssFile> getStylesheetFiles();
+	List<String> getStylesheetFiles();
 }

@@ -15,8 +15,8 @@
  */
 package com.intellij.gwt.i18n;
 
+import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.lang.properties.psi.Property;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -33,10 +33,10 @@ public class PropertiesSearcher implements QueryExecutor<PsiElement, PsiElement>
 	{
 		if(sourceElement instanceof PsiMethod)
 		{
-			final Property[] properties = GwtI18nManager.getInstance(sourceElement.getProject()).getProperties((PsiMethod) sourceElement);
-			for(Property property : properties)
+			final IProperty[] properties = GwtI18nManager.getInstance(sourceElement.getProject()).getProperties((PsiMethod) sourceElement);
+			for(IProperty property : properties)
 			{
-				if(!consumer.process(property))
+				if(!consumer.process(property.getPsiElement()))
 				{
 					return false;
 				}
@@ -48,7 +48,7 @@ public class PropertiesSearcher implements QueryExecutor<PsiElement, PsiElement>
 			final PropertiesFile[] files = GwtI18nManager.getInstance(sourceElement.getProject()).getPropertiesFiles((PsiClass) sourceElement);
 			for(PropertiesFile file : files)
 			{
-				if(!consumer.process(file))
+				if(!consumer.process(file.getContainingFile()))
 				{
 					return false;
 				}

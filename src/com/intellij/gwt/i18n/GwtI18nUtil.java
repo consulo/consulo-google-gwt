@@ -24,13 +24,12 @@ import javax.swing.Icon;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.gwt.sdk.GwtVersion;
-import com.intellij.javaee.model.annotations.AnnotationModelUtil;
-import com.intellij.lang.properties.psi.Property;
+import com.intellij.lang.properties.IProperty;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.pom.Navigatable;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
@@ -65,9 +64,9 @@ public class GwtI18nUtil
 	{
 	}
 
-	public static void navigateToProperty(@NotNull Property property)
+	public static void navigateToProperty(@NotNull IProperty property)
 	{
-		((Navigatable) property).navigate(true);
+		property.navigate(true);
 	}
 
 	public static String suggetsPropertyKey(@NotNull String value, final PsiNameHelper nameHelper, final LanguageLevel languageLevel)
@@ -244,7 +243,7 @@ public class GwtI18nUtil
 			PsiNameValuePair[] attributes = annotation.getParameterList().getAttributes();
 			if(attributes.length == 1)
 			{
-				String key = AnnotationModelUtil.getObjectValue(attributes[0].getValue(), String.class);
+				String key = AnnotationUtil.getStringAttributeValue(annotation, "value");
 				if(key != null)
 				{
 					return key;

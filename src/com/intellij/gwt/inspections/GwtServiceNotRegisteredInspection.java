@@ -16,43 +16,17 @@
 
 package com.intellij.gwt.inspections;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
-import com.intellij.gwt.module.GwtModulesManager;
-import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.gwt.rpc.GwtServletUtil;
-import com.intellij.gwt.rpc.RemoteServiceUtil;
-import com.intellij.javaee.DeploymentDescriptorsConstants;
-import com.intellij.javaee.model.xml.web.Servlet;
-import com.intellij.javaee.model.xml.web.ServletMapping;
-import com.intellij.javaee.model.xml.web.WebApp;
-import com.intellij.javaee.web.WebUtil;
-import com.intellij.javaee.web.facet.WebFacet;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.ReadonlyStatusHandler;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.xml.XmlTag;
-import com.intellij.psi.xml.XmlToken;
-import com.intellij.util.ObjectUtils;
 import com.intellij.util.SmartList;
-import com.intellij.util.xml.GenericDomValue;
-import com.intellij.xml.util.XmlTagUtil;
 
 /**
  * @author nik
@@ -78,7 +52,7 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 	@Nullable
 	public ProblemDescriptor[] checkFile(@NotNull final PsiFile file, @NotNull final InspectionManager manager, final boolean isOnTheFly)
 	{
-		if(!DeploymentDescriptorsConstants.WEB_XML_META_DATA.getFileName().equals(file.getName()))
+		/*if(!DeploymentDescriptorsConstants.WEB_XML_META_DATA.getFileName().equals(file.getName()))
 		{
 			return null;
 		}
@@ -166,10 +140,10 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 		if(expectedUrlPatterns.isEmpty())
 		{
 			return null;
-		}
+		}      */
 
 		List<ProblemDescriptor> problems = new SmartList<ProblemDescriptor>();
-
+		/*
 		for(Servlet servlet : expectedUrlPatterns.keySet())
 		{
 			ServletMapping mapping = singleMappings.get(servlet);
@@ -191,10 +165,10 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 						quickfix));
 			}
 		}
-
+             */
 		return problems.toArray(new ProblemDescriptor[problems.size()]);
 	}
-
+   /*
 	private static boolean containsUrlPattern(final ServletMapping mapping, final String urlPattern)
 	{
 		for(GenericDomValue<String> pattern : mapping.getUrlPatterns())
@@ -205,13 +179,13 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 			}
 		}
 		return false;
-	}
+	}        */
 
 	@Override
 	@Nullable
 	public ProblemDescriptor[] checkClass(@NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
 	{
-		if(!shouldCheck(aClass))
+	/*	if(!shouldCheck(aClass))
 		{
 			return null;
 		}
@@ -278,11 +252,11 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 			RegisterServiceQuickFix quickFix = new RegisterServiceQuickFix(facet, gwtModule, webApp, aClass, serviceName);
 			return new ProblemDescriptor[]{manager.createProblemDescriptor(place, message, quickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING)};
 		}
-
+		   */
 		return null;
 	}
 
-	private static class RegisterServiceQuickFix extends BaseGwtLocalQuickFix
+	/*private static class RegisterServiceQuickFix extends BaseGwtLocalQuickFix
 	{
 		private final GwtFacet myFacet;
 		private GwtModule myGwtModule;
@@ -364,5 +338,5 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 				}
 			}
 		}
-	}
+	}   */
 }

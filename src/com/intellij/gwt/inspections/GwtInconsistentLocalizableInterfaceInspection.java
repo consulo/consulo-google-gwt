@@ -37,6 +37,7 @@ import com.intellij.gwt.i18n.GwtI18nUtil;
 import com.intellij.gwt.i18n.PropertiesFilesListCellRenderer;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.ide.DataManager;
+import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesElementFactory;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
@@ -121,7 +122,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 		List<ProblemDescriptor> descriptors = new ArrayList<ProblemDescriptor>();
 		for(PsiMethod psiMethod : psiClass.getMethods())
 		{
-			final Property[] properties = i18nManager.getProperties(psiMethod);
+			final IProperty[] properties = i18nManager.getProperties(psiMethod);
 			if(properties.length == 0)
 			{
 				final String description = GwtBundle.message("problem.description.method.0.doesn.t.have.corresponding.property", psiMethod.getName());
@@ -144,9 +145,9 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 			return null;
 		}
 
-		List<Property> propertiesWithoutMethods = new ArrayList<Property>();
-		final List<Property> properties = propertiesFile.getProperties();
-		for(Property property : properties)
+		List<IProperty> propertiesWithoutMethods = new ArrayList<IProperty>();
+		final List<IProperty> properties = propertiesFile.getProperties();
+		for(IProperty property : properties)
 		{
 			final PsiMethod method = i18nManager.getMethod(property);
 			if(method == null && property.getUnescapedKey() != null)
@@ -171,7 +172,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 		}
 
 		List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
-		for(Property property : propertiesWithoutMethods)
+		for(IProperty property : propertiesWithoutMethods)
 		{
 			final String key = property.getUnescapedKey();
 			final AddMethodToInterfaceQuickFix quickFix = new AddMethodToInterfaceQuickFix(anInterface, key, property.getValue(), gwtFacet.getSdkVersion());
@@ -181,14 +182,14 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 			};
 
 			final String description = GwtBundle.message("problem.description.property.0.doesn.t.have.corresponding.method.in.1", key, anInterface.getName());
-			problems.add(manager.createProblemDescriptor(property, description, fixes, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+			problems.add(manager.createProblemDescriptor(property.getPsiElement(), description, fixes, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
 		}
 		return problems.toArray(new ProblemDescriptor[problems.size()]);
 	}
 
 	private static void defineProperty(final PropertiesFile propertiesFile, final String propertyName)
 	{
-		final Property property = new WriteCommandAction<Property>(propertiesFile.getProject(), propertiesFile)
+		final Property property = new WriteCommandAction<Property>(propertiesFile.getProject(), propertiesFile.getContainingFile())
 		{
 			@Override
 			protected void run(final Result<Property> result) throws Throwable
@@ -255,9 +256,9 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 	{
 		private final PsiClass myInterface;
 		private final GwtVersion myGwtVersion;
-		private final List<Property> myProperties;
+		private final List<IProperty> myProperties;
 
-		public SynchronizeInterfaceQuickFix(final PsiClass anInterface, final List<Property> properties, final GwtVersion gwtVersion)
+		public SynchronizeInterfaceQuickFix(final PsiClass anInterface, final List<IProperty> properties, final GwtVersion gwtVersion)
 		{
 			super(GwtBundle.message("quickfix.name.synchronize.all.methods.in.0", anInterface.getName()));
 			myProperties = properties;
@@ -273,7 +274,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 				return;
 			}
 
-			for(Property property : myProperties)
+			for(IProperty property : myProperties)
 			{
 				GwtI18nUtil.addMethod(myInterface, property.getUnescapedKey(), property.getValue(), myGwtVersion);
 			}
@@ -298,7 +299,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 			if(myPropertiesFiles.length == 1)
 			{
 				final PropertiesFile file = myPropertiesFiles[0];
-				if(ensureWritable(file))
+				if(ensureWritable(file.getContainingFile()))
 				{
 					final Property property = definePropertyImpl(file, myPropertyName);
 					if(property != null)

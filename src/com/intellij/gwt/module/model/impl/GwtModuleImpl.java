@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.consulo.psi.PsiPackage;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtInheritsEntry;
 import com.intellij.gwt.module.model.GwtModule;
@@ -38,9 +39,9 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.css.CssFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlFile;
+import com.intellij.util.xml.DomService;
 
 /**
  * @author nik
@@ -105,9 +106,8 @@ public abstract class GwtModuleImpl implements GwtModule
 	@Override
 	public XmlFile getModuleXmlFile()
 	{
-		return getRoot().getFile();
+		return DomService.getInstance().getContainingFile(this);
 	}
-
 
 	@Override
 	public VirtualFile getModuleDirectory()
@@ -137,13 +137,13 @@ public abstract class GwtModuleImpl implements GwtModule
 	}
 
 	@Override
-	public List<CssFile> getStylesheetFiles()
+	public List<String> getStylesheetFiles()
 	{
 		ensureInitialized();
-		List<CssFile> list = new ArrayList<CssFile>();
+		List<String> list = new ArrayList<String>();
 		for(GwtStylesheetRef stylesheetRef : getStylesheets())
 		{
-			final CssFile cssFile = stylesheetRef.getSrc().getValue();
+			final String cssFile = stylesheetRef.getSrc().getValue();
 			if(cssFile != null)
 			{
 				list.add(cssFile);

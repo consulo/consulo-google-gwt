@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.NonNls;
+import org.consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
@@ -43,21 +43,11 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.XmlRecursiveElementVisitor;
-import com.intellij.psi.css.*;
-import com.intellij.psi.css.resolve.CssResolveManager;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.PsiModificationTracker;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.ArrayUtil;
@@ -70,9 +60,6 @@ import com.intellij.util.xml.DomService;
  */
 public class GwtModulesManagerImpl extends GwtModulesManager
 {
-	@NonNls
-	private static final String CSS_EXTENSION = ".css";
-	private static final Key<CachedValue<Map<String, CssClass>>> CACHED_CSS_CLASS_DECLARATIONS = Key.create("CACHED_CSS_CLASS_DECLARATIONS");
 	private static final Key<CachedValue<Set<GwtModule>>> CACHED_GWT_INHERITED_MODULES = Key.create("CACHED_GWT_INHERITED_MODULES");
 	private Project myProject;
 	private ProjectFileIndex myProjectFileIndex;
@@ -237,139 +224,6 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 		return id2Tag;
 	}
 
-	private void processModuleWithInherited(final GwtModule gwtModule, final Map<String, CssClass> cssClass2Declaration,
-			final Set<GwtModule> processedModules)
-	{
-		if(!processedModules.add(gwtModule))
-		{
-			return;
-		}
-
-		final List<CssFile> list = gwtModule.getStylesheetFiles();
-		for(CssFile cssFile : list)
-		{
-			final CssStylesheet stylesheet = cssFile.getStylesheet();
-			if(stylesheet != null)
-			{
-				for(CssRuleset ruleset : stylesheet.getRulesets())
-				{
-					collectDeclarations(ruleset, cssClass2Declaration);
-				}
-			}
-		}
-
-		final XmlFile xmlFile = findHtmlFileByModule(gwtModule);
-		final CssResolveManager resolveManager = CssResolveManager.getInstance();
-		for(CssRuleset cssRuleset : resolveManager.getNewResolver().resolveAll(xmlFile))
-		{
-			collectDeclarations(cssRuleset, cssClass2Declaration);
-		}
-
-		Module module = gwtModule.getModule();
-		if(module != null)
-		{
-			List<GwtModule> inheritedList = gwtModule.getInherited(GlobalSearchScope.moduleWithDependenciesScope(module));
-			for(GwtModule inherited : inheritedList)
-			{
-				processModuleWithInherited(inherited, cssClass2Declaration, processedModules);
-			}
-		}
-	}
-
-	private static void collectDeclarations(final CssRuleset cssRuleset, final Map<String, CssClass> cssClass2Declaration)
-	{
-		for(CssSelector selector : cssRuleset.getSelectorList().getSelectors())
-		{
-			for(PsiElement selectorElement : selector.getElements())
-			{
-				if(selectorElement instanceof CssSimpleSelector)
-				{
-					CssSimpleSelector simpleSelector = (CssSimpleSelector) selectorElement;
-					final CssSelectorSuffix[] selectorSuffixes = simpleSelector.getSelectorSuffixes();
-					for(CssSelectorSuffix suffix : selectorSuffixes)
-					{
-						if(suffix instanceof CssClass)
-						{
-							final CssClass cssClass = (CssClass) suffix;
-							String name = cssClass.getName();
-							if(!cssClass2Declaration.containsKey(name))
-							{
-								cssClass2Declaration.put(name, cssClass);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	@Override
-	@Nullable
-	public CssClass findCssDeclarationByClass(final GwtModule module, final String cssClass)
-	{
-		return getCssClass2DeclarationMap(module).get(cssClass);
-	}
-
-	private Map<String, CssClass> getCssClass2DeclarationMap(final GwtModule module)
-	{
-		CachedValue<Map<String, CssClass>> cachedValue = module.getModuleXmlFile().getUserData(CACHED_CSS_CLASS_DECLARATIONS);
-		if(cachedValue == null)
-		{
-			cachedValue = PsiManager.getInstance(myProject).getCachedValuesManager().createCachedValue(new CachedValueProvider<Map<String, CssClass>>()
-			{
-				@Override
-				public Result<Map<String, CssClass>> compute()
-				{
-					final Map<String, CssClass> cssClass2Declaration = new HashMap<String, CssClass>();
-					processModuleWithInherited(module, cssClass2Declaration, new HashSet<GwtModule>());
-					return Result.create(cssClass2Declaration, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT,
-							ProjectRootManager.getInstance(myProject));
-				}
-			}, false);
-			module.getModuleXmlFile().putUserData(CACHED_CSS_CLASS_DECLARATIONS, cachedValue);
-		}
-		return cachedValue.getValue();
-	}
-
-	@Override
-	public String[] getAllCssClassNames(final GwtModule module)
-	{
-		final Set<String> classesSet = getCssClass2DeclarationMap(module).keySet();
-		return ArrayUtil.toStringArray(classesSet);
-	}
-
-	@Override
-	@Nullable
-	public CssFile findPreferableCssFile(final GwtModule module)
-	{
-		final List<CssFile> list = module.getStylesheetFiles();
-		if(!list.isEmpty())
-		{
-			return list.get(0);
-		}
-
-		final XmlFile htmlFile = findHtmlFileByModule(module);
-		if(htmlFile == null)
-		{
-			return null;
-		}
-
-		final CssFile[] cssFiles = CssResolveManager.getInstance().getNewResolver().resolveStyleSheets(htmlFile, null);
-		final String expectedFileName = module.getShortName() + CSS_EXTENSION;
-		for(CssFile cssFile : cssFiles)
-		{
-			if(expectedFileName.equals(cssFile.getName()))
-			{
-				return cssFile;
-			}
-		}
-		if(cssFiles.length > 0)
-		{
-			return cssFiles[0];
-		}
-		return null;
-	}
-
 	@Override
 	public boolean isGwtModuleFile(final VirtualFile file)
 	{
@@ -388,7 +242,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 		CachedValue<Set<GwtModule>> cachedValue = gwtModule.getModuleXmlFile().getUserData(CACHED_GWT_INHERITED_MODULES);
 		if(cachedValue == null)
 		{
-			cachedValue = PsiManager.getInstance(myProject).getCachedValuesManager().createCachedValue(new CachedValueProvider<Set<GwtModule>>()
+			cachedValue = CachedValuesManager.getManager(myProject).createCachedValue(new CachedValueProvider<Set<GwtModule>>()
 			{
 				@Override
 				public Result<Set<GwtModule>> compute()
@@ -396,8 +250,8 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 					final Set<GwtModule> set = new HashSet<GwtModule>();
 					Module module = gwtModule.getModule();
 					List<Object> dependencies = new ArrayList<Object>();
-					GlobalSearchScope scope = module != null ? GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module) : GlobalSearchScope.allScope
-							(myProject);
+					GlobalSearchScope scope = module != null ? GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module) : GlobalSearchScope
+							.allScope(myProject);
 					collectAllInherited(gwtModule, set, scope, dependencies);
 					dependencies.add(ProjectRootManager.getInstance(myProject));
 					return Result.create(set, dependencies.toArray(new Object[dependencies.size()]));
@@ -471,7 +325,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 		String packageName = "";
 		do
 		{
-			final PsiPackage psiPackage = JavaPsiFacade.getInstance(myProject).findPackage(packageName);
+			final PsiJavaPackage psiPackage = JavaPsiFacade.getInstance(myProject).findPackage(packageName);
 			if(psiPackage != null)
 			{
 				final PsiDirectory[] directories = psiPackage.getDirectories(scope);

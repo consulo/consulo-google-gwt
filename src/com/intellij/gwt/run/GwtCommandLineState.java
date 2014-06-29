@@ -50,15 +50,16 @@ import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.ProjectRootsTraversing;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.OrderEnumerator;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.PathsList;
 import com.intellij.util.SystemProperties;
 
 /**
@@ -114,12 +115,13 @@ public class GwtCommandLineState extends JavaCommandLineState
 		programParameters.addParametersString(myShellParameters);
 		programParameters.add(myRunPage);
 
-		final PathsList sources = ProjectRootsTraversing.collectRoots(myModule, new ProjectRootsTraversing.RootTraversePolicy(ProjectRootsTraversing
-				.RootTraversePolicy.PRODUCTION_SOURCES, null, null, ProjectRootsTraversing.RootTraversePolicy.RECURSIVE));
+		OrderEnumerator orderEnumerator = ModuleRootManager.getInstance(myModule).orderEntries();
 
-		for(String path : sources.getPathList())
+		VirtualFile[] roots = orderEnumerator.recursively().sources().getRoots();
+
+		for(VirtualFile path : roots)
 		{
-			params.getClassPath().addFirst(path);
+			params.getClassPath().add(path);
 		}
 
 		params.getClassPath().addFirst(GwtSdkUtil.getDevJarPath(myGwtModuleExtension.getSdk()));

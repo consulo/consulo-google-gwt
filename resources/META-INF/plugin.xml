@@ -45,8 +45,6 @@
 
 		<annotator language="JAVA" implementationClass="com.intellij.gwt.i18n.PropertiesInterfaceAnnotator"/>
 
-		<css.unusedSymbolExclusion implementation="com.intellij.gwt.module.GwtUnusedCssSymbolInspectionExclusion"/>
-
 		<referencesSearch implementation="com.intellij.gwt.references.search.GwtToHtmlTagIdReferencesSearcher"/>
 		<definitionsSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
 

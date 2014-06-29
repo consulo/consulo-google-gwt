@@ -22,6 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.facet.GwtFacet;
+import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.fileTypes.StdFileTypes;
@@ -134,7 +135,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 	public PsiClass getPropertiesInterface(@NotNull PropertiesFile file)
 	{
 		final String fileName = file.getName();
-		final PsiDirectory directory = file.getContainingDirectory();
+		final PsiDirectory directory = file.getContainingFile().getContainingDirectory();
 		if(directory == null || !GwtFacet.isInModuleWithGwtFacet(myProject, file.getVirtualFile()))
 		{
 			return null;
@@ -160,7 +161,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 
 	@Override
 	@NotNull
-	public Property[] getProperties(@NotNull PsiMethod method)
+	public IProperty[] getProperties(@NotNull PsiMethod method)
 	{
 		final PsiClass aClass = method.getContainingClass();
 		if(aClass == null)
@@ -175,23 +176,23 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 		}
 
 		final String propertyName = GwtI18nUtil.getPropertyName(method);
-		List<Property> properties = new ArrayList<Property>();
+		List<IProperty> properties = new ArrayList<IProperty>();
 		for(PropertiesFile file : files)
 		{
-			final Property property = file.findPropertyByKey(propertyName);
+			final IProperty property = file.findPropertyByKey(propertyName);
 			if(property != null)
 			{
 				properties.add(property);
 			}
 		}
-		return properties.toArray(new Property[properties.size()]);
+		return properties.toArray(new IProperty[properties.size()]);
 	}
 
 	@Override
 	@Nullable
-	public PsiMethod getMethod(@NotNull Property property)
+	public PsiMethod getMethod(@NotNull IProperty property)
 	{
-		final PsiClass psiClass = getPropertiesInterface(property.getContainingFile());
+		final PsiClass psiClass = getPropertiesInterface(property.getPropertiesFile());
 		if(psiClass == null)
 		{
 			return null;

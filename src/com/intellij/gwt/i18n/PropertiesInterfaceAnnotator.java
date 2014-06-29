@@ -31,8 +31,8 @@ import com.intellij.gwt.GwtBundle;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
@@ -48,16 +48,16 @@ import com.intellij.ui.awt.RelativePoint;
  */
 public class PropertiesInterfaceAnnotator implements Annotator
 {
-	private static final Implementable<PsiMethod, Property> PROPERTY_IMPLEMENTABLE = new Implementable<PsiMethod, Property>()
+	private static final Implementable<PsiMethod, IProperty> PROPERTY_IMPLEMENTABLE = new Implementable<PsiMethod, IProperty>()
 	{
 		@Override
-		public void navigate(final Property target)
+		public void navigate(final IProperty target)
 		{
 			GwtI18nUtil.navigateToProperty(target);
 		}
 
 		@Override
-		public String getPopupChooserTitle(final PsiMethod source, final Property[] targets)
+		public String getPopupChooserTitle(final PsiMethod source, final IProperty[] targets)
 		{
 			return GwtBundle.message("i18n.goto.property.popup.title", targets[0].getUnescapedKey(), targets.length);
 		}
@@ -79,7 +79,7 @@ public class PropertiesInterfaceAnnotator implements Annotator
 		@Override
 		public void navigate(final PropertiesFile target)
 		{
-			target.navigate(true);
+			target.getContainingFile().navigate(true);
 		}
 
 		@Override
@@ -108,11 +108,11 @@ public class PropertiesInterfaceAnnotator implements Annotator
 		{
 			final PsiMethod method = (PsiMethod) psiElement;
 			GwtI18nManager manager = GwtI18nManager.getInstance(method.getProject());
-			final Property[] properties = manager.getProperties(method);
+			final IProperty[] properties = manager.getProperties(method);
 			if(properties.length != 0)
 			{
 				final Annotation annotation = holder.createInfoAnnotation(method.getNameIdentifier(), null);
-				annotation.setGutterIconRenderer(new ImplementedGutterIconRenderer<PsiMethod, Property>(PROPERTY_IMPLEMENTABLE, method, properties));
+				annotation.setGutterIconRenderer(new ImplementedGutterIconRenderer<PsiMethod, IProperty>(PROPERTY_IMPLEMENTABLE, method, properties));
 			}
 		}
 		else if(psiElement instanceof PsiClass)
@@ -127,7 +127,7 @@ public class PropertiesInterfaceAnnotator implements Annotator
 		}
 	}
 
-	private static interface Implementable<S extends PsiElement, T extends PsiElement>
+	private static interface Implementable<S extends PsiElement, T>
 	{
 		void navigate(T target);
 
@@ -138,7 +138,7 @@ public class PropertiesInterfaceAnnotator implements Annotator
 		ListCellRenderer getListCellRenderer();
 	}
 
-	private static class ImplementedGutterIconRenderer<S extends PsiElement, T extends PsiElement> extends GutterIconRenderer
+	private static class ImplementedGutterIconRenderer<S extends PsiElement, T> extends GutterIconRenderer
 	{
 		private Implementable<S, T> myImplementable;
 		private S mySource;
@@ -167,9 +167,13 @@ public class PropertiesInterfaceAnnotator implements Annotator
 			final StringBuilder files = new StringBuilder();
 			for(T target : myTargets)
 			{
-				if(target.isValid())
+				if(target instanceof PropertiesFile)
 				{
-					files.append(MessageFormat.format(IMPLEMENTING_PROPERTY_FILE_FORMAT, target.getContainingFile().getName()));
+					files.append(MessageFormat.format(IMPLEMENTING_PROPERTY_FILE_FORMAT, ((PropertiesFile) target).getContainingFile().getName()));
+				}
+				else if(target instanceof IProperty)
+				{
+					files.append(MessageFormat.format(IMPLEMENTING_PROPERTY_FILE_FORMAT, ((IProperty) target).getPropertiesFile().getName()));
 				}
 			}
 			return myImplementable.getGutterTooltip(mySource, files.toString());
@@ -187,9 +191,21 @@ public class PropertiesInterfaceAnnotator implements Annotator
 		{
 			return true;
 		}
+
+		@Override
+		public boolean equals(Object o)
+		{
+			return false;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return 0;
+		}
 	}
 
-	private static class NavigateAction<S extends PsiElement, T extends PsiElement> extends AnAction
+	private static class NavigateAction<S extends PsiElement, T> extends AnAction
 	{
 		private Implementable<S, T> myImplementable;
 		private S mySource;

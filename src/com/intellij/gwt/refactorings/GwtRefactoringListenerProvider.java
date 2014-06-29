@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
+import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.components.ProjectComponent;
@@ -207,12 +208,12 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 		if(element instanceof PsiMethod)
 		{
 			final PsiMethod method = (PsiMethod) element;
-			final Property[] properties = i18nManager.getProperties(method);
-			for(Property property : properties)
+			final IProperty[] properties = i18nManager.getProperties(method);
+			for(IProperty property : properties)
 			{
 				if(Comparing.equal(property.getUnescapedKey(), method.getName()))
 				{
-					elementsToRename.put(property, STRING2STRING_ID);
+					elementsToRename.put((PsiNamedElement) property.getPsiElement(), STRING2STRING_ID);
 				}
 			}
 		}

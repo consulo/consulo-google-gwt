@@ -30,8 +30,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.css.CssClass;
-import com.intellij.psi.css.CssFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlFile;
 
@@ -93,15 +91,6 @@ public abstract class GwtModulesManager
 	public abstract PsiElement findTagById(@NotNull XmlFile htmlFile, String id);
 
 	public abstract String[] getAllIds(@NotNull XmlFile htmlFile);
-
-
-	@Nullable
-	public abstract CssClass findCssDeclarationByClass(GwtModule module, String cssClass);
-
-	public abstract String[] getAllCssClassNames(final GwtModule module);
-
-	@Nullable
-	public abstract CssFile findPreferableCssFile(final GwtModule module);
 
 	public abstract boolean isGwtModuleFile(final VirtualFile file);
 

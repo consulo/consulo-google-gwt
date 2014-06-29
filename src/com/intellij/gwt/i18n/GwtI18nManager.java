@@ -18,8 +18,8 @@ package com.intellij.gwt.i18n;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -43,10 +43,10 @@ public abstract class GwtI18nManager
 	public abstract PsiClass getPropertiesInterface(@NotNull PropertiesFile file);
 
 	@NotNull
-	public abstract Property[] getProperties(@NotNull PsiMethod method);
+	public abstract IProperty[] getProperties(@NotNull PsiMethod method);
 
 	@Nullable
-	public abstract PsiMethod getMethod(@NotNull Property property);
+	public abstract PsiMethod getMethod(@NotNull IProperty property);
 
 	public abstract boolean isConstantsInterface(@NotNull PsiClass aClass);
 
