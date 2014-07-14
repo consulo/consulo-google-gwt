@@ -22,12 +22,12 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.diagnostic.Logger;
@@ -53,7 +53,7 @@ public class GwtInconsistentAsyncInterfaceInspection extends BaseGwtInspection
 	@Nullable
 	public ProblemDescriptor[] checkClass(@NotNull final PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
 	{
-		GwtFacet gwtFacet = getFacet(aClass);
+		GoogleGwtModuleExtension gwtFacet = getFacet(aClass);
 		if(gwtFacet == null)
 		{
 			return null;

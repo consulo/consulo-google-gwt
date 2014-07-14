@@ -4,7 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.RemoteService;
 
-#parse("File Header.java")
+#parse("Java File Header.java")
 public interface ${NAME} extends RemoteService{
 		// Sample interface method of remote interface
 		String getMessage(String msg);

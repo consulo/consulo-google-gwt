@@ -17,21 +17,21 @@
 package com.intellij.gwt.i18n;
 
 import com.intellij.ide.util.PsiElementListCellRenderer;
-import com.intellij.lang.properties.psi.PropertiesFile;
+import com.intellij.psi.PsiFile;
 
 /**
  * @author nik
  */
-public class PropertiesFilesListCellRenderer extends PsiElementListCellRenderer<PropertiesFile>
+public class PropertiesFilesListCellRenderer extends PsiElementListCellRenderer<PsiFile>
 {
 	@Override
-	public String getElementText(final PropertiesFile element)
+	public String getElementText(final PsiFile element)
 	{
 		return element.getName();
 	}
 
 	@Override
-	protected String getContainerText(final PropertiesFile element, final String name)
+	protected String getContainerText(final PsiFile element, final String name)
 	{
 		return null;
 	}

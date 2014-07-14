@@ -26,12 +26,12 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.i18n.GwtI18nUtil;
 import com.intellij.gwt.i18n.PropertiesFilesListCellRenderer;
@@ -82,7 +82,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 	@Nullable
 	public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly)
 	{
-		GwtFacet gwtFacet = getFacet(file);
+		GoogleGwtModuleExtension gwtFacet = getFacet(file);
 		if(gwtFacet == null)
 		{
 			return null;
@@ -136,7 +136,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 
 	private static
 	@Nullable
-	ProblemDescriptor[] checkPropertiesFile(final InspectionManager manager, final PropertiesFile propertiesFile, final GwtFacet gwtFacet)
+	ProblemDescriptor[] checkPropertiesFile(final InspectionManager manager, final PropertiesFile propertiesFile, final GoogleGwtModuleExtension gwtFacet)
 	{
 		final GwtI18nManager i18nManager = GwtI18nManager.getInstance(manager.getProject());
 		final PsiClass anInterface = i18nManager.getPropertiesInterface(propertiesFile);

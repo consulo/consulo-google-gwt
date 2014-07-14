@@ -27,7 +27,6 @@ import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.libraries.LibraryUtil;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.ArchiveFileSystem;
@@ -51,27 +50,17 @@ public class GwtSdkUtil
 	@NonNls
 	private static final String EMUL_ROOT = "com/google/gwt/emul/";
 
-	private static final Key<GwtVersion> GWT_VERSION_KEY = Key.create("gwt-version-key");
-
 	private GwtSdkUtil()
 	{
 	}
 
-	public static GwtVersion getVersionOptions(Sdk sdk)
+	public static GwtVersion detectVersion(Sdk sdk)
 	{
-		GwtVersion gwtVersion = sdk.getUserData(GWT_VERSION_KEY);
-		if(gwtVersion == null)
+		if(sdk == null)
 		{
-			return GwtVersionImpl.VERSION_1_0;
+			return GwtVersionImpl.VERSION_1_6_OR_LATER;
 		}
 
-		gwtVersion = detectVersion(sdk);
-		sdk.putUserData(GWT_VERSION_KEY, gwtVersion);
-		return gwtVersion;
-	}
-
-	private static GwtVersion detectVersion(Sdk sdk)
-	{
 		VirtualFile devJar = JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(getDevJarPath(sdk)) +
 				ArchiveFileSystem.ARCHIVE_SEPARATOR);
 		if(devJar != null)
@@ -104,7 +93,7 @@ public class GwtSdkUtil
 		return GwtVersionImpl.VERSION_FROM_1_1_TO_1_3;
 	}
 
-	private static String getJreEmulationClassPath(String className)
+	public static String getJreEmulationClassPath(String className)
 	{
 		return EMUL_ROOT + className.replace('.', '/') + JavaFileType.DOT_DEFAULT_EXTENSION;
 	}
@@ -115,9 +104,25 @@ public class GwtSdkUtil
 	}
 
 	@Nullable
-	public static VirtualFile getUserJar(Sdk sdk)
+	public static VirtualFile getUserJar(@Nullable Sdk sdk)
 	{
+		if(sdk == null)
+		{
+			return null;
+		}
 		String jarPath = getUserJarPath(sdk);
+		return JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(jarPath) + ArchiveFileSystem
+				.ARCHIVE_SEPARATOR);
+	}
+
+	@Nullable
+	public static VirtualFile getDevJar(@Nullable Sdk sdk)
+	{
+		if(sdk == null)
+		{
+			return null;
+		}
+		String jarPath = getDevJarPath(sdk);
 		return JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(jarPath) + ArchiveFileSystem
 				.ARCHIVE_SEPARATOR);
 	}

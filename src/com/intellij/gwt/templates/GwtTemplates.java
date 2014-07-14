@@ -25,8 +25,8 @@ public class GwtTemplates
 {
 	@NonNls
 	public static final String GWT_ENTRY_POINT_JAVA = "GwtEntryPoint.java";
-	@NonNls
-	public static final String GWT_MODULE_CSS = "GwtAppCss.css";
+	//@NonNls
+	//public static final String GWT_MODULE_CSS = "GwtAppCss.css";
 	@NonNls
 	public static final String GWT_MODULE_GWT_XML = "GwtApp.gwt.xml";
 	@NonNls
@@ -60,7 +60,7 @@ public class GwtTemplates
 
 	@NonNls
 	public static final String[] TEMPLATES = {
-			GWT_MODULE_CSS,
+			//GWT_MODULE_CSS,
 			GWT_MODULE_GWT_XML,
 			GWT_MODULE_HTML,
 			GWT_MODULE_HTML_1_4,

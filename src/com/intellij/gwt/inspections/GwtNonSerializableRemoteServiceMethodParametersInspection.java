@@ -30,6 +30,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.codeInspection.InspectionManager;
@@ -37,7 +38,6 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.rpc.GwtGenericsUtil;
 import com.intellij.gwt.rpc.GwtSerializableUtil;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
@@ -67,7 +67,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 	@Nullable
 	public ProblemDescriptor[] checkClass(@NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
 	{
-		GwtFacet gwtFacet = getFacet(aClass);
+		GoogleGwtModuleExtension gwtFacet = getFacet(aClass);
 		if(gwtFacet == null)
 		{
 			return null;
@@ -119,7 +119,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 		return panel;
 	}
 
-	private ProblemDescriptor[] checkRemoteService(final GwtFacet gwtFacet, final PsiClass aClass, final InspectionManager manager)
+	private ProblemDescriptor[] checkRemoteService(final GoogleGwtModuleExtension gwtFacet, final PsiClass aClass, final InspectionManager manager)
 	{
 		ArrayList<ProblemDescriptor> result = new ArrayList<ProblemDescriptor>(0);
 

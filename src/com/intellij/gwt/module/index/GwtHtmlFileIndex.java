@@ -13,7 +13,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileFilter;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.DataIndexer;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.intellij.util.indexing.FileContent;
@@ -30,7 +30,7 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 	private static final ID<String, Void> NAME = ID.create("GwtHtmlFile");
 	private static final FileBasedIndex.InputFilter INPUT_FILTER = new FileBasedIndex.InputFilter()
 	{
-		public boolean acceptInput(VirtualFile file)
+		public boolean acceptInput(Project project, VirtualFile file)
 		{
 			return file.getFileType() == StdFileTypes.HTML;
 		}
@@ -82,7 +82,7 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 
 	public static Collection<VirtualFile> getHtmlFilesByModule(@NotNull Project project, @NotNull String moduleName)
 	{
-		final Collection<VirtualFile> files = FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, VirtualFileFilter.ALL);
+		final Collection<VirtualFile> files = FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, GlobalSearchScope.allScope(project));
 		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 		if(allFilesInSourceContent(files, fileIndex))
 		{

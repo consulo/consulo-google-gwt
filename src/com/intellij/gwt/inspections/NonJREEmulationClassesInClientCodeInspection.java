@@ -22,6 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -30,7 +31,9 @@ import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
+import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaRecursiveElementVisitor;
@@ -83,8 +86,8 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 			return null;
 		}
 
-		final GwtFacet gwtFacet = GwtFacet.findFacetBySourceFile(file.getProject(), virtualFile);
-		if(gwtFacet == null || !gwtFacet.getConfiguration().getSdk().isValid())
+		final GoogleGwtModuleExtension gwtFacet = GwtFacet.findFacetBySourceFile(file.getProject(), virtualFile);
+		if(gwtFacet == null || gwtFacet.getSdk() == null)
 		{
 			return null;
 		}
@@ -152,7 +155,7 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 					{
 						topLevelClass = referencedClass;
 					}
-					if(!gwtFacet.getConfiguration().getSdk().containsJreEmulationClass(topLevelClass.getQualifiedName()))
+					if(!containsJreEmulationClass(gwtFacet.getSdk(), topLevelClass.getQualifiedName()))
 					{
 						final String message = GwtBundle.message("problem.description.class.0.is.not.presented.in.jre.emulation.library", className);
 						problems.add(manager.createProblemDescriptor(reference, message, ((LocalQuickFix) null), ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
@@ -163,6 +166,18 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 		});
 
 		return problems.toArray(new ProblemDescriptor[problems.size()]);
+	}
+
+	public static boolean containsJreEmulationClass(Sdk sdk, String className)
+	{
+		VirtualFile userJar = GwtSdkUtil.getUserJar(sdk);
+		if(userJar == null)
+		{
+			return true;
+		}
+
+		VirtualFile emulFile = userJar.findFileByRelativePath(GwtSdkUtil.getJreEmulationClassPath(className));
+		return emulFile != null;
 	}
 
 	private static class InheritModuleQuickFix extends BaseGwtLocalQuickFix

@@ -18,6 +18,7 @@ package com.intellij.gwt.inspections;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.gwt.GwtBundle;
@@ -53,7 +54,7 @@ public abstract class BaseGwtInspection extends BaseJavaLocalInspectionTool
 	}
 
 	@Nullable
-	protected static GwtFacet getFacet(@NotNull PsiElement psiElement)
+	protected static GoogleGwtModuleExtension getFacet(@NotNull PsiElement psiElement)
 	{
 		return GwtFacet.findFacetBySourceFile(psiElement.getProject(), psiElement.getContainingFile().getVirtualFile());
 	}

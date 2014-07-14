@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
@@ -121,7 +122,7 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 		String moduleName = StringUtil.capitalize(name);
 		final ArrayList<PsiElement> res = new ArrayList<PsiElement>();
 
-		GwtFacet gwtFacet = GwtFacet.findFacetBySourceFile(directory.getProject(), directory.getVirtualFile());
+		GoogleGwtModuleExtension gwtFacet = GwtFacet.findFacetBySourceFile(directory.getProject(), directory.getVirtualFile());
 		LOG.assertTrue(gwtFacet != null);
 
 		PsiDirectory client = directory.createSubdirectory(GwtModulesManager.DEFAULT_SOURCE_PATH);
@@ -141,8 +142,8 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 		String gwtModuleHtml = gwtFacet.getSdkVersion().getGwtModuleHtmlTemplate();
 		res.add(createFromTemplate(publicDir, moduleName + "." + StdFileTypes.HTML.getDefaultExtension(), gwtModuleHtml,
 				FileTemplate.ATTRIBUTE_PACKAGE_NAME, appPackageName, "GWT_MODULE_NAME", gwtModuleName));
-		res.add(createFromTemplate(publicDir, moduleName + "." + CSS_EXTENSION, GwtTemplates.GWT_MODULE_CSS, FileTemplate.ATTRIBUTE_PACKAGE_NAME,
-				appPackageName));
+		/*res.add(createFromTemplate(publicDir, moduleName + "." + CSS_EXTENSION, GwtTemplates.GWT_MODULE_CSS, FileTemplate.ATTRIBUTE_PACKAGE_NAME,
+				appPackageName));*/
 		res.add(entryPointClass);
 
 		return res.toArray(new PsiElement[res.size()]);

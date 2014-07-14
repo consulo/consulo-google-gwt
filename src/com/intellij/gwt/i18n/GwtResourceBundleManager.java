@@ -26,6 +26,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.template.Template;
@@ -138,7 +139,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 		final VirtualFile virtualFile = psiFile.getVirtualFile();
 		LOG.assertTrue(virtualFile != null);
 
-		GwtFacet gwtFacet = GwtFacet.findFacetBySourceFile(myProject, psiFile.getVirtualFile());
+		GoogleGwtModuleExtension gwtFacet = GwtFacet.findFacetBySourceFile(myProject, psiFile.getVirtualFile());
 		GwtVersion gwtVersion = GwtFacet.getGwtVersion(gwtFacet);
 		PsiMethod method = GwtI18nUtil.addMethod(anInterface, key, gwtVersion);
 		if(parameters.length > 0)

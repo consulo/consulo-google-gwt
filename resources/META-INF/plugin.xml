@@ -5,13 +5,15 @@
 	<name>GWT Support</name>
 	<id>com.intellij.gwt</id>
 	<description>Significantly simplifies development of AJAX applications based on Google Web Toolkit</description>
-	<version>1.0</version>
+	<version>SNAPSHOT</version>
 
 	<depends>org.consulo.java</depends>
-	<depends>org.mustbe.consulo.javascript</depends>
-	<depends>com.intellij.xml</depends>
+	<depends optional="true">org.mustbe.consulo.javascript</depends>
 	<depends>com.intellij.properties</depends>
 	<depends>com.intellij.java-i18n</depends>
+	<depends>com.intellij.xml</depends>
+
+	<depends config-file="javaee.xml" optional="true">org.mustbe.consulo.javaee</depends>
 
 	<vendor>JetBrains</vendor>
 	<category>Web/JavaEE Technologies</category>
@@ -21,16 +23,13 @@
 
 	</extensions>
 
-	<extensions defaultExtensionNs="org.consulo.java">
-		<testPatcher implementation="com.intellij.gwt.junit.GwtJUnitPatcher"/>
+	<extensions defaultExtensionNs="com.intellij.xml">
+		<dom.fileDescription implementation="com.intellij.gwt.module.GwtDomFileDescription"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
 		<errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
-		<!--<javaee.web.customBuildParticipant implementation="com.intellij.gwt.make.GwtWebBuildParticipant"/> -->
 		<antBuildGen implementation="com.intellij.gwt.ant.GwtBuildExtension" order="first"/>
-
-		<dom.fileDescription implementation="com.intellij.gwt.module.GwtDomFileDescription"/>
 
 		<fileBasedIndex implementation="com.intellij.gwt.module.index.GwtHtmlFileIndex"/>
 
@@ -48,26 +47,26 @@
 		<referencesSearch implementation="com.intellij.gwt.references.search.GwtToHtmlTagIdReferencesSearcher"/>
 		<definitionsSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
 
-		<!--<explodedAndJarBuildGenerator implementation="com.intellij.gwt.ant.GwtExplodedAndJarBuildGenerator"/>-->
-		<configurationType implementation="com.intellij.gwt.run.GwtRunConfigurationType"/>
 		<lang.elementManipulator forClass="com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl"
 								 implementationClass="com.intellij.gwt.jsinject.JsGwtReferenceExpressionManipulator"/>
+
 		<codeInsight.parameterInfo language="JavaScript" implementationClass="com.intellij.gwt.jsinject.GwtJSParameterInfoHandler"/>
-		<compiler implementation="com.intellij.gwt.make.GwtCompiler"/>
+
 		<multiHostInjector forClass="com.intellij.psi.PsiComment" implementationClass="com.intellij.gwt.jsinject.JsInjector"/>
+		<fileTemplateGroup implementation="com.intellij.gwt.GwtFileTemplateGroupDescriptorFactory" />
+		<inspectionToolProvider implementation="com.intellij.gwt.GwtInspectionToolProvider" />
 	</extensions>
 
 	<extensions defaultExtensionNs="org.consulo.java">
 		<overridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtOverridingServiceMethodsSearcher"/>
 		<allOverridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtAllOverridingServiceMethodsSearcher"/>
 		<superMethodsSearch implementation="com.intellij.gwt.rpc.GwtAsyncMethodSearcher"/>
-
 	</extensions>
 
 
 	<application-components>
 		<component>
-			<implementation-class>com.intellij.gwt.GwtApplicationComponent</implementation-class>
+			<implementation-class>com.intellij.gwt.GwtJsInjector</implementation-class>
 		</component>
 	</application-components>
 
@@ -92,11 +91,6 @@
 					class="com.intellij.gwt.actions.CreateGwtEntryPointAction"
 					text="GWT Entry point"
 					description="Create new GWT class extending EntryPoint">
-			</action>
-			<action id="GWT.NewRemoteService"
-					class="com.intellij.gwt.actions.CreateGwtRemoteServiceAction"
-					text="GWT Remote service"
-					description="Create new GWT interface extending RemoteService, corresponding async version and implementation class">
 			</action>
 			<action id="GWT.NewSerialClass"
 					class="com.intellij.gwt.actions.CreateGwtSerializableClassAction"

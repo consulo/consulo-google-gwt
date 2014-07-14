@@ -3,7 +3,7 @@ package ${PACKAGE_NAME};
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import ${CLIENT_PACKAGE}.${SERVICE_NAME};
 
-#parse("File Header.java")
+#parse("Java File Header.java")
 public class ${NAME} extends RemoteServiceServlet implements ${SERVICE_NAME} {
 // Implementation of sample interface method
 public String getMessage(String msg){

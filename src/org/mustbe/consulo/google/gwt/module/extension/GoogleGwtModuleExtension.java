@@ -2,7 +2,7 @@ package org.mustbe.consulo.google.gwt.module.extension;
 
 import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
+import com.intellij.gwt.sdk.GwtVersion;
 
 /**
  * @author VISTALL
@@ -11,5 +11,5 @@ import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 public interface GoogleGwtModuleExtension<T extends GoogleGwtModuleExtension<T>> extends ModuleExtensionWithSdk<T>
 {
 	@NotNull
-	GwtJavaScriptOutputStyle getJavaScriptOutputStyle();
+	GwtVersion getSdkVersion();
 }

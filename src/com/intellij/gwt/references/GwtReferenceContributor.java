@@ -20,7 +20,6 @@ import com.intellij.gwt.module.model.GwtServlet;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiJavaPatterns;
 import com.intellij.patterns.PsiMethodPattern;
-import com.intellij.patterns.StringPattern;
 import com.intellij.patterns.XmlAttributeValuePattern;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiClass;
@@ -74,10 +73,10 @@ public class GwtReferenceContributor extends PsiReferenceContributor
 		registrar.registerReferenceProvider(literalExpression().and(psiExpression().methodCallParameter(0, psiMethod().withName("get").definedInClass("com" +
 				".google.gwt.user.client.ui.RootPanel"))), new GwtToHtmlReferencesProvider());
 
-		StringPattern methods = string().oneOf("addStyleName", "removeStyleName", "setStyleName", "setStylePrimaryName");
+	/*	StringPattern methods = string().oneOf("addStyleName", "removeStyleName", "setStyleName", "setStylePrimaryName");
 		registrar.registerReferenceProvider(literalExpression().andOr(psiExpression().methodCallParameter(0, psiMethod().withName(methods).definedInClass
 				("com.google.gwt.user.client.ui.UIObject")), psiExpression().methodCallParameter(2, psiMethod().withName(methods).definedInClass("com.google.gwt" +
-				".user.client.ui.HTMLTable.CellFormatter"))), new GwtToCssClassReferenceProvider());
+				".user.client.ui.HTMLTable.CellFormatter"))), new GwtToCssClassReferenceProvider());   */
 
 		final PsiMethodPattern setEntryPointMethodPattern = psiMethod().withName("setServiceEntryPoint").definedInClass("com.google.gwt.user.client.rpc" +
 				".ServiceDefTarget");

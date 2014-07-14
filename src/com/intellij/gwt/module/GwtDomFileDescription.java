@@ -15,12 +15,17 @@
  */
 package com.intellij.gwt.module;
 
+import javax.swing.Icon;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.GoogleGwtIcons;
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.impl.GwtModuleImpl;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomFileDescription;
 
@@ -32,6 +37,13 @@ public class GwtDomFileDescription extends DomFileDescription<GwtModule>
 	public GwtDomFileDescription()
 	{
 		super(GwtModule.class, "module");
+	}
+
+	@Nullable
+	@Override
+	public Icon getFileIcon(@Iconable.IconFlags int flags)
+	{
+		return GoogleGwtIcons.Gwt;
 	}
 
 	@Override

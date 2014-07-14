@@ -18,45 +18,31 @@ package com.intellij.gwt.facet;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.facet.*;
-import com.intellij.gwt.sdk.GwtSdkUtil;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;
-import com.intellij.javaee.web.facet.WebFacet;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.ui.configuration.projectRoot.LibrariesContainerFactory;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * @author nik
  */
-public class GwtFacet extends Facet<GwtFacetConfiguration>
+@Deprecated
+public class GwtFacet
 {
-	private LocalFileSystem.WatchRequest myCompilerOutputWatchRequest;
+	//private LocalFileSystem.WatchRequest myCompilerOutputWatchRequest;
 
-	public GwtFacet(@NotNull final FacetType facetType, @NotNull final Module module, final String name,
-			@NotNull final GwtFacetConfiguration configuration)
+	@Nullable
+	public static GoogleGwtModuleExtension getInstance(@NotNull Module module)
 	{
-		super(facetType, module, name, configuration, null);
+		return ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
 	}
 
 	@Nullable
-	public static GwtFacet getInstance(@NotNull Module module)
-	{
-		return FacetManager.getInstance(module).getFacetByType(GwtFacetType.ID);
-	}
-
-	@Nullable
-	public static GwtFacet findFacetBySourceFile(@NotNull Project project, @Nullable VirtualFile file)
+	public static GoogleGwtModuleExtension<?> findFacetBySourceFile(@NotNull Project project, @Nullable VirtualFile file)
 	{
 		if(file == null)
 		{
@@ -69,7 +55,7 @@ public class GwtFacet extends Facet<GwtFacetConfiguration>
 			return null;
 		}
 
-		return getInstance(module);
+		return ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
 	}
 
 	public static boolean isInModuleWithGwtFacet(final @NotNull Project project, final @Nullable VirtualFile file)
@@ -77,19 +63,7 @@ public class GwtFacet extends Facet<GwtFacetConfiguration>
 		return findFacetBySourceFile(project, file) != null;
 	}
 
-	@Nullable
-	public WebFacet getWebFacet()
-	{
-		final String webFacetName = getConfiguration().getWebFacetName();
-		return webFacetName != null ? FacetManager.getInstance(getModule()).findFacet(WebFacet.ID, webFacetName) : null;
-	}
-
-	@NotNull
-	public GwtVersion getSdkVersion()
-	{
-		return getConfiguration().getSdk().getVersion();
-	}
-
+	/*
 	@Override
 	public void initFacet()
 	{
@@ -124,61 +98,9 @@ public class GwtFacet extends Facet<GwtFacetConfiguration>
 			myCompilerOutputWatchRequest = LocalFileSystem.getInstance().addRootToWatch(path, true);
 		}
 	}
-
-	public static GwtFacet createNewFacet(final @NotNull Module module)
-	{
-		FacetManager facetManager = FacetManager.getInstance(module);
-		final ModifiableFacetModel model = facetManager.createModifiableModel();
-		GwtFacet facet = model.getFacetByType(GwtFacetType.ID);
-		if(facet != null)
-		{
-			return facet;
-		}
-
-		GwtFacetType type = GwtFacetType.INSTANCE;
-		GwtFacetConfiguration configuration = ProjectFacetManager.getInstance(module.getProject()).createDefaultConfiguration(type);
-		facet = facetManager.createFacet(type, type.getDefaultFacetName(), configuration, null);
-		model.addFacet(facet);
-
-		final ModifiableRootModel rootModel = ModuleRootManager.getInstance(module).getModifiableModel();
-		setupGwtSdkAndLibraries(configuration, rootModel, null);
-
-		new WriteAction()
-		{
-			@Override
-			protected void run(final Result result)
-			{
-				model.commit();
-				rootModel.commit();
-			}
-		}.execute();
-		return facet;
-	}
-
-	public static void setupGwtSdkAndLibraries(final GwtFacetConfiguration configuration, ModifiableRootModel rootModel, @Nullable GwtSdk gwtSdk)
-	{
-		if(gwtSdk == null || !gwtSdk.isValid())
-		{
-			gwtSdk = GwtSdkManager.getInstance().suggestGwtSdk();
-		}
-
-		if(gwtSdk != null)
-		{
-			configuration.setGwtSdkUrl(gwtSdk.getHomeDirectoryUrl());
-			GwtSdkManager.getInstance().moveToTop(gwtSdk);
-			VirtualFile userJar = gwtSdk.getUserJar();
-			if(userJar != null)
-			{
-				final Project project = rootModel.getModule().getProject();
-				Library library = GwtSdkUtil.findOrCreateGwtUserLibrary(LibrariesContainerFactory.createContainer(project), userJar);
-				rootModel.addLibraryEntry(library);
-			}
-
-		}
-	}
-
+	    */
 	@NotNull
-	public static GwtVersion getGwtVersion(final @Nullable GwtFacet gwtFacet)
+	public static GwtVersion getGwtVersion(final @Nullable GoogleGwtModuleExtension gwtFacet)
 	{
 		return gwtFacet != null ? gwtFacet.getSdkVersion() : GwtVersionImpl.VERSION_1_5;
 	}

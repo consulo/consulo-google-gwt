@@ -95,7 +95,7 @@ public class GwtToHtmlTagIdReferencesSearcher implements QueryExecutor<PsiRefere
 			return true;
 		}
 
-		final PsiSearchHelper searchHelper = file.getManager().getSearchHelper();
+		final PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(element.getProject());
 		return searchHelper.processElementsWithWord(new TextOccurenceProcessor()
 		{
 			@Override

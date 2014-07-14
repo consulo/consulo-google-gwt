@@ -27,8 +27,8 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiArrayType;
@@ -62,7 +62,7 @@ public class GwtSerializableUtil
 	{
 	}
 
-	public static SerializableChecker createSerializableChecker(GwtFacet facet, final boolean checkInterfaces)
+	public static SerializableChecker createSerializableChecker(GoogleGwtModuleExtension facet, final boolean checkInterfaces)
 	{
 		GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(facet.getModule());
 		return new SerializableChecker(facet.getSdkVersion(), scope, JavaPsiFacade.getInstance(facet.getModule().getProject()), checkInterfaces);

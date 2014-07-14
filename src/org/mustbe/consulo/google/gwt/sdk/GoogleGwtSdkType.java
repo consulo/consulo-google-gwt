@@ -5,13 +5,11 @@ import java.io.IOException;
 
 import javax.swing.Icon;
 
-import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.GoogleGwtIcons;
-import com.intellij.openapi.projectRoots.AdditionalDataConfigurable;
+import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkAdditionalData;
 import com.intellij.openapi.projectRoots.SdkModel;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.SdkType;
@@ -112,16 +110,16 @@ public class GoogleGwtSdkType extends SdkType
 			{
 				if(name.endsWith("-src") || name.endsWith("-sources"))
 				{
-					sdkModificator.addRoot(ArchiveVfsUtil.getJarRootForLocalFile(virtualFile), OrderRootType.SOURCES);
+					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), OrderRootType.SOURCES);
 				}
 				else if(!name.endsWith("+src"))
 				{
-					sdkModificator.addRoot(ArchiveVfsUtil.getJarRootForLocalFile(virtualFile), OrderRootType.CLASSES);
+					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), OrderRootType.CLASSES);
 				}
 
 				if(name.equals("gwt-user"))
 				{
-					sdkModificator.addRoot(ArchiveVfsUtil.getJarRootForLocalFile(virtualFile), OrderRootType.SOURCES);
+					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), OrderRootType.SOURCES);
 				}
 			}
 			else if(name.equals("doc") && virtualFile.isDirectory())
@@ -145,11 +143,10 @@ public class GoogleGwtSdkType extends SdkType
 		return file.getName();
 	}
 
-	@Nullable
 	@Override
-	public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator)
+	public boolean isRootTypeApplicable(OrderRootType type)
 	{
-		return null;
+		return JavaSdk.getInstance().isRootTypeApplicable(type);
 	}
 
 	@NotNull
@@ -157,11 +154,5 @@ public class GoogleGwtSdkType extends SdkType
 	public String getPresentableName()
 	{
 		return "Google GWT SDK";
-	}
-
-	@Override
-	public void saveAdditionalData(SdkAdditionalData sdkAdditionalData, Element element)
-	{
-
 	}
 }

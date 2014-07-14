@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
@@ -78,7 +79,7 @@ public class CreateGwtSampleAppAction extends GwtCreateActionBase
 	@Override
 	protected void doCheckBeforeCreate(String name, PsiDirectory directory) throws IncorrectOperationException
 	{
-		GwtFacet facet = GwtFacet.findFacetBySourceFile(directory.getProject(), directory.getVirtualFile());
+		GoogleGwtModuleExtension facet = GwtFacet.findFacetBySourceFile(directory.getProject(), directory.getVirtualFile());
 		LOG.assertTrue(facet != null);
 		if(!facet.getSdkVersion().isGenericsSupported())
 		{

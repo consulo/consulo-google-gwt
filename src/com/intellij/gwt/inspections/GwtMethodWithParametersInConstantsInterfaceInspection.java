@@ -29,8 +29,8 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.i18n.GwtI18nUtil;
+import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
@@ -123,7 +123,7 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 
 		List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
 		PsiJavaCodeReferenceElement extendsConstantsElement = findExtendsContsantsElement(propertiesInterface);
-		for(Property property : propertiesFile.getProperties())
+		for(IProperty property : propertiesFile.getProperties())
 		{
 			if(GwtI18nUtil.getParametersCount(property.getValue()) > 0)
 			{
@@ -134,7 +134,7 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 				}
 				String message = GwtBundle.message("problem.description.properties.with.parameters.are.not.allowed.if.the.associated.interface.extends" +
 						".constants");
-				problems.add(manager.createProblemDescriptor(property, message, quickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+				problems.add(manager.createProblemDescriptor(property.getPsiElement(), message, quickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
 			}
 		}
 

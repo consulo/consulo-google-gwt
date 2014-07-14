@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.i18n.GwtI18nUtil;
 import com.intellij.gwt.rpc.GwtGenericsUtil;
@@ -35,7 +35,7 @@ public class GwtDeprecatedPropertyKeyJavadocTagInspection extends BaseGwtInspect
 	@Override
 	public ProblemDescriptor[] checkClass(@NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
 	{
-		GwtFacet gwtFacet = getFacet(aClass);
+		GoogleGwtModuleExtension gwtFacet = getFacet(aClass);
 		if(gwtFacet == null || !gwtFacet.getSdkVersion().isGenericsSupported())
 		{
 			return null;

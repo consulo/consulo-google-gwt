@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact name="dist">
+    <output-path>$PROJECT_DIR$/out/artifacts/dist</output-path>
+    <root id="root">
+      <element id="directory" name="google-gwt">
+        <element id="directory" name="lib">
+          <element id="zip-archive" name="google-gwt.jar">
+            <element id="module-output" name="consulo-google-gwt" />
+            <element id="module-production-resource-output" name="consulo-google-gwt" />
+          </element>
+          <element id="zip-archive" name="google-gwt-javaee.jar">
+            <element id="module-output" name="javaee-impl" />
+            <element id="module-production-resource-output" name="javaee-impl" />
+          </element>
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

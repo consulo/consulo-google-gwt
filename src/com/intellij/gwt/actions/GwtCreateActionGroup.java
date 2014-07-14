@@ -16,6 +16,7 @@
 
 package com.intellij.gwt.actions;
 
+import org.mustbe.consulo.google.gwt.GoogleGwtIcons;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -29,7 +30,7 @@ public class GwtCreateActionGroup extends DefaultActionGroup
 	{
 		super(GwtBundle.message("action.group.gwt.title"), true);
 		getTemplatePresentation().setDescription(GwtBundle.message("action.group.gwt.description"));
-		getTemplatePresentation().setIcon(GwtFacetType.SMALL_ICON);
+		getTemplatePresentation().setIcon(GoogleGwtIcons.Gwt);
 	}
 
 

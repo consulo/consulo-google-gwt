@@ -23,6 +23,7 @@ import java.util.Properties;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.CommonBundle;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtFacet;
@@ -44,7 +45,6 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
@@ -81,22 +81,10 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 			return PsiElement.EMPTY_ARRAY;
 		}
 
-		GwtFacet facet = GwtFacet.getInstance(module);
+		GoogleGwtModuleExtension facet = GwtFacet.getInstance(module);
 		if(facet == null)
 		{
-			int answer = Messages.showYesNoDialog(project, GwtBundle.message("question.text.gwt.facet.is.not.configured.for.module.0.do.you.want.to.create" +
-					".it", module.getName()), GwtBundle.message("dialog.title.google.web.toolkit"), Messages.getQuestionIcon());
-			if(answer != DialogWrapper.OK_EXIT_CODE)
-			{
-				return PsiElement.EMPTY_ARRAY;
-			}
-			facet = GwtFacet.createNewFacet(module);
-			//ModulesConfigurator.showFacetSettingsDialog(facet, null);
-			facet = GwtFacet.getInstance(module);
-			if(facet == null)
-			{
-				return PsiElement.EMPTY_ARRAY;
-			}
+			return PsiElement.EMPTY_ARRAY;
 		}
 
 		if(requireGwtModule())
