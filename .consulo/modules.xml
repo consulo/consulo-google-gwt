@@ -64,6 +64,15 @@
             <SOURCES />
           </library>
         </orderEntry>
+        <orderEntry type="module-library">
+          <library name="consulo:Play 1.x.x">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/dep/play/lib/play.jar!/" />
+            </CLASSES>
+            <DOCUMENTATION />
+            <SOURCES />
+          </library>
+        </orderEntry>
       </module>
       <module name="javaee-impl" dirurl="file://$PROJECT_DIR$/javaee-impl">
         <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
@@ -110,6 +119,18 @@
             <SOURCES />
           </library>
         </orderEntry>
+      </module>
+      <module name="play1-impl" dirurl="file://$PROJECT_DIR$/play1-impl">
+        <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" />
+        <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
+        <content url="file://$MODULE_DIR$">
+          <content-folder type="PRODUCTION" url="file://$MODULE_DIR$/src" />
+          <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
+        </content>
+        <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
+        <orderEntry type="module-extension-sdk" extension-id="java" />
+        <orderEntry type="sourceFolder" forTests="false" />
+        <orderEntry type="module" module-name="consulo-google-gwt" />
       </module>
     </modules>
   </component>

@@ -12,6 +12,10 @@
             <element id="module-output" name="javaee-impl" />
             <element id="module-production-resource-output" name="javaee-impl" />
           </element>
+          <element id="zip-archive" name="google-gwt-play1.jar">
+            <element id="module-output" name="play1-impl" />
+            <element id="module-production-resource-output" name="play1-impl" />
+          </element>
         </element>
       </element>
     </root>
