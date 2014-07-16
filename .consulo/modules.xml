@@ -35,18 +35,6 @@
           </library>
         </orderEntry>
         <orderEntry type="module-library">
-          <library name="consulo:Java">
-            <CLASSES>
-              <root url="jar://$MODULE_DIR$/dep/java/lib/java-manifest.jar!/" />
-              <root url="jar://$MODULE_DIR$/dep/java/lib/java-rt.jar!/" />
-              <root url="jar://$MODULE_DIR$/dep/java/lib/java.jar!/" />
-              <root url="jar://$MODULE_DIR$/dep/java/lib/jdk-annotations.jar!/" />
-            </CLASSES>
-            <DOCUMENTATION />
-            <SOURCES />
-          </library>
-        </orderEntry>
-        <orderEntry type="module-library">
           <library name="consulo:Properties Support">
             <CLASSES>
               <root url="jar://$MODULE_DIR$/dep/properties/lib/properties.jar!/" />
@@ -56,18 +44,31 @@
           </library>
         </orderEntry>
         <orderEntry type="module-library">
-          <library name="consulo:I18n for Java">
+          <library name="consulo:Play 1.x.x">
             <CLASSES>
-              <root url="jar://$MODULE_DIR$/dep/java-i18n/lib/java-i18n.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/play/lib/play.jar!/" />
             </CLASSES>
             <DOCUMENTATION />
             <SOURCES />
           </library>
         </orderEntry>
         <orderEntry type="module-library">
-          <library name="consulo:Play 1.x.x">
+          <library name="consulo:Java">
             <CLASSES>
-              <root url="jar://$MODULE_DIR$/dep/play/lib/play.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/asm-all.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/coverage-report-idea.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/coverage-report.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/coverate_rt.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/finder.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/instrumentation-util.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/jacocoagent.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/jacocoant.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/java-i18n.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/java-manifest.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/java-rt.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/java.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/jdi.jar!/" />
+              <root url="jar://$MODULE_DIR$/dep/java/lib/jdk-annotations.jar!/" />
             </CLASSES>
             <DOCUMENTATION />
             <SOURCES />
