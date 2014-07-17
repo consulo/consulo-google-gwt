@@ -10,7 +10,6 @@
 	<depends>org.consulo.java</depends>
 	<depends optional="true">org.mustbe.consulo.javascript</depends>
 	<depends>com.intellij.properties</depends>
-	<depends>com.intellij.java-i18n</depends>
 	<depends>com.intellij.xml</depends>
 
 	<depends config-file="javaee.xml" optional="true">org.mustbe.consulo.javaee</depends>
@@ -19,7 +18,7 @@
 	<vendor>JetBrains</vendor>
 	<category>Web/JavaEE Technologies</category>
 
-	<extensions defaultExtensionNs="com.intellij.java-i18n">
+	<extensions defaultExtensionNs="org.consulo.java">
 		<resourceBundleManager implementation="com.intellij.gwt.i18n.GwtResourceBundleManager"/>
 
 	</extensions>
