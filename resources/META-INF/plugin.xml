@@ -8,7 +8,7 @@
 	<version>SNAPSHOT</version>
 
 	<depends>org.consulo.java</depends>
-	<depends optional="true">org.mustbe.consulo.javascript</depends>
+	<depends optional="true" config-file="org.mustbe.consulo.javascript.xml">org.mustbe.consulo.javascript</depends>
 	<depends>com.intellij.properties</depends>
 	<depends>com.intellij.xml</depends>
 
@@ -50,9 +50,7 @@
 		<lang.elementManipulator forClass="com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl"
 								 implementationClass="com.intellij.gwt.jsinject.JsGwtReferenceExpressionManipulator"/>
 
-		<codeInsight.parameterInfo language="JavaScript" implementationClass="com.intellij.gwt.jsinject.GwtJSParameterInfoHandler"/>
 
-		<multiHostInjector forClass="com.intellij.psi.PsiComment" implementationClass="com.intellij.gwt.jsinject.JsInjector"/>
 		<fileTemplateGroup implementation="com.intellij.gwt.GwtFileTemplateGroupDescriptorFactory" />
 		<inspectionToolProvider implementation="com.intellij.gwt.GwtInspectionToolProvider" />
 	</extensions>
@@ -63,12 +61,6 @@
 		<superMethodsSearch implementation="com.intellij.gwt.rpc.GwtAsyncMethodSearcher"/>
 	</extensions>
 
-
-	<application-components>
-		<component>
-			<implementation-class>com.intellij.gwt.GwtJsInjector</implementation-class>
-		</component>
-	</application-components>
 
 	<project-components>
 		<component>

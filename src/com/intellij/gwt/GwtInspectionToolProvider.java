@@ -38,7 +38,6 @@ public class GwtInspectionToolProvider implements InspectionToolProvider
 				GwtInconsistentLocalizableInterfaceInspection.class,
 				GwtInconsistentSerializableClassInspection.class,
 				GwtMethodWithParametersInConstantsInterfaceInspection.class,
-				GwtJavaScriptReferencesInspection.class,
 				GwtObsoleteTypeArgsJavadocTagInspection.class,
 				GwtRawAsyncCallbackInspection.class,
 				GwtDeprecatedPropertyKeyJavadocTagInspection.class

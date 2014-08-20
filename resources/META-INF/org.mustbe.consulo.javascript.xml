@@ -1,0 +1,16 @@
+<idea-plugin>
+	<application-components>
+		<component>
+			<implementation-class>com.intellij.gwt.GwtJsInjector</implementation-class>
+		</component>
+	</application-components>
+
+	<extensions defaultExtensionNs="com.intellij">
+		<multiHostInjector forClass="com.intellij.psi.PsiComment" implementationClass="com.intellij.gwt.jsinject.JsInjector"/>
+
+		<codeInsight.parameterInfo language="JavaScript" implementationClass="com.intellij.gwt.jsinject.GwtJSParameterInfoHandler"/>
+
+		<inspectionToolProvider implementation="com.intellij.gwt.GwtJsInspectionToolProvider" />
+
+	</extensions>
+</idea-plugin>
