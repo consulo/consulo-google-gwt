@@ -22,7 +22,7 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.google.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL
@@ -32,7 +32,7 @@ public class JavaEEGoogleGwtModuleExtension extends GoogleGwtModuleExtensionImpl
 {
 	protected final Map<String, String> myPackagingPaths = new HashMap<String, String>();
 
-	public JavaEEGoogleGwtModuleExtension(@NotNull String id, @NotNull ModifiableRootModel rootModel)
+	public JavaEEGoogleGwtModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}

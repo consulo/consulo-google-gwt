@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtMutableModuleExtension;
 import org.mustbe.consulo.google.gwt.module.extension.GwtModuleExtensionPanel;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 
 /**
@@ -35,7 +35,7 @@ import com.intellij.openapi.ui.VerticalFlowLayout;
  */
 public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension implements GoogleGwtMutableModuleExtension<Play1GwtModuleExtension>
 {
-	public Play1GwtMutableModuleExtension(@NotNull String id, @NotNull ModifiableRootModel rootModel)
+	public Play1GwtMutableModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}

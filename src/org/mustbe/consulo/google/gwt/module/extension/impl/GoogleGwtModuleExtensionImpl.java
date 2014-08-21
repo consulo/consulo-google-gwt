@@ -26,7 +26,7 @@ import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.util.PathsList;
 
@@ -43,7 +43,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	protected String myAdditionalCompilerParameters = "";
 	protected String myCompilerOutputPath = "";
 
-	public GoogleGwtModuleExtensionImpl(@NotNull String id, @NotNull ModifiableRootModel rootModel)
+	public GoogleGwtModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}

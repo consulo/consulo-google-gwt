@@ -24,7 +24,7 @@ import org.consulo.module.extension.ui.ModuleExtensionWithSdkPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.Comparing;
 
@@ -35,7 +35,7 @@ import com.intellij.openapi.util.Comparing;
 public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModuleExtension implements
 		GoogleGwtMutableModuleExtension<JavaEEGoogleGwtModuleExtension>
 {
-	public JavaEEGoogleGwtMutableModuleExtension(@NotNull String id, @NotNull ModifiableRootModel rootModel)
+	public JavaEEGoogleGwtMutableModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}

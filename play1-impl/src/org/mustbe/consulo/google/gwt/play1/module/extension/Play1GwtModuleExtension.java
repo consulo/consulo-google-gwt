@@ -19,7 +19,7 @@ package org.mustbe.consulo.google.gwt.play1.module.extension;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import org.mustbe.consulo.google.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL
@@ -27,7 +27,7 @@ import com.intellij.openapi.roots.ModifiableRootModel;
  */
 public class Play1GwtModuleExtension extends GoogleGwtModuleExtensionImpl<Play1GwtModuleExtension> implements GoogleGwtModuleExtension<Play1GwtModuleExtension>
 {
-	public Play1GwtModuleExtension(@NotNull String id, @NotNull ModifiableRootModel rootModel)
+	public Play1GwtModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}
