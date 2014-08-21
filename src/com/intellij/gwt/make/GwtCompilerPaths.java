@@ -20,7 +20,7 @@ import java.io.File;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -105,7 +105,7 @@ public class GwtCompilerPaths
 		}
 	}
 
-	public static File getOutputDirectory(final JavaEEGoogleGwtModuleExtension facet)
+	public static File getOutputDirectory(final GoogleGwtModuleExtension facet)
 	{
 		String outputPath = facet.getCompilerOutputPath();
 		final File outputDir;

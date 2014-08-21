@@ -19,60 +19,25 @@ package org.mustbe.consulo.google.gwt.module.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.sdk.GoogleGwtSdkType;
-import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
+import org.mustbe.consulo.google.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.gwt.sdk.GwtSdkUtil;
-import com.intellij.gwt.sdk.GwtVersion;
-import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.ModifiableRootModel;
 
 /**
  * @author VISTALL
  * @since 14.07.14
  */
-public class JavaEEGoogleGwtModuleExtension extends ModuleExtensionWithSdkImpl<JavaEEGoogleGwtModuleExtension> implements
-		GoogleGwtModuleExtension<JavaEEGoogleGwtModuleExtension>
+public class JavaEEGoogleGwtModuleExtension extends GoogleGwtModuleExtensionImpl<JavaEEGoogleGwtModuleExtension>
 {
-	protected GwtJavaScriptOutputStyle myOutputStyle = GwtJavaScriptOutputStyle.DETAILED;
-	protected boolean myRunGwtCompilerOnMake = true;
-	protected int myCompilerMaxHeapSize = 128;
-	protected String myAdditionalCompilerParameters = "";
 	protected final Map<String, String> myPackagingPaths = new HashMap<String, String>();
-	protected String myCompilerOutputPath = "";
 
 	public JavaEEGoogleGwtModuleExtension(@NotNull String id, @NotNull ModifiableRootModel rootModel)
 	{
 		super(id, rootModel);
 	}
 
-	public GwtJavaScriptOutputStyle getOutputStyle()
-	{
-		return myOutputStyle;
-	}
-
-	public boolean isRunGwtCompilerOnMake()
-	{
-		return myRunGwtCompilerOnMake;
-	}
-
-	public String getAdditionalCompilerParameters()
-	{
-		return myAdditionalCompilerParameters;
-	}
-
-	public int getCompilerMaxHeapSize()
-	{
-		return myCompilerMaxHeapSize;
-	}
-
-	public String getCompilerOutputPath()
-	{
-		return myCompilerOutputPath;
-	}
-
+	@Override
 	@NotNull
 	public String getPackagingRelativePath(@NotNull GwtModule module)
 	{
@@ -83,19 +48,5 @@ public class JavaEEGoogleGwtModuleExtension extends ModuleExtensionWithSdkImpl<J
 			return path;
 		}
 		return "/" + moduleName;
-	}
-
-	@NotNull
-	@Override
-	public Class<? extends SdkType> getSdkTypeClass()
-	{
-		return GoogleGwtSdkType.class;
-	}
-
-	@NotNull
-	@Override
-	public GwtVersion getSdkVersion()
-	{
-		return GwtSdkUtil.detectVersion(getSdk());
 	}
 }

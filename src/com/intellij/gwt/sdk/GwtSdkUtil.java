@@ -24,13 +24,16 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.i18n.GwtI18nUtil;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;
 import com.intellij.ide.highlighter.JarArchiveFileType;
+import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.libraries.LibraryUtil;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.ArchiveFileSystem;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
 
 /**
  * @author nik
@@ -60,6 +63,22 @@ public class GwtSdkUtil
 		{
 			return GwtVersionImpl.VERSION_1_6_OR_LATER;
 		}
+
+		VirtualFile devFile = LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/gwt-dev.jar");
+		if(devFile != null)
+		{
+			String classPath = GwtVersionImpl.GWT_16_COMPILER_MAIN_CLASS.replace(".", "/") + "." + JavaClassFileType.INSTANCE.getDefaultExtension();
+			VirtualFile archiveRoot = ArchiveVfsUtil.getArchiveRootForLocalFile(devFile);
+			if(archiveRoot != null)
+			{
+				VirtualFile compilerClass = archiveRoot.findFileByRelativePath(classPath);
+				if(compilerClass != null)
+				{
+					return GwtVersionImpl.VERSION_1_6_OR_LATER;
+				}
+			}
+		}
+
 
 		VirtualFile devJar = JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(getDevJarPath(sdk)) +
 				ArchiveFileSystem.ARCHIVE_SEPARATOR);

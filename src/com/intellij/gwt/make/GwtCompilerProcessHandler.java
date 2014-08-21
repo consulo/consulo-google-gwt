@@ -109,6 +109,10 @@ public class GwtCompilerProcessHandler extends OSProcessHandler
 	public void notifyTextAvailable(final String text, final Key outputType)
 	{
 		super.notifyTextAvailable(text, outputType);
+		if(outputType == ProcessOutputTypes.STDERR)
+		{
+			return;
+		}
 		myParsers.get(outputType).parseOutput(text);
 	}
 

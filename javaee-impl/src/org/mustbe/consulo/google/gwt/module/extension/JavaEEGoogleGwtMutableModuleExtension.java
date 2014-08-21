@@ -19,13 +19,10 @@ package org.mustbe.consulo.google.gwt.module.extension;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.consulo.module.extension.ui.ModuleExtensionWithSdkPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.gwt.facet.GwtFacetEditor;
-import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.ui.VerticalFlowLayout;
@@ -36,36 +33,11 @@ import com.intellij.openapi.util.Comparing;
  * @since 14.07.14
  */
 public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModuleExtension implements
-		MutableModuleExtensionWithSdk<JavaEEGoogleGwtModuleExtension>
+		GoogleGwtMutableModuleExtension<JavaEEGoogleGwtModuleExtension>
 {
 	public JavaEEGoogleGwtMutableModuleExtension(@NotNull String id, @NotNull ModifiableRootModel rootModel)
 	{
 		super(id, rootModel);
-	}
-
-	public void setOutputStyle(final GwtJavaScriptOutputStyle outputStyle)
-	{
-		myOutputStyle = outputStyle;
-	}
-
-	public void setRunGwtCompilerOnMake(final boolean runGwtCompiler)
-	{
-		myRunGwtCompilerOnMake = runGwtCompiler;
-	}
-
-	public void setAdditionalCompilerParameters(final String additionalCompilerParameters)
-	{
-		myAdditionalCompilerParameters = additionalCompilerParameters;
-	}
-
-	public void setCompilerMaxHeapSize(final int compilerMaxHeapSize)
-	{
-		myCompilerMaxHeapSize = compilerMaxHeapSize;
-	}
-
-	public void setCompilerOutputPath(final String compilerOutputPath)
-	{
-		myCompilerOutputPath = compilerOutputPath;
 	}
 
 	@NotNull
@@ -81,7 +53,7 @@ public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModule
 	{
 		JPanel panel = new JPanel(new VerticalFlowLayout());
 		panel.add(new ModuleExtensionWithSdkPanel(this, runnable));
-		panel.add(new GwtFacetEditor(this));
+		panel.add(new GwtModuleExtensionPanel(this));
 		return wrapToNorth(panel);
 	}
 
@@ -98,27 +70,7 @@ public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModule
 		{
 			return true;
 		}
-		if(!Comparing.equal(myOutputStyle, originExtension.myOutputStyle))
-		{
-			return true;
-		}
-		if(myRunGwtCompilerOnMake != originExtension.myRunGwtCompilerOnMake)
-		{
-			return true;
-		}
-		if(myCompilerMaxHeapSize != originExtension.myCompilerMaxHeapSize)
-		{
-			return true;
-		}
-		if(!Comparing.equal(myAdditionalCompilerParameters, originExtension.myAdditionalCompilerParameters))
-		{
-			return true;
-		}
 		if(!Comparing.equal(myPackagingPaths, originExtension.myPackagingPaths))
-		{
-			return true;
-		}
-		if(!Comparing.equal(myCompilerOutputPath, originExtension.myCompilerOutputPath))
 		{
 			return true;
 		}

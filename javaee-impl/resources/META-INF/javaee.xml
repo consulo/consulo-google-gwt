@@ -21,7 +21,6 @@
 
 	<extensions defaultExtensionNs="com.intellij">
 		<configurationType implementation="com.intellij.gwt.run.GwtRunConfigurationType"/>
-		<compiler implementation="com.intellij.gwt.make.GwtCompiler"/>
 
 		<moduleExtensionProvider key="javaee-google-gwt"
 								 parentKey="java-web"

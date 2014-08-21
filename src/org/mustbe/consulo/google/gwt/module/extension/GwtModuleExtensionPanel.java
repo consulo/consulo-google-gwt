@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.intellij.gwt.facet;
+package org.mustbe.consulo.google.gwt.module.extension;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,9 +30,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
 
-import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtMutableModuleExtension;
 import com.intellij.gwt.GwtBundle;
+import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -44,6 +45,7 @@ import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
@@ -52,7 +54,7 @@ import com.intellij.util.ui.ListTableModel;
 /**
  * @author nik
  */
-public class GwtFacetEditor extends JPanel
+public class GwtModuleExtensionPanel extends JPanel
 {
 	private JComboBox myOutputStyleBox;
 	private JPanel myMainPanel;
@@ -68,9 +70,9 @@ public class GwtFacetEditor extends JPanel
 	private final TableView<ModulePackagingInfo> myTableView;
 	private ArrayList<ModulePackagingInfo> myModulePackagingInfos;
 	private final ListTableModel<ModulePackagingInfo> myTableModel;
-	private JavaEEGoogleGwtMutableModuleExtension myExtension;
+	private GoogleGwtMutableModuleExtension myExtension;
 
-	public GwtFacetEditor(final JavaEEGoogleGwtMutableModuleExtension extension)
+	public GwtModuleExtensionPanel(final GoogleGwtMutableModuleExtension extension)
 	{
 		myExtension = extension;
 		myCompilerOutputDirLabel.setLabelFor(myCompilerOutputDirField.getTextField());
@@ -87,7 +89,30 @@ public class GwtFacetEditor extends JPanel
 		myRunGwtCompilerCheckbox.setSelected(extension.isRunGwtCompilerOnMake());
 		myAdditionalCompilerParametersField.setText(extension.getAdditionalCompilerParameters());
 		myCompilerOutputDirField.setText(extension.getCompilerOutputPath());
+		myCompilerOutputDirField.getTextField().getDocument().addDocumentListener(new DocumentAdapter()
+		{
+			@Override
+			protected void textChanged(DocumentEvent documentEvent)
+			{
+				extension.setCompilerOutputPath(myCompilerOutputDirField.getText());
+			}
+		});
 		myCompilerHeapSizeField.setText(String.valueOf(extension.getCompilerMaxHeapSize()));
+		myCompilerHeapSizeField.getDocument().addDocumentListener(new DocumentAdapter()
+		{
+			@Override
+			protected void textChanged(DocumentEvent documentEvent)
+			{
+				try
+				{
+					extension.setCompilerMaxHeapSize(Integer.parseInt(myCompilerHeapSizeField.getText()));
+				}
+				catch(NumberFormatException e)
+				{
+					myCompilerHeapSizeField.setText("256");
+				}
+			}
+		});
 
 
 		myRunGwtCompilerCheckbox.addActionListener(new ActionListener()

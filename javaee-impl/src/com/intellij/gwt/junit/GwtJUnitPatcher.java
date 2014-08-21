@@ -18,7 +18,7 @@ package com.intellij.gwt.junit;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import com.intellij.execution.JavaTestPatcher;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
@@ -51,7 +51,7 @@ public class GwtJUnitPatcher implements JavaTestPatcher
 			return;
 		}
 
-		final GoogleGwtModuleExtension extension = ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
+		final GoogleGwtModuleExtensionImpl extension = ModuleUtilCore.getExtension(module, GoogleGwtModuleExtensionImpl.class);
 		if(extension == null)
 		{
 			return;

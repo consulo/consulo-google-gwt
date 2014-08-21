@@ -24,6 +24,7 @@ import java.util.Map;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -36,6 +37,7 @@ import com.intellij.lang.javascript.psi.impl.JSChangeUtil;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -148,7 +150,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 		}
 
 		Module module = ModuleUtil.findModuleForPsiElement(aClass);
-		GwtVersion gwtVersion = GwtFacet.getGwtVersion(module != null ? GwtFacet.getInstance(module) : null);
+		GwtVersion gwtVersion = GwtFacet.getGwtVersion(module != null ? ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class) : null);
 		if(gwtVersion.isNewExpressionInJavaScriptSupported())
 		{
 			for(PsiMethod constructor : aClass.getConstructors())

@@ -26,7 +26,8 @@ import java.util.List;
 import org.consulo.java.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtMutableModuleExtension;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.options.CompileStepBeforeRun;
 import com.intellij.execution.configurations.CommandLineBuilder;
@@ -55,7 +56,6 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.roots.OrderRootsEnumerator;
 import com.intellij.openapi.util.MultiValuesMap;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
@@ -120,7 +120,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 				final Module[] modules = context.getCompileScope().getAffectedModules();
 				for(Module module : modules)
 				{
-					JavaEEGoogleGwtModuleExtension facet = ModuleUtilCore.getExtension(module, JavaEEGoogleGwtModuleExtension.class);
+					GoogleGwtMutableModuleExtension facet = ModuleUtilCore.getExtension(module, GoogleGwtMutableModuleExtension.class);
 					if(facet == null || !facet.isRunGwtCompilerOnMake())
 					{
 						continue;
@@ -182,7 +182,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		return result.toArray(new ProcessingItem[result.size()]);
 	}
 
-	private static void addFilesRecursively(final GwtModule module, JavaEEGoogleGwtModuleExtension facet, final VirtualFile file,
+	private static void addFilesRecursively(final GwtModule module, GoogleGwtMutableModuleExtension facet, final VirtualFile file,
 			final List<ProcessingItem> result)
 	{
 		if(!file.isValid() || FileTypeManager.getInstance().isFileIgnored(file.getName()))
@@ -207,8 +207,8 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 	@Override
 	public ProcessingItem[] process(final CompileContext context, ProcessingItem[] items)
 	{
-		MultiValuesMap<Pair<JavaEEGoogleGwtModuleExtension, GwtModule>, GwtModuleFileProcessingItem> module2Items = new
-				MultiValuesMap<Pair<JavaEEGoogleGwtModuleExtension, GwtModule>, GwtModuleFileProcessingItem>();
+		MultiValuesMap<Pair<GoogleGwtModuleExtension, GwtModule>, GwtModuleFileProcessingItem> module2Items = new
+				MultiValuesMap<Pair<GoogleGwtModuleExtension, GwtModule>, GwtModuleFileProcessingItem>();
 		for(ProcessingItem item : items)
 		{
 			final GwtModuleFileProcessingItem processingItem = (GwtModuleFileProcessingItem) item;
@@ -217,7 +217,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 
 		final ArrayList<ProcessingItem> compiled = new ArrayList<ProcessingItem>();
 
-		for(Pair<JavaEEGoogleGwtModuleExtension, GwtModule> pair : module2Items.keySet())
+		for(Pair<GoogleGwtModuleExtension, GwtModule> pair : module2Items.keySet())
 		{
 			if(compile(context, pair.getFirst(), pair.getSecond()))
 			{
@@ -228,7 +228,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		return compiled.toArray(new ProcessingItem[compiled.size()]);
 	}
 
-	private static boolean compile(final CompileContext context, final JavaEEGoogleGwtModuleExtension facet, final GwtModule gwtModule)
+	private static boolean compile(final CompileContext context, final GoogleGwtModuleExtension facet, final GwtModule gwtModule)
 	{
 		final Ref<VirtualFile> gwtModuleFile = Ref.create(null);
 		final Ref<File> outputDirRef = Ref.create(null);
@@ -259,7 +259,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 				LOG.debug("GWT Compiler command line: " + commandLine.getCommandLineString());
 			}
 			commandLine.setWorkDirectory(outputDir);
-			context.getProgressIndicator().setText2(GwtBundle.message("progress.text.compiling.gwt.module.0", gwtModuleName.get()));
+			context.getProgressIndicator().setText(GwtBundle.message("progress.text.compiling.gwt.module.0", gwtModuleName.get()));
 
 			GwtCompilerProcessHandler handler = new GwtCompilerProcessHandler(commandLine.createProcess(), context, gwtModuleFile.get().getUrl(),
 					facet.getModule());
@@ -278,7 +278,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		return context.getMessageCount(CompilerMessageCategory.ERROR) == 0;
 	}
 
-	private static JavaParameters createCommand(JavaEEGoogleGwtModuleExtension facet, final GwtModule module, final File outputDir,
+	private static JavaParameters createCommand(GoogleGwtModuleExtension facet, final GwtModule module, final File outputDir,
 			final File generatedDir, final String gwtModuleName)
 	{
 		final JavaParameters javaParameters = new JavaParameters();
@@ -303,19 +303,15 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		return javaParameters;
 	}
 
-	private static void createClasspath(final JavaEEGoogleGwtModuleExtension facet, Module module, final PathsList classPath)
+	private static void createClasspath(final GoogleGwtModuleExtension facet, Module module, final PathsList classPath)
 	{
 		OrderEnumerator orderEnumerator = ModuleRootManager.getInstance(module).orderEntries();
-		OrderRootsEnumerator classes = orderEnumerator.recursively().classes();
 
-		/*ProjectRootsTraversing.collectRoots(module, new ProjectRootsTraversing.RootTraversePolicy(ProjectRootsTraversing.RootTraversePolicy
-				.PRODUCTION_SOURCES, ProjectRootsTraversing.RootTraversePolicy.ADD_CLASSES, ProjectRootsTraversing.RootTraversePolicy.ADD_CLASSES,
-				ProjectRootsTraversing.RootTraversePolicy.RECURSIVE), classPath);
+		classPath.addVirtualFiles(orderEnumerator.recursively().classes().getRoots());
+		classPath.addVirtualFiles(orderEnumerator.sources().getRoots());
 
-		ProjectRootsTraversing.collectRoots(module, new ProjectRootsTraversing.RootTraversePolicy(ProjectClasspathTraversing.GENERAL_OUTPUT, null,
-				null, ProjectRootsTraversing.RootTraversePolicy.RECURSIVE), classPath); */
+		facet.setupCompilerClasspath(classPath);
 
-		classPath.addVirtualFiles(classes.getRoots());
 		classPath.addFirst(GwtSdkUtil.getDevJarPath(facet.getSdk()));
 	}
 }

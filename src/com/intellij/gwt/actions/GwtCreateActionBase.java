@@ -26,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.CommonBundle;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.ide.IdeView;
@@ -42,6 +41,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -81,7 +81,7 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 			return PsiElement.EMPTY_ARRAY;
 		}
 
-		GoogleGwtModuleExtension facet = GwtFacet.getInstance(module);
+		GoogleGwtModuleExtension facet = ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
 		if(facet == null)
 		{
 			return PsiElement.EMPTY_ARRAY;
@@ -143,7 +143,7 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 			return false;
 		}
 
-		if(GwtFacet.getInstance(module) == null)
+		if(ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class) == null)
 		{
 			return false;
 		}

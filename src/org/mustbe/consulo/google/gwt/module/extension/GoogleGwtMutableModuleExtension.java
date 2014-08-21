@@ -14,21 +14,26 @@
  * limitations under the License.
  */
 
-package org.mustbe.consulo.google.gwt.play1.module.extension;
+package org.mustbe.consulo.google.gwt.module.extension;
 
-import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import org.mustbe.consulo.google.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 
 /**
  * @author VISTALL
- * @since 14.07.14
+ * @since 21.08.14
  */
-public class Play1GwtModuleExtension extends GoogleGwtModuleExtensionImpl<Play1GwtModuleExtension> implements GoogleGwtModuleExtension<Play1GwtModuleExtension>
+public interface GoogleGwtMutableModuleExtension<T extends GoogleGwtModuleExtensionImpl<T>> extends GoogleGwtModuleExtension<T>,
+		MutableModuleExtensionWithSdk<T>
 {
-	public Play1GwtModuleExtension(@NotNull String id, @NotNull ModifiableRootModel rootModel)
-	{
-		super(id, rootModel);
-	}
+	void setOutputStyle(final GwtJavaScriptOutputStyle outputStyle);
+
+	void setRunGwtCompilerOnMake(final boolean runGwtCompiler);
+
+	void setAdditionalCompilerParameters(final String additionalCompilerParameters);
+
+	void setCompilerMaxHeapSize(final int compilerMaxHeapSize);
+
+	void setCompilerOutputPath(final String compilerOutputPath);
 }

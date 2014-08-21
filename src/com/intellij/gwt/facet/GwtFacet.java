@@ -36,12 +36,6 @@ public class GwtFacet
 	//private LocalFileSystem.WatchRequest myCompilerOutputWatchRequest;
 
 	@Nullable
-	public static GoogleGwtModuleExtension getInstance(@NotNull Module module)
-	{
-		return ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
-	}
-
-	@Nullable
 	public static GoogleGwtModuleExtension<?> findFacetBySourceFile(@NotNull Project project, @Nullable VirtualFile file)
 	{
 		if(file == null)

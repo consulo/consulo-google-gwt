@@ -22,9 +22,9 @@ import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -45,7 +45,7 @@ public abstract class BaseGwtInspection extends BaseJavaLocalInspectionTool
 	{
 		for(Module module : ModuleManager.getInstance(project).getModules())
 		{
-			if(GwtFacet.getInstance(module) != null)
+			if(ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class) != null)
 			{
 				return true;
 			}
@@ -56,7 +56,7 @@ public abstract class BaseGwtInspection extends BaseJavaLocalInspectionTool
 	@Nullable
 	protected static GoogleGwtModuleExtension getFacet(@NotNull PsiElement psiElement)
 	{
-		return GwtFacet.findFacetBySourceFile(psiElement.getProject(), psiElement.getContainingFile().getVirtualFile());
+		return ModuleUtilCore.getExtension(psiElement, GoogleGwtModuleExtension.class);
 	}
 
 	@NotNull

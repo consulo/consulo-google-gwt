@@ -18,7 +18,7 @@ package com.intellij.gwt.make;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.compiler.ValidityState;
@@ -32,9 +32,9 @@ public class GwtModuleFileProcessingItem implements FileProcessingCompiler.Proce
 	private GwtModule myModule;
 	private VirtualFile myFile;
 	private ValidityState myValidityState;
-	private JavaEEGoogleGwtModuleExtension myFacet;
+	private GoogleGwtModuleExtension myFacet;
 
-	public GwtModuleFileProcessingItem(final JavaEEGoogleGwtModuleExtension facet, final GwtModule module, VirtualFile file)
+	public GwtModuleFileProcessingItem(final GoogleGwtModuleExtension facet, final GwtModule module, VirtualFile file)
 	{
 		myModule = module;
 		myFile = file;
@@ -61,7 +61,7 @@ public class GwtModuleFileProcessingItem implements FileProcessingCompiler.Proce
 		return myModule;
 	}
 
-	public JavaEEGoogleGwtModuleExtension getFacet()
+	public GoogleGwtModuleExtension getFacet()
 	{
 		return myFacet;
 	}

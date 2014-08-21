@@ -17,20 +17,23 @@
 package org.mustbe.consulo.google.gwt.play1.module.extension;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
-import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
 import org.consulo.module.extension.ui.ModuleExtensionWithSdkPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtMutableModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GwtModuleExtensionPanel;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.ui.VerticalFlowLayout;
 
 /**
  * @author VISTALL
  * @since 15.07.14
  */
-public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension implements MutableModuleExtensionWithSdk<Play1GwtModuleExtension>
+public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension implements GoogleGwtMutableModuleExtension<Play1GwtModuleExtension>
 {
 	public Play1GwtMutableModuleExtension(@NotNull String id, @NotNull ModifiableRootModel rootModel)
 	{
@@ -41,7 +44,10 @@ public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension impl
 	@Override
 	public JComponent createConfigurablePanel(@NotNull Runnable runnable)
 	{
-		return wrapToNorth(new ModuleExtensionWithSdkPanel(this, runnable));
+		JPanel panel = new JPanel(new VerticalFlowLayout());
+		panel.add(new ModuleExtensionWithSdkPanel(this, runnable));
+		panel.add(new GwtModuleExtensionPanel(this));
+		return wrapToNorth(panel);
 	}
 
 	@Override
