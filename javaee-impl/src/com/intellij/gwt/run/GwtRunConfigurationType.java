@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.GoogleGwtIcons;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.execution.LocatableConfigurationType;
 import com.intellij.execution.Location;
 import com.intellij.execution.RunManager;
@@ -30,7 +31,6 @@ import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.extensions.Extensions;
@@ -102,7 +102,7 @@ public class GwtRunConfigurationType implements ConfigurationType, LocatableConf
 		}
 
 		VirtualFile file = psiFile.getVirtualFile();
-		if(file == null || !GwtFacet.isInModuleWithGwtFacet(location.getProject(), file))
+		if(file == null || !GoogleGwtModuleExtensionUtil.hasModuleExtension(location.getProject(), file))
 		{
 			return null;
 		}

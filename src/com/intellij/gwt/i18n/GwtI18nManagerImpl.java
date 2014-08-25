@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.gwt.facet.GwtFacet;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
@@ -53,7 +53,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 
 	private boolean isConstantsOrMessagesInterface(@NotNull PsiClass aClass)
 	{
-		if(!GwtFacet.isInModuleWithGwtFacet(myProject, getOriginalContainingFile(aClass).getVirtualFile()) || !aClass.isInterface())
+		if(!GoogleGwtModuleExtensionUtil.hasModuleExtension(myProject, getOriginalContainingFile(aClass).getVirtualFile()) || !aClass.isInterface())
 		{
 			return false;
 		}
@@ -136,7 +136,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 	{
 		final String fileName = file.getName();
 		final PsiDirectory directory = file.getContainingFile().getContainingDirectory();
-		if(directory == null || !GwtFacet.isInModuleWithGwtFacet(myProject, file.getVirtualFile()))
+		if(directory == null || !GoogleGwtModuleExtensionUtil.hasModuleExtension(myProject, file.getVirtualFile()))
 		{
 			return null;
 		}

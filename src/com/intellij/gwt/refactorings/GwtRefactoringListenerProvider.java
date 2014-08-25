@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.gwt.facet.GwtFacet;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.lang.properties.IProperty;
@@ -123,7 +123,7 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 	public RefactoringElementListener getListener(PsiElement element)
 	{
 		final PsiFile containingFile = element.getContainingFile();
-		if(containingFile == null || !GwtFacet.isInModuleWithGwtFacet(element.getProject(), containingFile.getVirtualFile()))
+		if(containingFile == null || !GoogleGwtModuleExtensionUtil.hasModuleExtension(element.getProject(), containingFile.getVirtualFile()))
 		{
 			return null;
 		}

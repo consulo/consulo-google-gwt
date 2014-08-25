@@ -24,20 +24,16 @@ import java.util.Map;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.javascript.JavaScriptSupportLoader;
 import com.intellij.lang.javascript.psi.JSExpression;
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -149,8 +145,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 			map.put(signature.toString(), psiMethod);
 		}
 
-		Module module = ModuleUtil.findModuleForPsiElement(aClass);
-		GwtVersion gwtVersion = GwtFacet.getGwtVersion(module != null ? ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class) : null);
+		GwtVersion gwtVersion = GoogleGwtModuleExtensionUtil.getVersion(aClass);
 		if(gwtVersion.isNewExpressionInJavaScriptSupported())
 		{
 			for(PsiMethod constructor : aClass.getConstructors())
@@ -282,6 +277,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 		return qualifiedName != null ? qualifiedName.replace('.', '/') : null;
 	}
 
+	@NotNull
 	@Override
 	public Object[] getVariants()
 	{
@@ -304,11 +300,11 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 			LookupElementBuilder item = LookupElementBuilder.create(member, entry.getKey());
 			if(member instanceof PsiMethod)
 			{
-				item.setInsertHandler(new MethodParenthesesHandler((PsiMethod) member, true));
+				item.withInsertHandler(new MethodParenthesesHandler((PsiMethod) member, true));
 			}
 			else if(member instanceof PsiClass)
 			{
-				item.setInsertHandler(ParenthesesInsertHandler.NO_PARAMETERS);
+				item.withInsertHandler(ParenthesesInsertHandler.NO_PARAMETERS);
 			}
 			lookupItems.add(item);
 		}

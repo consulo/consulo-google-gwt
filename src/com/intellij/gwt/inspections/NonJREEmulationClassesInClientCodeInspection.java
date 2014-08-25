@@ -23,12 +23,12 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.sdk.GwtSdkUtil;
@@ -86,7 +86,7 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 			return null;
 		}
 
-		final GoogleGwtModuleExtension gwtFacet = GwtFacet.findFacetBySourceFile(file.getProject(), virtualFile);
+		final GoogleGwtModuleExtension gwtFacet = GoogleGwtModuleExtensionUtil.findModuleExtension(file.getProject(), virtualFile);
 		if(gwtFacet == null || gwtFacet.getSdk() == null)
 		{
 			return null;

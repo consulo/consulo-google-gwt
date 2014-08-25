@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.templates.GwtTemplates;
@@ -122,7 +122,7 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 		String moduleName = StringUtil.capitalize(name);
 		final ArrayList<PsiElement> res = new ArrayList<PsiElement>();
 
-		GoogleGwtModuleExtension gwtFacet = GwtFacet.findFacetBySourceFile(directory.getProject(), directory.getVirtualFile());
+		GoogleGwtModuleExtension gwtFacet = GoogleGwtModuleExtensionUtil.findModuleExtension(directory.getProject(), directory.getVirtualFile());
 		LOG.assertTrue(gwtFacet != null);
 
 		PsiDirectory client = directory.createSubdirectory(GwtModulesManager.DEFAULT_SOURCE_PATH);

@@ -1,7 +1,7 @@
 package com.intellij.gwt.rpc;
 
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
-import com.intellij.gwt.facet.GwtFacet;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiFile;
@@ -24,7 +24,7 @@ public abstract class GwtSearcherBase<Result, Param> implements QueryExecutor<Re
 				PsiFile file = getContainingFile(queryParameters);
 				if(file != null)
 				{
-					GoogleGwtModuleExtension gwtFacet = GwtFacet.findFacetBySourceFile(file.getProject(), file.getVirtualFile());
+					GoogleGwtModuleExtension gwtFacet = GoogleGwtModuleExtensionUtil.findModuleExtension(file.getProject(), file.getVirtualFile());
 					if(gwtFacet != null)
 					{
 						return doExecute(queryParameters, consumer);

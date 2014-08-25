@@ -26,7 +26,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.template.Template;
@@ -34,7 +34,6 @@ import com.intellij.codeInsight.template.TemplateBuilder;
 import com.intellij.codeInsight.template.TemplateBuilderFactory;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInspection.i18n.JavaI18nUtil;
-import com.intellij.gwt.facet.GwtFacet;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.gwt.sdk.GwtVersion;
@@ -77,29 +76,34 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 		myGwtModulesManager = gwtModulesManager;
 	}
 
+	@Override
 	@Nullable
 	public PsiClass getResourceBundle()
 	{
 		return null;
 	}
 
+	@Override
 	@NonNls
 	public String getTemplateName()
 	{
 		return null;
 	}
 
+	@Override
 	@NonNls
 	public String getConcatenationTemplateName()
 	{
 		return null;
 	}
 
+	@Override
 	public boolean isActive(final PsiFile context) throws ResourceBundleNotFoundException
 	{
 		return myGwtModulesManager.isUnderGwtModule(context.getVirtualFile());
 	}
 
+	@Override
 	public boolean canShowJavaCodeInfo()
 	{
 		return false;
@@ -108,7 +112,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 	@Override
 	public String suggestPropertyKey(final @NotNull String value)
 	{
-		return GwtI18nUtil.suggetsPropertyKey(value, JavaPsiFacade.getInstance(myProject).getNameHelper(), LanguageLevel.HIGHEST);
+		return GwtI18nUtil.suggetsPropertyKey(value, PsiNameHelper.getInstance(myProject), LanguageLevel.HIGHEST);
 	}
 
 	@Override
@@ -139,8 +143,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 		final VirtualFile virtualFile = psiFile.getVirtualFile();
 		LOG.assertTrue(virtualFile != null);
 
-		GoogleGwtModuleExtension gwtFacet = GwtFacet.findFacetBySourceFile(myProject, psiFile.getVirtualFile());
-		GwtVersion gwtVersion = GwtFacet.getGwtVersion(gwtFacet);
+		GwtVersion gwtVersion = GoogleGwtModuleExtensionUtil.getVersion(anInterface);
 		PsiMethod method = GwtI18nUtil.addMethod(anInterface, key, gwtVersion);
 		if(parameters.length > 0)
 		{
@@ -189,6 +192,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 		@NonNls
 		private static final String GET_LOCALIZABLE_INSTANCE_TEMPLATE = "(({0}) " + GwtSdkUtil.GWT_CLASS_NAME + ".create({0}.class))";
 
+		@Override
 		public String getI18nizedText(final String propertyKey, final @Nullable PropertiesFile propertiesFile, final PsiLiteralExpression context)
 		{
 			return getI18nizedConcatenationText(propertyKey, "", propertiesFile, context);
@@ -217,6 +221,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 			return MessageFormat.format(GET_LOCALIZABLE_INSTANCE_TEMPLATE, anInterface.getQualifiedName());
 		}
 
+		@Override
 		public String getI18nizedConcatenationText(final String propertyKey, final String parametersString, final @Nullable PropertiesFile propertiesFile,
 				final PsiLiteralExpression context)
 		{
@@ -236,6 +241,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 
 	private class GwtPropertyCreationHandler implements PropertyCreationHandler
 	{
+		@Override
 		public void createProperty(final Project project, final Collection<PropertiesFile> propertiesFiles, final String key, final String value,
 				final PsiExpression[] parameters) throws IncorrectOperationException
 		{
