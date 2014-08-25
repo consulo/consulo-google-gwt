@@ -48,8 +48,6 @@
 		<referencesSearch implementation="com.intellij.gwt.references.search.GwtToHtmlTagIdReferencesSearcher"/>
 		<definitionsSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
 
-		<lang.elementManipulator forClass="com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl"
-								 implementationClass="com.intellij.gwt.jsinject.JsGwtReferenceExpressionManipulator"/>
 
 
 		<fileTemplateGroup implementation="com.intellij.gwt.GwtFileTemplateGroupDescriptorFactory" />

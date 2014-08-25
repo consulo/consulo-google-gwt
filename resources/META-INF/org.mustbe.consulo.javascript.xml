@@ -12,5 +12,7 @@
 
 		<inspectionToolProvider implementation="com.intellij.gwt.GwtJsInspectionToolProvider" />
 
+		<lang.elementManipulator forClass="com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl"
+								 implementationClass="com.intellij.gwt.jsinject.JsGwtReferenceExpressionManipulator"/>
 	</extensions>
 </idea-plugin>
