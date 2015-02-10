@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.GoogleGwtIcons;
 import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModel;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.OrderRootType;
@@ -90,7 +89,7 @@ public class GoogleGwtSdkType extends SdkType
 	}
 
 	@Override
-	public boolean setupSdkPaths(Sdk sdk, SdkModel sdkModel)
+	public void setupSdkPaths(Sdk sdk)
 	{
 		SdkModificator sdkModificator = sdk.getSdkModificator();
 
@@ -98,7 +97,7 @@ public class GoogleGwtSdkType extends SdkType
 		if(homeDirectory == null)
 		{
 			sdkModificator.commitChanges();
-			return true;
+			return;
 		}
 
 		for(VirtualFile virtualFile : homeDirectory.getChildren())
@@ -133,7 +132,6 @@ public class GoogleGwtSdkType extends SdkType
 		}
 
 		sdkModificator.commitChanges();
-		return true;
 	}
 
 	@Override
