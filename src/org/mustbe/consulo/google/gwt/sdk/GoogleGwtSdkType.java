@@ -13,6 +13,9 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.types.BinariesOrderRootType;
+import com.intellij.openapi.roots.types.DocumentationOrderRootType;
+import com.intellij.openapi.roots.types.SourcesOrderRootType;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -33,34 +36,16 @@ public class GoogleGwtSdkType extends SdkType
 
 	@Nullable
 	@Override
-	public Icon getGroupIcon()
-	{
-		return getIcon();
-	}
-
-	@Nullable
-	@Override
 	public Icon getIcon()
 	{
 		return GoogleGwtIcons.Gwt;
-	}
-
-	@Nullable
-	@Override
-	public String suggestHomePath()
-	{
-		return null;
 	}
 
 	@Override
 	public boolean isValidSdkHome(String s)
 	{
 		File file = new File(s, "gwt-dev.jar");
-		if(!file.exists())
-		{
-			return false;
-		}
-		return true;
+		return file.exists();
 	}
 
 	@Nullable
@@ -81,9 +66,8 @@ public class GoogleGwtSdkType extends SdkType
 				return lines[0].substring(LINE_START.length(), lines[0].length());
 			}
 		}
-		catch(IOException e)
+		catch(IOException ignored)
 		{
-
 		}
 		return "unknown";
 	}
@@ -109,16 +93,16 @@ public class GoogleGwtSdkType extends SdkType
 			{
 				if(name.endsWith("-src") || name.endsWith("-sources"))
 				{
-					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), OrderRootType.SOURCES);
+					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), SourcesOrderRootType.getInstance());
 				}
 				else if(!name.endsWith("+src"))
 				{
-					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), OrderRootType.CLASSES);
+					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), BinariesOrderRootType.getInstance());
 				}
 
 				if(name.equals("gwt-user"))
 				{
-					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), OrderRootType.SOURCES);
+					sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), SourcesOrderRootType.getInstance());
 				}
 			}
 			else if(name.equals("doc") && virtualFile.isDirectory())
@@ -126,7 +110,7 @@ public class GoogleGwtSdkType extends SdkType
 				VirtualFile javadoc = virtualFile.findChild("javadoc");
 				if(javadoc != null)
 				{
-					sdkModificator.addRoot(javadoc, OrderRootType.DOCUMENTATION);
+					sdkModificator.addRoot(javadoc, DocumentationOrderRootType.getInstance());
 				}
 			}
 		}
@@ -135,9 +119,9 @@ public class GoogleGwtSdkType extends SdkType
 	}
 
 	@Override
-	public String suggestSdkName(String s, String s2)
+	public String suggestSdkName(String currentSdkName, String sdkHome)
 	{
-		File file = new File(s2);
+		File file = new File(sdkHome);
 		return file.getName();
 	}
 
