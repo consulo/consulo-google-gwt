@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
 import com.intellij.gwt.module.model.GwtEntryPoint;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -194,7 +194,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 			return null;
 		}
 
-		return (XmlFile) viewProvider.getPsi(StdLanguages.HTML);
+		return (XmlFile) viewProvider.getPsi(HTMLLanguage.INSTANCE);
 	}
 
 	@Override

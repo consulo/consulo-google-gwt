@@ -19,7 +19,8 @@ package com.intellij.gwt.references.search;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.references.GwtToHtmlTagReference;
-import com.intellij.lang.StdLanguages;
+import com.intellij.lang.html.HTMLLanguage;
+import com.intellij.lang.xhtml.XHTMLLanguage;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -77,7 +78,7 @@ public class GwtToHtmlTagIdReferencesSearcher implements QueryExecutor<PsiRefere
 		}
 
 		final PsiFile file = parent.getContainingFile();
-		if(!file.getLanguage().equals(StdLanguages.HTML) && !file.getLanguage().equals(StdLanguages.XHTML))
+		if(!file.getLanguage().equals(HTMLLanguage.INSTANCE) && !file.getLanguage().equals(XHTMLLanguage.INSTANCE))
 		{
 			return true;
 		}
