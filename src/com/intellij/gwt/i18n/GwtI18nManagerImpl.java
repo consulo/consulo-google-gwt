@@ -23,9 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.lang.properties.IProperty;
+import com.intellij.lang.properties.PropertiesFileType;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -127,7 +127,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 	private static boolean isFileNameForInterfaceName(final @Nullable String fileName, final @Nullable String interfaceName)
 	{
 		return fileName != null && interfaceName != null &&
-				(fileName.equals(interfaceName + "." + StdFileTypes.PROPERTIES.getDefaultExtension()) || fileName.startsWith(interfaceName + "_"));
+				(fileName.equals(interfaceName + "." + PropertiesFileType.INSTANCE.getDefaultExtension()) || fileName.startsWith(interfaceName + "_"));
 	}
 
 	@Override

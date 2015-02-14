@@ -31,8 +31,9 @@ import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
 import com.intellij.gwt.module.model.GwtEntryPoint;
 import com.intellij.gwt.module.model.GwtModule;
+import com.intellij.ide.highlighter.HtmlFileType;
+import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.lang.html.HTMLLanguage;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -176,7 +177,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 		}
 
 		final VirtualFile parent = module.getModuleDirectory();
-		final VirtualFile defaultFile = parent.findFileByRelativePath(DEFAULT_PUBLIC_PATH + "/" + module.getShortName() + "." + StdFileTypes.HTML
+		final VirtualFile defaultFile = parent.findFileByRelativePath(DEFAULT_PUBLIC_PATH + "/" + module.getShortName() + "." + HtmlFileType.INSTANCE
 				.getDefaultExtension());
 		final VirtualFile htmlFile;
 		if(defaultFile != null && htmlFiles.contains(defaultFile))
@@ -486,7 +487,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 		@Override
 		public boolean processFile(VirtualFile fileOrDir)
 		{
-			if(!fileOrDir.isDirectory() && fileOrDir.getFileType() == StdFileTypes.XML &&
+			if(!fileOrDir.isDirectory() && fileOrDir.getFileType() == XmlFileType.INSTANCE &&
 					fileOrDir.getNameWithoutExtension().endsWith(GWT_SUFFIX))
 			{
 				final PsiFile psiFile = myPsiManager.findFile(fileOrDir);

@@ -38,10 +38,10 @@ import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.javaee.DeploymentDescriptorsConstants;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.options.ConfigurationException;
@@ -317,7 +317,7 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
 			public boolean isFileVisible(VirtualFile file, boolean showHiddenFiles)
 			{
 				return super.isFileVisible(file, showHiddenFiles) && (file.isDirectory() || FileTypeManager.getInstance().getFileTypeByFile(file) ==
-						StdFileTypes.HTML);
+						HtmlFileType.INSTANCE);
 			}
 		};
 		final VirtualFile[] sourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots();

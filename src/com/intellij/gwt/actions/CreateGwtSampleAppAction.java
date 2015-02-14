@@ -27,8 +27,9 @@ import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.templates.GwtTemplates;
 import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.highlighter.HtmlFileType;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
@@ -120,12 +121,12 @@ public class CreateGwtSampleAppAction extends GwtCreateActionBase
 		result.add(serverDir);
 		final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(clientDir);
 		LOG.assertTrue(aPackage != null);
-		result.add(createFromTemplate(serverDir, name + SERVICE_IMPL_SUFFIX + "." + StdFileTypes.JAVA.getDefaultExtension(),
+		result.add(createFromTemplate(serverDir, name + SERVICE_IMPL_SUFFIX + JavaFileType.DOT_DEFAULT_EXTENSION,
 				GwtTemplates.GWT_SAMPLE_APP_SERVICE_IMPL_JAVA, SERVICE_NAME_PROPERTY, serviceName, CLIENT_PACKAGE_PROPERTY, aPackage.getQualifiedName()));
 
 		PsiDirectory publicDir = moduleDir.createSubdirectory(GwtModulesManager.DEFAULT_PUBLIC_PATH);
 		result.add(publicDir);
-		result.add(createFromTemplate(publicDir, name + "." + StdFileTypes.HTML.getDefaultExtension(), GwtTemplates.GWT_SAMPLE_APP_HTML,
+		result.add(createFromTemplate(publicDir, name + "." + HtmlFileType.INSTANCE.getDefaultExtension(), GwtTemplates.GWT_SAMPLE_APP_HTML,
 				FileTemplate.ATTRIBUTE_PACKAGE_NAME, appPackageName));
 
 		return result.toArray(new PsiElement[result.size()]);

@@ -27,8 +27,8 @@ import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.templates.GwtTemplates;
 import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
@@ -140,7 +140,7 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 		res.add(publicDir);
 		final String gwtModuleName = appPackageName.length() > 0 ? appPackageName + "." + moduleName : moduleName;
 		String gwtModuleHtml = gwtFacet.getSdkVersion().getGwtModuleHtmlTemplate();
-		res.add(createFromTemplate(publicDir, moduleName + "." + StdFileTypes.HTML.getDefaultExtension(), gwtModuleHtml,
+		res.add(createFromTemplate(publicDir, moduleName + "." + HtmlFileType.INSTANCE.getDefaultExtension(), gwtModuleHtml,
 				FileTemplate.ATTRIBUTE_PACKAGE_NAME, appPackageName, "GWT_MODULE_NAME", gwtModuleName));
 		/*res.add(createFromTemplate(publicDir, moduleName + "." + CSS_EXTENSION, GwtTemplates.GWT_MODULE_CSS, FileTemplate.ATTRIBUTE_PACKAGE_NAME,
 				appPackageName));*/

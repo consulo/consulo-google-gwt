@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -30,9 +30,9 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 	private static final ID<String, Void> NAME = ID.create("GwtHtmlFile");
 	private static final FileBasedIndex.InputFilter INPUT_FILTER = new FileBasedIndex.InputFilter()
 	{
-		public boolean acceptInput(Project project, VirtualFile file)
+		public boolean acceptInput(Project project, @NotNull VirtualFile file)
 		{
-			return file.getFileType() == StdFileTypes.HTML;
+			return file.getFileType() == HtmlFileType.INSTANCE;
 		}
 	};
 	private GwtHtmlFileIndexer myIndexer;
@@ -44,24 +44,28 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 		myKeyDescriptor = new EnumeratorStringDescriptor();
 	}
 
+	@NotNull
 	@Override
 	public ID<String, Void> getName()
 	{
 		return NAME;
 	}
 
+	@NotNull
 	@Override
 	public DataIndexer<String, Void, FileContent> getIndexer()
 	{
 		return myIndexer;
 	}
 
+	@NotNull
 	@Override
 	public KeyDescriptor<String> getKeyDescriptor()
 	{
 		return myKeyDescriptor;
 	}
 
+	@NotNull
 	@Override
 	public FileBasedIndex.InputFilter getInputFilter()
 	{

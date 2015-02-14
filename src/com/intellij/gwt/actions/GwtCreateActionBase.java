@@ -33,12 +33,12 @@ import com.intellij.ide.actions.CreateElementActionBase;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -188,7 +188,7 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 	protected static PsiClass createClassFromTemplate(final PsiDirectory directory, String className, String templateName,
 			@NonNls String... parameters) throws IncorrectOperationException
 	{
-		final PsiFile file = createFromTemplateInternal(directory, className, className + "." + StdFileTypes.JAVA.getDefaultExtension(), templateName,
+		final PsiFile file = createFromTemplateInternal(directory, className, className + JavaFileType.DOT_DEFAULT_EXTENSION, templateName,
 				parameters);
 		return ((PsiJavaFile) file).getClasses()[0];
 	}
