@@ -15,8 +15,11 @@
  */
 package com.intellij.gwt.i18n;
 
+import org.jetbrains.annotations.NotNull;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -29,7 +32,7 @@ import com.intellij.util.QueryExecutor;
 public class PropertiesSearcher implements QueryExecutor<PsiElement, PsiElement>
 {
 	@Override
-	public boolean execute(final PsiElement sourceElement, final Processor<PsiElement> consumer)
+	public boolean execute(@NotNull final PsiElement sourceElement, @NotNull final Processor<PsiElement> consumer)
 	{
 		if(sourceElement instanceof PsiMethod)
 		{
@@ -41,11 +44,17 @@ public class PropertiesSearcher implements QueryExecutor<PsiElement, PsiElement>
 					return false;
 				}
 			}
-			return true;
 		}
 		else if(sourceElement instanceof PsiClass)
 		{
-			final PropertiesFile[] files = GwtI18nManager.getInstance(sourceElement.getProject()).getPropertiesFiles((PsiClass) sourceElement);
+			final PropertiesFile[] files = ApplicationManager.getApplication().runReadAction(new Computable<PropertiesFile[]>()
+			{
+				@Override
+				public PropertiesFile[] compute()
+				{
+					return GwtI18nManager.getInstance(sourceElement.getProject()).getPropertiesFiles((PsiClass) sourceElement);
+				}
+			});
 			for(PropertiesFile file : files)
 			{
 				if(!consumer.process(file.getContainingFile()))
@@ -53,7 +62,6 @@ public class PropertiesSearcher implements QueryExecutor<PsiElement, PsiElement>
 					return false;
 				}
 			}
-			return true;
 		}
 		return true;
 	}
