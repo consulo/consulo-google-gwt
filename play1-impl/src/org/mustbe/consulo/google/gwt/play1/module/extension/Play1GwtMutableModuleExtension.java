@@ -20,9 +20,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.consulo.module.extension.MutableModuleInheritableNamedPointer;
-import org.consulo.module.extension.ui.ModuleExtensionWithSdkPanel;
+import org.consulo.module.extension.ui.ModuleExtensionSdkBoxBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredDispatchThread;
 import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtMutableModuleExtension;
 import org.mustbe.consulo.google.gwt.module.extension.GwtModuleExtensionPanel;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -42,10 +43,11 @@ public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension impl
 
 	@Nullable
 	@Override
+	@RequiredDispatchThread
 	public JComponent createConfigurablePanel(@NotNull Runnable runnable)
 	{
 		JPanel panel = new JPanel(new VerticalFlowLayout());
-		panel.add(new ModuleExtensionWithSdkPanel(this, runnable));
+		panel.add(ModuleExtensionSdkBoxBuilder.createAndDefine(this, runnable).build());
 		panel.add(new GwtModuleExtensionPanel(this));
 		return wrapToNorth(panel);
 	}
