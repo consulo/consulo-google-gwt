@@ -1,10 +1,4 @@
 <idea-plugin>
-	<application-components>
-		<component>
-			<implementation-class>com.intellij.gwt.GwtJsInjector</implementation-class>
-		</component>
-	</application-components>
-
 	<extensions defaultExtensionNs="com.intellij">
 		<multiHostInjector forClass="com.intellij.psi.PsiComment" implementationClass="com.intellij.gwt.jsinject.JsInjector"/>
 
@@ -14,5 +8,7 @@
 
 		<lang.elementManipulator forClass="com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl"
 								 implementationClass="com.intellij.gwt.jsinject.JsGwtReferenceExpressionManipulator"/>
+
+		<lang.defineVersion language="JavaScript" implementationClass="org.mustbe.consulo.google.gwt.javascript.lang.GwtJavaScriptVersion" />
 	</extensions>
 </idea-plugin>

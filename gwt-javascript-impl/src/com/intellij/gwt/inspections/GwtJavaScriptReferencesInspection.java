@@ -23,13 +23,14 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.javascript.lang.GwtJavaScriptVersion;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.jsinject.GwtClassMemberReference;
 import com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl;
-import com.intellij.lang.javascript.JavaScriptSupportLoader;
+import com.intellij.lang.LanguageVersion;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -61,9 +62,9 @@ public class GwtJavaScriptReferencesInspection extends BaseGwtInspection
 	@Nullable
 	public ProblemDescriptor[] checkFile(@NotNull final PsiFile file, @NotNull final InspectionManager manager, final boolean isOnTheFly)
 	{
-		if(!JavaScriptSupportLoader.GWT_DIALECT.equals(file.getLanguage()))
+		if(!(file.getLanguageVersion() instanceof GwtJavaScriptVersion))
 		{
-			return null;
+			return ProblemDescriptor.EMPTY_ARRAY;
 		}
 
 		final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();

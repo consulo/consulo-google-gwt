@@ -18,10 +18,9 @@ package com.intellij.gwt.jsinject;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.lang.Language;
+import org.mustbe.consulo.google.gwt.javascript.lang.GwtJavaScriptVersion;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
-import com.intellij.lang.javascript.JavaScriptSupportLoader;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiComment;
@@ -69,9 +68,9 @@ public class JsInjector implements MultiHostInjector
 					prefix.append(") {");
 
 					String suffix = "}";
-					Language language = JavaScriptSupportLoader.GWT_DIALECT;
 					TextRange range = new TextRange(4, text.length() - 4);
-					registrar.startInjecting(language).addPlace(prefix.toString(), suffix, (PsiLanguageInjectionHost) host, range).doneInjecting();
+					registrar.startInjecting(GwtJavaScriptVersion.getInstance()).addPlace(prefix.toString(), suffix,
+							(PsiLanguageInjectionHost) host, range).doneInjecting();
 				}
 			}
 		}
