@@ -16,23 +16,10 @@
 
 package com.intellij.gwt.run;
 
-import java.util.Collection;
-
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.JavaCommandLineState;
-import com.intellij.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.gwt.GwtBundle;
@@ -45,6 +32,14 @@ import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+
+import java.util.Collection;
 
 public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule>
 {
@@ -67,6 +62,7 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 		this(GwtBundle.message("default.gwt.run.configuration.name"), project, configurationFactory);
 	}
 
+	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{

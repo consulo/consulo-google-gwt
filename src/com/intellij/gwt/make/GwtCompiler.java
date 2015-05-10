@@ -16,25 +16,9 @@
 
 package com.intellij.gwt.make;
 
-import java.io.DataInput;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.consulo.java.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtMutableModuleExtension;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.options.CompileStepBeforeRun;
-import com.intellij.execution.configurations.CommandLineBuilder;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.JavaParameters;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.*;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
@@ -43,12 +27,7 @@ import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
-import com.intellij.openapi.compiler.ClassInstrumentingCompiler;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.compiler.ValidityState;
+import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
@@ -61,6 +40,18 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtMutableModuleExtension;
+import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
+
+import java.io.DataInput;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class GwtCompiler implements ClassInstrumentingCompiler
 {
