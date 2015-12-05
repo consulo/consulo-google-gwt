@@ -27,7 +27,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.psi.search.searches.DefinitionsSearch;
+import com.intellij.psi.search.searches.DefinitionsScopedSearch;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.util.IncorrectOperationException;
 
@@ -222,7 +222,7 @@ public class GwtObsoleteTypeArgsJavadocTagInspection extends BaseGwtInspection
 				@Override
 				public void run()
 				{
-					Collection<PsiElement> elements = DefinitionsSearch.search(myMethod).findAll();
+					Collection<PsiElement> elements = DefinitionsScopedSearch.search(myMethod).findAll();
 					for(PsiElement element : elements)
 					{
 						if(element instanceof PsiMethod)
