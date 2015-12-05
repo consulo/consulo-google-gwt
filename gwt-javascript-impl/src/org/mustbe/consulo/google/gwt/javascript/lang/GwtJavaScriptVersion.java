@@ -4,9 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.javascript.ide.highlight.GwtSyntaxHighlighter;
 import org.mustbe.consulo.javascript.lang.BaseJavaScriptLanguageVersion;
+import org.mustbe.consulo.javascript.lang.JavaScriptLanguage;
 import com.intellij.lang.javascript.DialectOptionHolder;
 import com.intellij.lang.javascript.JavaScriptParsingLexer;
-import com.intellij.lang.javascript.JavascriptLanguage;
 import com.intellij.lang.javascript.highlighting.JSHighlighter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
@@ -20,7 +20,7 @@ public class GwtJavaScriptVersion extends BaseJavaScriptLanguageVersion
 	@NotNull
 	public static GwtJavaScriptVersion getInstance()
 	{
-		return JavascriptLanguage.INSTANCE.findVersionByClass(GwtJavaScriptVersion.class);
+		return JavaScriptLanguage.INSTANCE.findVersionByClass(GwtJavaScriptVersion.class);
 	}
 
 	private final DialectOptionHolder myDialectOptionHolder = new DialectOptionHolder(false, true);

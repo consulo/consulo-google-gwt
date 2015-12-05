@@ -16,8 +16,8 @@
 
 package org.mustbe.consulo.google.gwt.javascript.lang;
 
+import org.mustbe.consulo.javascript.lang.JavaScriptLanguage;
 import com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl;
-import com.intellij.lang.javascript.JavascriptLanguage;
 import com.intellij.psi.tree.ElementTypeAsPsiFactory;
 import com.intellij.psi.tree.IElementType;
 
@@ -27,6 +27,5 @@ import com.intellij.psi.tree.IElementType;
  */
 public interface GwtJavaScriptElements
 {
-	IElementType GWT_REFERENCE_EXPRESSION = new ElementTypeAsPsiFactory("GWT_REFERENCE_EXPRESSION", JavascriptLanguage.INSTANCE,
-			JSGwtReferenceExpressionImpl.class);
+	IElementType GWT_REFERENCE_EXPRESSION = new ElementTypeAsPsiFactory("GWT_REFERENCE_EXPRESSION", JavaScriptLanguage.INSTANCE, JSGwtReferenceExpressionImpl.class);
 }
