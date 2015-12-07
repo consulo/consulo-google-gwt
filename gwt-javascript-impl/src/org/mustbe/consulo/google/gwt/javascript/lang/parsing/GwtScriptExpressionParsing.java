@@ -4,9 +4,9 @@ import org.mustbe.consulo.google.gwt.javascript.lang.GwtJavaScriptElements;
 import org.mustbe.consulo.javascript.lang.parsing.ExpressionParsing;
 import org.mustbe.consulo.javascript.lang.parsing.JavaScriptParsingContext;
 import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.javascript.JSBundle;
 import com.intellij.lang.javascript.JSElementTypes;
 import com.intellij.lang.javascript.JSTokenTypes;
+import com.intellij.lang.javascript.JavaScriptBundle;
 import com.intellij.psi.tree.IElementType;
 
 /**
@@ -103,7 +103,7 @@ public class GwtScriptExpressionParsing extends ExpressionParsing
 					}
 					else
 					{
-						builder.error(JSBundle.message("javascript.parser.message.expected.name"));
+						builder.error(JavaScriptBundle.message("javascript.parser.message.expected.name"));
 					}
 
 					if(gwtExprMark == null)
@@ -123,7 +123,7 @@ public class GwtScriptExpressionParsing extends ExpressionParsing
 				{
 					builder.advanceLexer();
 					parseExpression(builder);
-					checkMatches(builder, JSTokenTypes.RBRACKET, JSBundle.message("javascript.parser.message.expected.rbracket"));
+					checkMatches(builder, JSTokenTypes.RBRACKET, JavaScriptBundle.message("javascript.parser.message.expected.rbracket"));
 					expr.done(JSElementTypes.INDEXED_PROPERTY_ACCESS_EXPRESSION);
 					expr = expr.precede();
 				}
