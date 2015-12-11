@@ -320,7 +320,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 			newElementName += oldElementName.substring(i);
 		}
 		String newText = getRangeInElement().replace(oldText, newElementName);
-		JSExpression newNode = JSChangeUtil.createExpressionFromText(myElement.getProject(), newText, null);
+		JSExpression newNode = JSChangeUtil.createExpressionFromText(myElement.getProject(), newText);
 		return myElement.replace(newNode);
 	}
 

@@ -20,7 +20,7 @@ public class JsGwtReferenceExpressionManipulator extends AbstractElementManipula
 			final String newContent) throws IncorrectOperationException
 	{
 		String newText = range.replace(element.getText(), newContent);
-		JSExpression newExpression = JSChangeUtil.createExpressionFromText(element.getProject(), newText, null);
+		JSExpression newExpression = JSChangeUtil.createExpressionFromText(element.getProject(), newText);
 		return (JSGwtReferenceExpressionImpl) element.replace(newExpression);
 	}
 
