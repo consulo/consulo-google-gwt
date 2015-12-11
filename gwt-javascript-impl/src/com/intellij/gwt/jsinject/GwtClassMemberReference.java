@@ -29,7 +29,6 @@ import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.gwt.sdk.GwtVersion;
-import com.intellij.lang.ASTNode;
 import com.intellij.lang.javascript.psi.JSExpression;
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil;
 import com.intellij.openapi.diagnostic.Logger;
@@ -321,8 +320,8 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 			newElementName += oldElementName.substring(i);
 		}
 		String newText = getRangeInElement().replace(oldText, newElementName);
-		ASTNode newNode = JSChangeUtil.createExpressionFromText(myElement.getProject(), newText, null);
-		return myElement.replace((JSExpression) newNode.getPsi());
+		JSExpression newNode = JSChangeUtil.createExpressionFromText(myElement.getProject(), newText, null);
+		return myElement.replace(newNode);
 	}
 
 	@Override

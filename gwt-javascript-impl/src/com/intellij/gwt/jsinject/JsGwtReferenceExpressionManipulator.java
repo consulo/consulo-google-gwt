@@ -4,7 +4,7 @@
  */
 package com.intellij.gwt.jsinject;
 
-import com.intellij.lang.ASTNode;
+import com.intellij.lang.javascript.psi.JSExpression;
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.AbstractElementManipulator;
@@ -20,8 +20,8 @@ public class JsGwtReferenceExpressionManipulator extends AbstractElementManipula
 			final String newContent) throws IncorrectOperationException
 	{
 		String newText = range.replace(element.getText(), newContent);
-		ASTNode newExpression = JSChangeUtil.createExpressionFromText(element.getProject(), newText, null);
-		return (JSGwtReferenceExpressionImpl) element.replace(newExpression.getPsi());
+		JSExpression newExpression = JSChangeUtil.createExpressionFromText(element.getProject(), newText, null);
+		return (JSGwtReferenceExpressionImpl) element.replace(newExpression);
 	}
 
 	@Override
