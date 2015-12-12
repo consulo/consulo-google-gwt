@@ -1,12 +1,13 @@
 package org.mustbe.consulo.google.gwt.javascript.lang;
 
+import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.javascript.ide.highlight.GwtSyntaxHighlighter;
 import org.mustbe.consulo.javascript.lang.BaseJavaScriptLanguageVersion;
 import org.mustbe.consulo.javascript.lang.JavaScriptLanguage;
 import com.intellij.lang.javascript.DialectOptionHolder;
-import com.intellij.lang.javascript.JavaScriptParsingLexer;
+import com.intellij.lang.javascript.JavaScriptParsingFlexLexer;
 import com.intellij.lang.javascript.highlighting.JSHighlighter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
@@ -18,6 +19,7 @@ import com.intellij.openapi.project.Project;
 public class GwtJavaScriptVersion extends BaseJavaScriptLanguageVersion
 {
 	@NotNull
+	@LazyInstance
 	public static GwtJavaScriptVersion getInstance()
 	{
 		return JavaScriptLanguage.INSTANCE.findVersionByClass(GwtJavaScriptVersion.class);
@@ -34,7 +36,7 @@ public class GwtJavaScriptVersion extends BaseJavaScriptLanguageVersion
 	@Override
 	public Lexer createLexer(@Nullable Project project)
 	{
-		return new JavaScriptParsingLexer(myDialectOptionHolder);
+		return new JavaScriptParsingFlexLexer(myDialectOptionHolder);
 	}
 
 	@NotNull
