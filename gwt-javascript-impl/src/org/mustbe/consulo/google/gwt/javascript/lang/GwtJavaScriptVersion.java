@@ -4,8 +4,10 @@ import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.google.gwt.javascript.ide.highlight.GwtSyntaxHighlighter;
+import org.mustbe.consulo.google.gwt.javascript.lang.parsing.GwtJavaScriptParser;
 import org.mustbe.consulo.javascript.lang.BaseJavaScriptLanguageVersion;
 import org.mustbe.consulo.javascript.lang.JavaScriptLanguage;
+import com.intellij.lang.PsiParser;
 import com.intellij.lang.javascript.DialectOptionHolder;
 import com.intellij.lang.javascript.JavaScriptParsingFlexLexer;
 import com.intellij.lang.javascript.highlighting.JSHighlighter;
@@ -30,6 +32,13 @@ public class GwtJavaScriptVersion extends BaseJavaScriptLanguageVersion
 	public GwtJavaScriptVersion()
 	{
 		super("GWT");
+	}
+
+	@NotNull
+	@Override
+	public PsiParser createParser(@Nullable Project project)
+	{
+		return new GwtJavaScriptParser();
 	}
 
 	@NotNull

@@ -58,7 +58,7 @@ public class GwtScriptExpressionParsing extends ExpressionParsing
 				if(gwtExprMark != null)
 				{
 					builder.advanceLexer();
-					if(isIdentifierToken(builder.getTokenType()))
+					if(isIdentifierToken(builder, builder.getTokenType()))
 					{
 						builder.advanceLexer();
 					}
@@ -97,7 +97,7 @@ public class GwtScriptExpressionParsing extends ExpressionParsing
 						continue;
 					}
 
-					if(tokenType == JSTokenTypes.ANY_IDENTIFIER || isIdentifierToken(tokenType))
+					if(tokenType == JSTokenTypes.ANY_IDENTIFIER || isIdentifierToken(builder, tokenType))
 					{
 						builder.advanceLexer();
 					}
