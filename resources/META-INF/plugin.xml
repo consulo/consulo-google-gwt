@@ -29,7 +29,6 @@
 
 	<extensions defaultExtensionNs="com.intellij">
 		<errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
-		<antBuildGen implementation="com.intellij.gwt.ant.GwtBuildExtension" order="first"/>
 		<compiler implementation="com.intellij.gwt.make.GwtCompiler"/>
 
 		<fileBasedIndex implementation="com.intellij.gwt.module.index.GwtHtmlFileIndex"/>
@@ -46,9 +45,7 @@
 		<annotator language="JAVA" implementationClass="com.intellij.gwt.i18n.PropertiesInterfaceAnnotator"/>
 
 		<referencesSearch implementation="com.intellij.gwt.references.search.GwtToHtmlTagIdReferencesSearcher"/>
-		<definitionsSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
-
-
+		<definitionsScopedSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
 
 		<fileTemplateGroup implementation="com.intellij.gwt.GwtFileTemplateGroupDescriptorFactory" />
 		<inspectionToolProvider implementation="com.intellij.gwt.GwtInspectionToolProvider" />

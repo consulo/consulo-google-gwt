@@ -23,17 +23,19 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.search.searches.DefinitionsScopedSearch;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 
 /**
  * @author peter
  */
-public class PropertiesSearcher implements QueryExecutor<PsiElement, PsiElement>
+public class PropertiesSearcher implements QueryExecutor<PsiElement, DefinitionsScopedSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull final PsiElement sourceElement, @NotNull final Processor<PsiElement> consumer)
+	public boolean execute(@NotNull DefinitionsScopedSearch.SearchParameters queryParameters, @NotNull Processor<PsiElement> consumer)
 	{
+		final PsiElement sourceElement = queryParameters.getElement();
 		if(sourceElement instanceof PsiMethod)
 		{
 			final IProperty[] properties = GwtI18nManager.getInstance(sourceElement.getProject()).getProperties((PsiMethod) sourceElement);
