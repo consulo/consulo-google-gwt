@@ -17,30 +17,37 @@
 package com.intellij.gwt.references;
 
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.RequiredReadAction;
+import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.PsiReferenceProviderBase;
+import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
 
 /**
  * @author nik
  */
-public class GwtToHtmlReferencesProvider extends PsiReferenceProviderBase
+public class GwtToHtmlReferencesProvider extends PsiReferenceProvider
 {
 
 	@Override
 	@NotNull
+	@RequiredReadAction
 	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context)
 	{
 		if(element instanceof PsiLiteralExpression)
 		{
+			GoogleGwtModuleExtension extension = ModuleUtilCore.getExtension(element, GoogleGwtModuleExtension.class);
+			if(extension == null)
+			{
+				return PsiReference.EMPTY_ARRAY;
+			}
 			final PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
 			if(literalExpression.getValue() instanceof String)
 			{
-				return new PsiReference[]{
-						new GwtToHtmlTagReference(literalExpression)
-				};
+				return new PsiReference[]{new GwtToHtmlTagReference(literalExpression)};
 			}
 		}
 		return PsiReference.EMPTY_ARRAY;

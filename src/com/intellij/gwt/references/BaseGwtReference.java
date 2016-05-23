@@ -38,9 +38,8 @@ public abstract class BaseGwtReference extends PsiReferenceBase<PsiLiteralExpres
 		myGwtModulesManager = GwtModulesManager.getInstance(myElement.getProject());
 	}
 
-	public
 	@Nullable
-	XmlFile getHtmlFileForModule()
+	public XmlFile getHtmlFileForModule()
 	{
 		final GwtModule module = findGwtModule();
 		if(module == null)
@@ -49,12 +48,10 @@ public abstract class BaseGwtReference extends PsiReferenceBase<PsiLiteralExpres
 		}
 
 		return myGwtModulesManager.findHtmlFileByModule(module);
-
 	}
 
-	public
 	@Nullable
-	GwtModule findGwtModule()
+	public GwtModule findGwtModule()
 	{
 		final PsiFile psiFile = myElement.getContainingFile();
 		if(psiFile == null)
