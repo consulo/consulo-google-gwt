@@ -19,8 +19,8 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.GoogleGwtIcons;
-import org.mustbe.consulo.google.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
+import consulo.gwt.GoogleGwtIcons;
+import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.impl.GwtModuleImpl;
 import com.intellij.openapi.module.Module;

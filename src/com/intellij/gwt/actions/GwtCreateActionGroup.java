@@ -16,7 +16,7 @@
 
 package com.intellij.gwt.actions;
 
-import org.mustbe.consulo.google.gwt.GoogleGwtIcons;
+import consulo.gwt.GoogleGwtIcons;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;

@@ -21,6 +21,7 @@
           </element>
           <element id="zip-archive" name="google-gwt-javascript.jar">
             <element id="module-output" name="gwt-javascript-impl" />
+            <element id="module-production-resource-output" name="gwt-javascript-impl" />
           </element>
         </element>
       </element>

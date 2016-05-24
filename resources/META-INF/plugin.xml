@@ -40,7 +40,7 @@
 		<projectService serviceInterface="com.intellij.gwt.i18n.GwtI18nManager"
 						serviceImplementation="com.intellij.gwt.i18n.GwtI18nManagerImpl"/>
 
-		<sdkType implementation="org.mustbe.consulo.google.gwt.sdk.GoogleGwtSdkType" />
+		<sdkType implementation="consulo.gwt.sdk.GoogleGwtSdkType" />
 
 		<annotator language="JAVA" implementationClass="com.intellij.gwt.i18n.PropertiesInterfaceAnnotator"/>
 

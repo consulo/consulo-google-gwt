@@ -16,7 +16,7 @@
 
 package com.intellij.gwt;
 
-import org.mustbe.consulo.google.gwt.GoogleGwtIcons;
+import consulo.gwt.GoogleGwtIcons;
 import com.intellij.gwt.templates.GwtTemplates;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor;

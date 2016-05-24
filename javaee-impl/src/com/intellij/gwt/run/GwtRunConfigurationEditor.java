@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import org.mustbe.consulo.java.web.module.extension.JavaWebModuleExtension;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;

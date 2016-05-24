@@ -20,7 +20,7 @@
 								 parentKey="play1"
 								 name="Google GWT"
 								 icon="/icons/gwt.png"
-								 immutableClass="org.mustbe.consulo.google.gwt.play1.module.extension.Play1GwtModuleExtension"
-								 mutableClass="org.mustbe.consulo.google.gwt.play1.module.extension.Play1GwtMutableModuleExtension"/>
+								 immutableClass="consulo.gwt.play1.module.extension.Play1GwtModuleExtension"
+								 mutableClass="consulo.gwt.play1.module.extension.Play1GwtMutableModuleExtension"/>
 	</extensions>
 </idea-plugin>

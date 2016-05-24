@@ -18,7 +18,7 @@ package com.intellij.gwt.references;
 
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.RequiredReadAction;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;

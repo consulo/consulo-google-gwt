@@ -20,7 +20,7 @@ import java.io.File;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;

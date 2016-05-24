@@ -20,8 +20,8 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;

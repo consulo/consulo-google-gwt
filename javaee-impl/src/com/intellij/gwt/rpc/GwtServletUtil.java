@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.GwtServlet;
 import com.intellij.javaee.model.xml.web.Servlet;

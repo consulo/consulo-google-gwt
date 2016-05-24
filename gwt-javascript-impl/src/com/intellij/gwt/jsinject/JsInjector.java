@@ -18,7 +18,7 @@ package com.intellij.gwt.jsinject;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.javascript.lang.GwtJavaScriptVersion;
+import consulo.gwt.javascript.lang.GwtJavaScriptVersion;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.util.TextRange;

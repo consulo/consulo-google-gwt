@@ -1,7 +1,7 @@
 package com.intellij.gwt.rpc;
 
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtensionUtil;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiFile;

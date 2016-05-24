@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.google.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.GwtServlet;

@@ -25,8 +25,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtModuleExtension;
-import org.mustbe.consulo.google.gwt.module.extension.GoogleGwtMutableModuleExtension;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.GoogleGwtMutableModuleExtension;
 import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.compiler.options.CompileStepBeforeRun;
@@ -62,6 +62,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.ExceptionUtil;
 import com.intellij.util.PathsList;
 import com.intellij.util.Processor;
 
@@ -271,8 +272,8 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		}
 		catch(Exception e)
 		{
-			LOG.info(e);
-			context.addMessage(CompilerMessageCategory.ERROR, e.getMessage(), null, -1, -1);
+			LOG.warn(e);
+			context.addMessage(CompilerMessageCategory.ERROR, ExceptionUtil.getThrowableText(e), null, -1, -1);
 			return false;
 		}
 
