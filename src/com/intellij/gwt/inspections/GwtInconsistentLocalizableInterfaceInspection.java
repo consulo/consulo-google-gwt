@@ -26,7 +26,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -53,6 +52,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.IncorrectOperationException;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 
 /**
  * @author nik
@@ -82,16 +83,18 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 	@Nullable
 	public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly)
 	{
-		GoogleGwtModuleExtension gwtFacet = getFacet(file);
-		if(gwtFacet == null)
+		GoogleGwtModuleExtension extension = getExtension(file);
+		if(extension == null)
 		{
 			return null;
 		}
 
+		GwtVersion version = GwtModuleExtensionUtil.getVersion(extension);
+
 		if(file instanceof PropertiesFile)
 		{
 			PropertiesFile propertiesFile = (PropertiesFile) file;
-			return checkPropertiesFile(manager, propertiesFile, gwtFacet);
+			return checkPropertiesFile(manager, propertiesFile, extension, version);
 		}
 
 		if(file instanceof PsiJavaFile)
@@ -127,16 +130,14 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 			{
 				final String description = GwtBundle.message("problem.description.method.0.doesn.t.have.corresponding.property", psiMethod.getName());
 				final LocalQuickFix quickFix = new DefinePropertyQuickfix(GwtI18nUtil.getPropertyName(psiMethod), files);
-				descriptors.add(manager.createProblemDescriptor(getElementToHighlight(psiMethod), description, quickFix,
-						ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+				descriptors.add(manager.createProblemDescriptor(getElementToHighlight(psiMethod), description, quickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
 			}
 		}
 		return descriptors.toArray(new ProblemDescriptor[descriptors.size()]);
 	}
 
-	private static
 	@Nullable
-	ProblemDescriptor[] checkPropertiesFile(final InspectionManager manager, final PropertiesFile propertiesFile, final GoogleGwtModuleExtension gwtFacet)
+	private static ProblemDescriptor[] checkPropertiesFile(final InspectionManager manager, final PropertiesFile propertiesFile, final GoogleGwtModuleExtension extension, GwtVersion version)
 	{
 		final GwtI18nManager i18nManager = GwtI18nManager.getInstance(manager.getProject());
 		final PsiClass anInterface = i18nManager.getPropertiesInterface(propertiesFile);
@@ -164,7 +165,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 		SynchronizeInterfaceQuickFix synchAllQuickfix;
 		if(propertiesWithoutMethods.size() > 1)
 		{
-			synchAllQuickfix = new SynchronizeInterfaceQuickFix(anInterface, propertiesWithoutMethods, gwtFacet.getSdkVersion());
+			synchAllQuickfix = new SynchronizeInterfaceQuickFix(anInterface, propertiesWithoutMethods, version);
 		}
 		else
 		{
@@ -175,7 +176,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 		for(IProperty property : propertiesWithoutMethods)
 		{
 			final String key = property.getUnescapedKey();
-			final AddMethodToInterfaceQuickFix quickFix = new AddMethodToInterfaceQuickFix(anInterface, key, property.getValue(), gwtFacet.getSdkVersion());
+			final AddMethodToInterfaceQuickFix quickFix = new AddMethodToInterfaceQuickFix(anInterface, key, property.getValue(), version);
 			LocalQuickFix[] fixes = synchAllQuickfix == null ? new LocalQuickFix[]{quickFix} : new LocalQuickFix[]{
 					synchAllQuickfix,
 					quickFix
@@ -221,8 +222,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 
 	private static boolean ensureWritable(final PsiElement element)
 	{
-		return !ReadonlyStatusHandler.getInstance(element.getProject()).ensureFilesWritable(element.getContainingFile().getVirtualFile())
-				.hasReadonlyFiles();
+		return !ReadonlyStatusHandler.getInstance(element.getProject()).ensureFilesWritable(element.getContainingFile().getVirtualFile()).hasReadonlyFiles();
 	}
 
 	private static class AddMethodToInterfaceQuickFix extends BaseGwtLocalQuickFix

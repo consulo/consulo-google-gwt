@@ -22,6 +22,7 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -49,26 +50,26 @@ public class GwtInconsistentAsyncInterfaceInspection extends BaseGwtInspection
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.inspections.GwtInconsistentAsyncInterfaceInspection");
 
+	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClass(@NotNull final PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
 	{
-		GoogleGwtModuleExtension gwtFacet = getFacet(aClass);
+		GoogleGwtModuleExtension gwtFacet = getExtension(aClass);
 		if(gwtFacet == null)
 		{
 			return null;
 		}
 
-		GwtVersion gwtVersion = gwtFacet.getSdkVersion();
 		if(RemoteServiceUtil.isRemoteServiceInterface(aClass))
 		{
-			return checkRemoteServiceForAsync(aClass, gwtVersion, manager);
+			return checkRemoteServiceForAsync(aClass, version, manager);
 		}
 
 		final PsiClass synch = RemoteServiceUtil.findSynchronousInterface(aClass);
 		if(synch != null)
 		{
-			return checkAsyncServiceForRemote(synch, aClass, gwtVersion, manager);
+			return checkAsyncServiceForRemote(synch, aClass, version, manager);
 		}
 
 		return null;

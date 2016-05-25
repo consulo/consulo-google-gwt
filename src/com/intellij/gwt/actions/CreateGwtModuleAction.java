@@ -18,17 +18,14 @@ package com.intellij.gwt.actions;
 
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
-import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.templates.GwtTemplates;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.highlighter.HtmlFileType;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiClass;
@@ -37,13 +34,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 
 public class CreateGwtModuleAction extends GwtCreateActionBase
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.actions.CreateGwtModuleAction");
-	@NonNls
-	private static final String CSS_EXTENSION = "css";
-
 	public CreateGwtModuleAction()
 	{
 		super(GwtBundle.message("newmodule.menu.action.text"), GwtBundle.message("newmodule.menu.action.description"));
@@ -122,8 +116,7 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 		String moduleName = StringUtil.capitalize(name);
 		final ArrayList<PsiElement> res = new ArrayList<PsiElement>();
 
-		GoogleGwtModuleExtension gwtFacet = GwtModuleExtensionUtil.findModuleExtension(directory.getProject(), directory.getVirtualFile());
-		LOG.assertTrue(gwtFacet != null);
+		GwtVersion version = GwtModuleExtensionUtil.getVersion(directory);
 
 		PsiDirectory client = directory.createSubdirectory(GwtModulesManager.DEFAULT_SOURCE_PATH);
 		res.add(client);
@@ -139,7 +132,7 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 		PsiDirectory publicDir = directory.createSubdirectory(GwtModulesManager.DEFAULT_PUBLIC_PATH);
 		res.add(publicDir);
 		final String gwtModuleName = appPackageName.length() > 0 ? appPackageName + "." + moduleName : moduleName;
-		String gwtModuleHtml = gwtFacet.getSdkVersion().getGwtModuleHtmlTemplate();
+		String gwtModuleHtml = version.getGwtModuleHtmlTemplate();
 		res.add(createFromTemplate(publicDir, moduleName + "." + HtmlFileType.INSTANCE.getDefaultExtension(), gwtModuleHtml,
 				FileTemplate.ATTRIBUTE_PACKAGE_NAME, appPackageName, "GWT_MODULE_NAME", gwtModuleName));
 		/*res.add(createFromTemplate(publicDir, moduleName + "." + CSS_EXTENSION, GwtTemplates.GWT_MODULE_CSS, FileTemplate.ATTRIBUTE_PACKAGE_NAME,

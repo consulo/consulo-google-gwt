@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -32,6 +32,7 @@ import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.rpc.GwtSerializableUtil;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -44,6 +45,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiType;
 import com.intellij.util.IncorrectOperationException;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 
 /**
  * @author nik
@@ -69,16 +71,15 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 	}
 
 
+	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClass(@NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension,
+			@NotNull GwtVersion version,
+			@NotNull PsiClass aClass,
+			@NotNull InspectionManager manager,
+			boolean isOnTheFly)
 	{
-		GoogleGwtModuleExtension gwtFacet = getFacet(aClass);
-		if(gwtFacet == null)
-		{
-			return null;
-		}
-
 		PsiFile containingFile = aClass.getContainingFile();
 		if(containingFile == null)
 		{
@@ -95,7 +96,7 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 			return null;
 		}
 
-		GwtSerializableUtil.SerializableChecker serializableChecker = GwtSerializableUtil.createSerializableChecker(gwtFacet, true);
+		GwtSerializableUtil.SerializableChecker serializableChecker = GwtSerializableUtil.createSerializableChecker(extension, true);
 		if(!serializableChecker.isMarkedSerializable(aClass))
 		{
 			return null;
@@ -116,8 +117,7 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 					{
 						element = psiField;
 					}
-					descriptors.add(manager.createProblemDescriptor(element, description, LocalQuickFix.EMPTY_ARRAY,
-							ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+					descriptors.add(manager.createProblemDescriptor(element, description, LocalQuickFix.EMPTY_ARRAY, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
 				}
 			}
 		}
@@ -129,14 +129,12 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 			if(constructor == null)
 			{
 				final LocalQuickFix quickfix = new CreateDefaultConstructorQuickFix(aClass);
-				descriptors.add(manager.createProblemDescriptor(getElementToHighlight(aClass), description, quickfix,
-						ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+				descriptors.add(manager.createProblemDescriptor(getElementToHighlight(aClass), description, quickfix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
 			}
-			else if(!gwtFacet.getSdkVersion().isPrivateNoArgConstructorInSerializableClassAllowed())
+			else if(!version.isPrivateNoArgConstructorInSerializableClassAllowed())
 			{
 				LocalQuickFix quickfix = new MakeConstructorPublicQuickFix(constructor);
-				descriptors.add(manager.createProblemDescriptor(getElementToHighlight(constructor), description, quickfix,
-						ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+				descriptors.add(manager.createProblemDescriptor(getElementToHighlight(constructor), description, quickfix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
 			}
 		}
 

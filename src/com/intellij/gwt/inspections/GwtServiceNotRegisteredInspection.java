@@ -21,12 +21,15 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.gwt.GwtBundle;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.SmartList;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 
 /**
  * @author nik
@@ -181,9 +184,10 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 		return false;
 	}        */
 
+	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClass(@NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
 	{
 	/*	if(!shouldCheck(aClass))
 		{

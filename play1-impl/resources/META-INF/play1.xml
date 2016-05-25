@@ -18,7 +18,7 @@
 	<extensions defaultExtensionNs="com.intellij">
 		<moduleExtensionProvider key="play1-google-gwt"
 								 parentKey="play1"
-								 name="Google GWT"
+								 name="GWT"
 								 icon="/icons/gwt.png"
 								 immutableClass="consulo.gwt.play1.module.extension.Play1GwtModuleExtension"
 								 mutableClass="consulo.gwt.play1.module.extension.Play1GwtMutableModuleExtension"/>

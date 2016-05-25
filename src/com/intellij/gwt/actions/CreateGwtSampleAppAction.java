@@ -20,11 +20,10 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
-import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.templates.GwtTemplates;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.highlighter.HtmlFileType;
@@ -37,6 +36,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaPackage;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 
 public class CreateGwtSampleAppAction extends GwtCreateActionBase
 {
@@ -80,9 +80,9 @@ public class CreateGwtSampleAppAction extends GwtCreateActionBase
 	@Override
 	protected void doCheckBeforeCreate(String name, PsiDirectory directory) throws IncorrectOperationException
 	{
-		GoogleGwtModuleExtension facet = GwtModuleExtensionUtil.findModuleExtension(directory.getProject(), directory.getVirtualFile());
-		LOG.assertTrue(facet != null);
-		if(!facet.getSdkVersion().isGenericsSupported())
+		GwtVersion version = GwtModuleExtensionUtil.getVersion(directory);
+		LOG.assertTrue(version != null);
+		if(!version.isGenericsSupported())
 		{
 			final String message = GwtBundle.message("error.message.sample.application.requires.gwt.1.5.or.later");
 			throw new IncorrectOperationException(message);

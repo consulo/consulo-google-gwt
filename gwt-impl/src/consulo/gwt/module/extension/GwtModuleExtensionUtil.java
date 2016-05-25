@@ -61,6 +61,13 @@ public class GwtModuleExtensionUtil
 			return GwtVersionImpl.VERSION_1_6_OR_LATER;
 		}
 		GoogleGwtModuleExtension extension = ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
+		return getVersion(extension);
+	}
+
+	@NotNull
+	@RequiredReadAction
+	public static GwtVersion getVersion(@Nullable GoogleGwtModuleExtension<?> extension)
+	{
 		if(extension == null)
 		{
 			return GwtVersionImpl.VERSION_1_6_OR_LATER;

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -13,6 +13,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
@@ -21,6 +22,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 
 /**
  * @author nik
@@ -29,11 +31,11 @@ public class GwtRawAsyncCallbackInspection extends BaseGwtInspection
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.inspections.GwtRawAsyncCallbackInspection");
 
+	@RequiredReadAction
 	@Override
-	public ProblemDescriptor[] checkClass(@NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
 	{
-		GoogleGwtModuleExtension gwtFacet = getFacet(aClass);
-		if(gwtFacet == null || !gwtFacet.getSdkVersion().isGenericsSupported())
+		if(!version.isGenericsSupported())
 		{
 			return null;
 		}

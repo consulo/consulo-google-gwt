@@ -18,43 +18,56 @@ package com.intellij.gwt.inspections;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.gwt.GwtBundle;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 
 /**
  * @author nik
  */
 public abstract class BaseGwtInspection extends BaseJavaLocalInspectionTool
 {
-	protected static boolean shouldCheck(@NotNull PsiElement psiElement)
+	@Override
+	@RequiredReadAction
+	public final ProblemDescriptor[] checkClass(@NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
 	{
-		return getFacet(psiElement) != null;
-	}
-
-	protected static boolean hasGwtFacets(@NotNull Project project)
-	{
-		for(Module module : ModuleManager.getInstance(project).getModules())
+		GoogleGwtModuleExtension extension = getExtension(aClass);
+		if(extension == null)
 		{
-			if(ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class) != null)
-			{
-				return true;
-			}
+			return ProblemDescriptor.EMPTY_ARRAY;
 		}
-		return false;
+
+		GwtVersion version = GwtModuleExtensionUtil.getVersion(extension);
+		return checkClassImpl(extension, version, aClass, manager, isOnTheFly);
 	}
 
 	@Nullable
-	protected static GoogleGwtModuleExtension getFacet(@NotNull PsiElement psiElement)
+	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull final InspectionManager manager,
+			final boolean isOnTheFly)
+	{
+		return ProblemDescriptor.EMPTY_ARRAY;
+	}
+
+	@RequiredReadAction
+	protected static boolean shouldCheck(@NotNull PsiElement psiElement)
+	{
+		return getExtension(psiElement) != null;
+	}
+
+	@Nullable
+	@RequiredReadAction
+	protected static GoogleGwtModuleExtension getExtension(@NotNull PsiElement psiElement)
 	{
 		return ModuleUtilCore.getExtension(psiElement, GoogleGwtModuleExtension.class);
 	}

@@ -27,6 +27,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.sdk.GwtVersion;
@@ -42,6 +43,7 @@ import com.intellij.psi.PsiTypeParameter;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 
 /**
  * @author nik
@@ -62,10 +64,14 @@ public class GwtSerializableUtil
 	{
 	}
 
-	public static SerializableChecker createSerializableChecker(GoogleGwtModuleExtension facet, final boolean checkInterfaces)
+	@RequiredReadAction
+	public static SerializableChecker createSerializableChecker(GoogleGwtModuleExtension extension, final boolean checkInterfaces)
 	{
-		GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(facet.getModule());
-		return new SerializableChecker(facet.getSdkVersion(), scope, JavaPsiFacade.getInstance(facet.getModule().getProject()), checkInterfaces);
+		GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(extension.getModule());
+
+		GwtVersion version = GwtModuleExtensionUtil.getVersion(extension);
+
+		return new SerializableChecker(version, scope, JavaPsiFacade.getInstance(extension.getModule().getProject()), checkInterfaces);
 	}
 
 	public static boolean isCollection(PsiType type)

@@ -23,12 +23,14 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.i18n.GwtI18nUtil;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.diagnostic.Logger;
@@ -44,6 +46,7 @@ import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReferenceList;
 import com.intellij.util.IncorrectOperationException;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 
 /**
  * @author nik
@@ -68,9 +71,10 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 		return "GwtMethodWithParametersInConstantsInterface";
 	}
 
+	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClass(@NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		if(!shouldCheck(aClass))
 		{

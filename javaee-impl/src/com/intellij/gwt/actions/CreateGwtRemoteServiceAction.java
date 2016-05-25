@@ -22,6 +22,8 @@ import java.util.StringTokenizer;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.intellij.gwt.sdk.GwtVersion;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.model.GwtModule;
@@ -107,10 +109,11 @@ public class CreateGwtRemoteServiceAction extends GwtCreateActionBase
 		ArrayList<PsiElement> res = new ArrayList<PsiElement>(0);
 
 		final String servletPath = GwtServletUtil.getDefaultServletPath(gwtModule, serviceName);
-		final JavaEEGoogleGwtModuleExtension gwtFacet = ModuleUtilCore.getExtension(gwtModule.getModule(), JavaEEGoogleGwtModuleExtension.class);
-		LOG.assertTrue(gwtFacet != null);
+		final JavaEEGoogleGwtModuleExtension extension = ModuleUtilCore.getExtension(gwtModule.getModule(), JavaEEGoogleGwtModuleExtension.class);
+		LOG.assertTrue(extension != null);
 
-		final String templateName = gwtFacet.getSdkVersion().getGwtServiceJavaTemplate();
+		GwtVersion version = GwtModuleExtensionUtil.getVersion(extension);
+		final String templateName = version.getGwtServiceJavaTemplate();
 		final PsiClass serviceClass = createClassFromTemplate(directory, serviceName, templateName, SERVLET_PATH_PROPERTY, servletPath,
 				RELATIVE_PATH_PROPERTY, servletPath.substring(1));
 		res.add(serviceClass);

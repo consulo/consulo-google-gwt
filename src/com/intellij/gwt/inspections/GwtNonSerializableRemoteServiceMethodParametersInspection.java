@@ -30,6 +30,8 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
+import com.intellij.gwt.sdk.GwtVersion;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.intention.QuickFixFactory;
@@ -63,11 +65,12 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 	@NonNls
 	private static final String SETTINGS_ELEMENT = "settings";
 
+	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClass(@NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
 	{
-		GoogleGwtModuleExtension gwtFacet = getFacet(aClass);
+		GoogleGwtModuleExtension gwtFacet = getExtension(aClass);
 		if(gwtFacet == null)
 		{
 			return null;

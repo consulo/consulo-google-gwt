@@ -24,7 +24,7 @@
 
 		<moduleExtensionProvider key="javaee-google-gwt"
 								 parentKey="java-web"
-								 name="Google GWT"
+								 name="GWT"
 								 icon="/icons/gwt.png"
 								 immutableClass="consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension"
 								 mutableClass="consulo.gwt.module.extension.JavaEEGoogleGwtMutableModuleExtension" />
