@@ -18,6 +18,7 @@ package com.intellij.gwt.i18n;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.components.ServiceManager;
@@ -37,12 +38,14 @@ public abstract class GwtI18nManager
 	}
 
 	@NotNull
+	@RequiredReadAction
 	public abstract PropertiesFile[] getPropertiesFiles(@NotNull PsiClass anInterface);
 
 	@Nullable
 	public abstract PsiClass getPropertiesInterface(@NotNull PropertiesFile file);
 
 	@NotNull
+	@RequiredReadAction
 	public abstract IProperty[] getProperties(@NotNull PsiMethod method);
 
 	@Nullable

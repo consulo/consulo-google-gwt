@@ -81,8 +81,7 @@ public class GwtSdkUtil
 		}
 
 
-		VirtualFile devJar = JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(getDevJarPath(sdk)) +
-				ArchiveFileSystem.ARCHIVE_SEPARATOR);
+		VirtualFile devJar = JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(getDevJarPath(sdk)) + ArchiveFileSystem.ARCHIVE_SEPARATOR);
 		if(devJar != null)
 		{
 			VirtualFile[] files = {devJar};
@@ -131,8 +130,7 @@ public class GwtSdkUtil
 			return null;
 		}
 		String jarPath = getUserJarPath(sdk);
-		return JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(jarPath) + ArchiveFileSystem
-				.ARCHIVE_SEPARATOR);
+		return JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(jarPath) + ArchiveFileSystem.ARCHIVE_SEPARATOR);
 	}
 
 

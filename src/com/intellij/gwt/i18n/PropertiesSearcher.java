@@ -38,7 +38,14 @@ public class PropertiesSearcher implements QueryExecutor<PsiElement, Definitions
 		final PsiElement sourceElement = queryParameters.getElement();
 		if(sourceElement instanceof PsiMethod)
 		{
-			final IProperty[] properties = GwtI18nManager.getInstance(sourceElement.getProject()).getProperties((PsiMethod) sourceElement);
+			final IProperty[] properties = ApplicationManager.getApplication().runReadAction(new Computable<IProperty[]>()
+			{
+				@Override
+				public IProperty[] compute()
+				{
+					return GwtI18nManager.getInstance(sourceElement.getProject()).getProperties((PsiMethod) sourceElement);
+				}
+			});
 			for(IProperty property : properties)
 			{
 				if(!consumer.process(property.getPsiElement()))

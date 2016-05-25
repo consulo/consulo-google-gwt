@@ -29,8 +29,7 @@
 								 immutableClass="consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension"
 								 mutableClass="consulo.gwt.module.extension.JavaEEGoogleGwtMutableModuleExtension" />
 	</extensions>
-	<!--<javaee.web.customBuildParticipant implementation="com.intellij.gwt.make.GwtWebBuildParticipant"/> -->
-	<!--<explodedAndJarBuildGenerator implementation="com.intellij.gwt.ant.GwtExplodedAndJarBuildGenerator"/>-->
+
 	<application-components>
 		<component>
 			<implementation-class>com.intellij.gwt.GwtApplicationComponent</implementation-class>

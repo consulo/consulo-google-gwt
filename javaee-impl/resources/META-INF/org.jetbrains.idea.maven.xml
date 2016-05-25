@@ -15,5 +15,11 @@
   -->
 
 <idea-plugin>
+	<extensions defaultExtensionNs="com.intellij.gwt">
+		<libraryPathProvider implementation="consulo.gwt.module.extension.path.JavaEEGwtLibraryPathProvider" id="mavenJavaEE" order="before defaultGwt"/>
+	</extensions>
 
+	<extensions defaultExtensionNs="org.jetbrains.idea.maven">
+		<importer implementation="consulo.gwt.maven.JavaEEGwtMavenImporter" />
+	</extensions>
 </idea-plugin>

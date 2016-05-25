@@ -318,5 +318,10 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		extension.setupCompilerClasspath(classPath);
 
 		classPath.addFirst(pathInfo.getDevJarPath());
+		List<String> additionalClasspath = pathInfo.getAdditionalClasspath();
+		for(String path : additionalClasspath)
+		{
+			classPath.add(path);
+		}
 	}
 }

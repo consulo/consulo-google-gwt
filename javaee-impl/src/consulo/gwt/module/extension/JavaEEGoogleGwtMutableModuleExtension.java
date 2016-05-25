@@ -28,6 +28,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.Comparing;
+import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 
 /**
  * @author VISTALL
@@ -52,10 +53,13 @@ public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModule
 	@RequiredDispatchThread
 	public JComponent createConfigurablePanel(@NotNull Runnable runnable)
 	{
-		JPanel panel = new JPanel(new VerticalFlowLayout());
-		panel.add(ModuleExtensionSdkBoxBuilder.createAndDefine(this, runnable).build());
+		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));
+		if(GwtLibraryPathProvider.EP_NAME.composite().canChooseBundle(getModuleRootLayer()))
+		{
+			panel.add(ModuleExtensionSdkBoxBuilder.createAndDefine(this, runnable).build());
+		}
 		panel.add(new GwtModuleExtensionPanel(this));
-		return wrapToNorth(panel);
+		return panel;
 	}
 
 	@Override

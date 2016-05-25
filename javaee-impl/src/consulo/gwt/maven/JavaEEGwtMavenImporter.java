@@ -26,7 +26,9 @@ import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectChanges;
 import org.jetbrains.idea.maven.project.MavenProjectsProcessorTask;
 import org.jetbrains.idea.maven.project.MavenProjectsTree;
+import org.mustbe.consulo.module.extension.ModuleExtensionProviderEP;
 import com.intellij.openapi.module.Module;
+import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 
 /**
  * @author VISTALL
@@ -34,9 +36,9 @@ import com.intellij.openapi.module.Module;
  */
 public class JavaEEGwtMavenImporter extends MavenImporterFromBuildPlugin
 {
-	public JavaEEGwtMavenImporter(String pluginGroupID, String pluginArtifactID)
+	public JavaEEGwtMavenImporter()
 	{
-		super(pluginGroupID, pluginArtifactID);
+		super("org.codehaus.mojo", "gwt-maven-plugin");
 	}
 
 	@Override
@@ -55,6 +57,12 @@ public class JavaEEGwtMavenImporter extends MavenImporterFromBuildPlugin
 			Map<MavenProject, String> map,
 			List<MavenProjectsProcessorTask> list)
 	{
-
+		// it can be - when Maven plugin installed, but not JavaEE plugin
+		ModuleExtensionProviderEP providerEP = ModuleExtensionProviderEP.findProviderEP("javaee-google-gwt");
+		if(providerEP == null)
+		{
+			return;
+		}
+		enableModuleExtension(module, mavenModifiableModelsProvider, JavaEEGoogleGwtModuleExtension.class);
 	}
 }

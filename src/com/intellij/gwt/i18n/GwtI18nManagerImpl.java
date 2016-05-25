@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.RequiredReadAction;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesFileType;
@@ -84,6 +85,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 		return isExtendingInterface(aClass, GwtI18nUtil.LOCALIZABLE_INTERFACE_NAME);
 	}
 
+	@RequiredReadAction
 	@Override
 	@NotNull
 	public PropertiesFile[] getPropertiesFiles(@NotNull PsiClass anInterface)
@@ -159,6 +161,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 		return null;
 	}
 
+	@RequiredReadAction
 	@Override
 	@NotNull
 	public IProperty[] getProperties(@NotNull PsiMethod method)
