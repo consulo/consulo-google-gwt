@@ -17,24 +17,25 @@
 package com.intellij.gwt.junit;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
+import org.mustbe.consulo.roots.ContentFolderScopes;
 import com.intellij.execution.JavaTestPatcher;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.gwt.make.GwtCompilerPaths;
 import com.intellij.gwt.module.GwtModulesManager;
-import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
+import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
+import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 
 /**
  * @author nik
@@ -44,7 +45,7 @@ public class GwtJUnitPatcher implements JavaTestPatcher
 	@NonNls
 	private static final String GWT_ARGS_PROPERTY = "gwt.args";
 
-	public void patchJavaParameters(@Nullable Module module, JavaParameters javaParameters)
+	public void patchJavaParameters(@Nullable Module module, @NotNull JavaParameters javaParameters)
 	{
 		if(module == null)
 		{
@@ -57,8 +58,10 @@ public class GwtJUnitPatcher implements JavaTestPatcher
 			return;
 		}
 
-		Sdk sdk = extension.getSdk();
-		if(sdk == null)
+		GwtLibraryPathProvider.Info info = GwtLibraryPathProvider.EP_NAME.composite().resolveInfo(extension);
+		assert info != null;
+		String devJarPath = info.getDevJarPath();
+		if(devJarPath == null)
 		{
 			return;
 		}
@@ -66,11 +69,11 @@ public class GwtJUnitPatcher implements JavaTestPatcher
 		if(GwtModulesManager.getInstance(module.getProject()).getGwtModules(module).length > 0)
 		{
 			final PathsList classPath = javaParameters.getClassPath();
-			for(VirtualFile file : ModuleRootManager.getInstance(module).getSourceRoots())
+			for(VirtualFile file : ModuleRootManager.getInstance(module).getContentFolderFiles(ContentFolderScopes.productionAndTest()))
 			{
 				classPath.addFirst(FileUtil.toSystemDependentName(file.getPath()));
 			}
-			classPath.addFirst(GwtSdkUtil.getDevJarPath(sdk));
+			classPath.addFirst(devJarPath);
 		}
 
 		String testGenPath = GwtCompilerPaths.getTestGenDirectory(module).getAbsolutePath();

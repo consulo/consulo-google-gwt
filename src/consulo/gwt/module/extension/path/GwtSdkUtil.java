@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.intellij.gwt.sdk;
+package consulo.gwt.module.extension.path;
 
 import java.io.File;
 import java.io.Serializable;
@@ -22,6 +22,7 @@ import java.io.Serializable;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.i18n.GwtI18nUtil;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.ide.highlighter.JavaClassFileType;
@@ -57,7 +58,7 @@ public class GwtSdkUtil
 	{
 	}
 
-	public static GwtVersion detectVersion(Sdk sdk)
+	static GwtVersion detectVersion(Sdk sdk)
 	{
 		if(sdk == null)
 		{
@@ -117,13 +118,13 @@ public class GwtSdkUtil
 		return EMUL_ROOT + className.replace('.', '/') + JavaFileType.DOT_DEFAULT_EXTENSION;
 	}
 
-	public static String getUserJarPath(Sdk sdk)
+	static String getUserJarPath(Sdk sdk)
 	{
 		return getUserJarPath(sdk.getHomePath());
 	}
 
 	@Nullable
-	public static VirtualFile getUserJar(@Nullable Sdk sdk)
+	static VirtualFile getUserJar(@Nullable Sdk sdk)
 	{
 		if(sdk == null)
 		{
@@ -134,34 +135,23 @@ public class GwtSdkUtil
 				.ARCHIVE_SEPARATOR);
 	}
 
-	@Nullable
-	public static VirtualFile getDevJar(@Nullable Sdk sdk)
-	{
-		if(sdk == null)
-		{
-			return null;
-		}
-		String jarPath = getDevJarPath(sdk);
-		return JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(jarPath) + ArchiveFileSystem
-				.ARCHIVE_SEPARATOR);
-	}
 
-	public static String getUserJarPath(String base)
+	static String getUserJarPath(String base)
 	{
 		return base + File.separator + GWT_USER_JAR;
 	}
 
-	public static String getDevJarPath(Sdk sdk)
+	static String getDevJarPath(Sdk sdk)
 	{
 		return getDevJarPath(sdk.getHomePath());
 	}
 
-	public static String getDevJarPath(String base)
+	static String getDevJarPath(String base)
 	{
 		return base + File.separator + getDevJarName();
 	}
 
-	public static String getDevJarName()
+	static String getDevJarName()
 	{
 		final String jarName;
 		if(SystemInfo.isWindows)

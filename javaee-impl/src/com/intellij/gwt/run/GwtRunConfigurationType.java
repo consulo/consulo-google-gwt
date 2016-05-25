@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import consulo.gwt.GoogleGwtIcons;
-import consulo.gwt.module.extension.GoogleGwtModuleExtensionUtil;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.execution.LocatableConfigurationType;
 import com.intellij.execution.Location;
 import com.intellij.execution.RunManager;
@@ -102,7 +102,7 @@ public class GwtRunConfigurationType implements ConfigurationType, LocatableConf
 		}
 
 		VirtualFile file = psiFile.getVirtualFile();
-		if(file == null || !GoogleGwtModuleExtensionUtil.hasModuleExtension(location.getProject(), file))
+		if(file == null || !GwtModuleExtensionUtil.hasModuleExtension(location.getProject(), file))
 		{
 			return null;
 		}

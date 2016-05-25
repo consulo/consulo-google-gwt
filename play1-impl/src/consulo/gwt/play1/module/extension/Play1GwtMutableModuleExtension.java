@@ -24,11 +24,11 @@ import org.consulo.module.extension.ui.ModuleExtensionSdkBoxBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.RequiredDispatchThread;
-import consulo.gwt.module.extension.GoogleGwtMutableModuleExtension;
-import consulo.gwt.module.extension.GwtModuleExtensionPanel;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.ui.VerticalFlowLayout;
+import consulo.gwt.module.extension.GoogleGwtMutableModuleExtension;
+import consulo.gwt.module.extension.GwtModuleExtensionPanel;
 
 /**
  * @author VISTALL
@@ -46,10 +46,10 @@ public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension impl
 	@RequiredDispatchThread
 	public JComponent createConfigurablePanel(@NotNull Runnable runnable)
 	{
-		JPanel panel = new JPanel(new VerticalFlowLayout());
+		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));
 		panel.add(ModuleExtensionSdkBoxBuilder.createAndDefine(this, runnable).build());
 		panel.add(new GwtModuleExtensionPanel(this));
-		return wrapToNorth(panel);
+		return panel;
 	}
 
 	@Override

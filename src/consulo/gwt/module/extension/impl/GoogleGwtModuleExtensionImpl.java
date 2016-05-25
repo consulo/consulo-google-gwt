@@ -19,16 +19,14 @@ package consulo.gwt.module.extension.impl;
 import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
-import consulo.gwt.sdk.GoogleGwtSdkType;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.gwt.sdk.GwtSdkUtil;
-import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.util.PathsList;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.sdk.GoogleGwtSdkType;
 
 /**
  * @author VISTALL
@@ -51,7 +49,6 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	@Override
 	public void setupCompilerClasspath(PathsList pathsList)
 	{
-
 	}
 
 	@Override
@@ -154,13 +151,6 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		myRunGwtCompilerOnMake = mutableModuleExtension.myRunGwtCompilerOnMake;
 		myCompilerMaxHeapSize = mutableModuleExtension.myCompilerMaxHeapSize;
 		myCompilerOutputPath = mutableModuleExtension.myCompilerOutputPath;
-	}
-
-	@Override
-	@NotNull
-	public GwtVersion getSdkVersion()
-	{
-		return GwtSdkUtil.detectVersion(getSdk());
 	}
 
 	public boolean isModifiedImpl(@NotNull T originExtension)

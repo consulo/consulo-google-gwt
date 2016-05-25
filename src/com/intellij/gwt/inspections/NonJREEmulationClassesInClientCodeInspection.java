@@ -22,8 +22,6 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
-import consulo.gwt.module.extension.GoogleGwtModuleExtensionUtil;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -31,9 +29,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaRecursiveElementVisitor;
@@ -43,6 +39,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiUtil;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
+import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
+import consulo.gwt.module.extension.path.GwtSdkUtil;
 
 /**
  * @author nik
@@ -86,8 +86,8 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 			return null;
 		}
 
-		final GoogleGwtModuleExtension gwtFacet = GoogleGwtModuleExtensionUtil.findModuleExtension(file.getProject(), virtualFile);
-		if(gwtFacet == null || gwtFacet.getSdk() == null)
+		final GoogleGwtModuleExtension extension = GwtModuleExtensionUtil.findModuleExtension(file.getProject(), virtualFile);
+		if(extension == null)
 		{
 			return null;
 		}
@@ -135,8 +135,8 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 								if(!inherited && !referencedModules.isEmpty())
 								{
 									GwtModule referencedModule = referencedModules.get(0);
-									final String message = GwtBundle.message("problem.description.class.0.is.defined.in.module.1.which.is.not.inherited.in.module.2",
-											className, referencedModule.getQualifiedName(), gwtModule.getQualifiedName());
+									final String message = GwtBundle.message("problem.description.class.0.is.defined.in.module.1.which.is.not.inherited.in.module.2", className,
+											referencedModule.getQualifiedName(), gwtModule.getQualifiedName());
 									problems.add(manager.createProblemDescriptor(reference, message, new InheritModuleQuickFix(gwtModule, referencedModule),
 											ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
 									return;
@@ -155,7 +155,8 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 					{
 						topLevelClass = referencedClass;
 					}
-					if(!containsJreEmulationClass(gwtFacet.getSdk(), topLevelClass.getQualifiedName()))
+
+					if(!containsJreEmulationClass(extension, topLevelClass.getQualifiedName()))
 					{
 						final String message = GwtBundle.message("problem.description.class.0.is.not.presented.in.jre.emulation.library", className);
 						problems.add(manager.createProblemDescriptor(reference, message, ((LocalQuickFix) null), ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
@@ -168,9 +169,11 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 		return problems.toArray(new ProblemDescriptor[problems.size()]);
 	}
 
-	public static boolean containsJreEmulationClass(Sdk sdk, String className)
+	public static boolean containsJreEmulationClass(GoogleGwtModuleExtension<?> extension, String className)
 	{
-		VirtualFile userJar = GwtSdkUtil.getUserJar(sdk);
+		GwtLibraryPathProvider.Info info = GwtLibraryPathProvider.EP_NAME.composite().resolveInfo(extension);
+		assert info != null;
+		VirtualFile userJar = info.getUserJar();
 		if(userJar == null)
 		{
 			return true;

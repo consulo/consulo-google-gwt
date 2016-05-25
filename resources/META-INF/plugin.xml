@@ -9,6 +9,7 @@
 
 	<depends>org.consulo.java</depends>
 	<depends optional="true" config-file="org.mustbe.consulo.javascript.xml">org.mustbe.consulo.javascript</depends>
+	<depends optional="true" config-file="org.jetbrains.idea.maven.xml">org.jetbrains.idea.maven</depends>
 	<depends>com.intellij.properties</depends>
 	<depends>com.intellij.xml</depends>
 
@@ -18,9 +19,16 @@
 	<vendor>JetBrains</vendor>
 	<category>Web/JavaEE Technologies</category>
 
+	<extensionPoints>
+		<extensionPoint name="libraryPathProvider" interface="consulo.gwt.module.extension.path.GwtLibraryPathProvider"/>
+	</extensionPoints>
+
 	<extensions defaultExtensionNs="org.consulo.java">
 		<resourceBundleManager implementation="com.intellij.gwt.i18n.GwtResourceBundleManager"/>
+	</extensions>
 
+	<extensions defaultExtensionNs="com.intellij.gwt">
+		<libraryPathProvider implementation="consulo.gwt.module.extension.path.BundleGwtLibraryPathProvider" id="defaultGwt" order="last"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.xml">
@@ -40,15 +48,15 @@
 		<projectService serviceInterface="com.intellij.gwt.i18n.GwtI18nManager"
 						serviceImplementation="com.intellij.gwt.i18n.GwtI18nManagerImpl"/>
 
-		<sdkType implementation="consulo.gwt.sdk.GoogleGwtSdkType" />
+		<sdkType implementation="consulo.gwt.sdk.GoogleGwtSdkType"/>
 
 		<annotator language="JAVA" implementationClass="com.intellij.gwt.i18n.PropertiesInterfaceAnnotator"/>
 
 		<referencesSearch implementation="com.intellij.gwt.references.search.GwtToHtmlTagIdReferencesSearcher"/>
 		<definitionsScopedSearch implementation="com.intellij.gwt.i18n.PropertiesSearcher"/>
 
-		<fileTemplateGroup implementation="com.intellij.gwt.GwtFileTemplateGroupDescriptorFactory" />
-		<inspectionToolProvider implementation="com.intellij.gwt.GwtInspectionToolProvider" />
+		<fileTemplateGroup implementation="com.intellij.gwt.GwtFileTemplateGroupDescriptorFactory"/>
+		<inspectionToolProvider implementation="com.intellij.gwt.GwtInspectionToolProvider"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="org.consulo.java">

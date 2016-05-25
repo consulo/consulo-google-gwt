@@ -24,7 +24,7 @@ import java.util.Map;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GoogleGwtModuleExtensionUtil;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -143,7 +143,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 			map.put(signature.toString(), psiMethod);
 		}
 
-		GwtVersion gwtVersion = GoogleGwtModuleExtensionUtil.getVersion(aClass);
+		GwtVersion gwtVersion = GwtModuleExtensionUtil.getVersion(aClass);
 		if(gwtVersion.isNewExpressionInJavaScriptSupported())
 		{
 			for(PsiMethod constructor : aClass.getConstructors())

@@ -31,7 +31,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
@@ -44,7 +43,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.gwt.make.GwtCompilerPaths;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
-import com.intellij.gwt.sdk.GwtSdkUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
@@ -61,6 +59,8 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.SystemProperties;
+import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 
 /**
  * @author nik
@@ -73,20 +73,27 @@ public class GwtCommandLineState extends JavaCommandLineState
 	private final Module myModule;
 	private String myRunPage;
 	private String myVMParameters;
-	private JavaEEGoogleGwtModuleExtension myGwtModuleExtension;
+	private JavaEEGoogleGwtModuleExtension myModuleExtension;
 	private final String myShellParameters;
 	private final String myCustomWebXmlUrl;
+	private final GwtLibraryPathProvider.Info myLibraryPathInfo;
 
-	public GwtCommandLineState(final JavaEEGoogleGwtModuleExtension gwtModuleExtension, final ExecutionEnvironment environment, final String runPage,
-			final String vmParameters, final String shellParameters, final String customWebXmlUrl)
+	public GwtCommandLineState(final JavaEEGoogleGwtModuleExtension moduleExtension,
+			final ExecutionEnvironment environment,
+			final String runPage,
+			final String vmParameters,
+			final String shellParameters,
+			final String customWebXmlUrl)
 	{
 		super(environment);
-		myGwtModuleExtension = gwtModuleExtension;
+		myModuleExtension = moduleExtension;
 		myShellParameters = shellParameters;
 		myCustomWebXmlUrl = customWebXmlUrl;
-		myModule = myGwtModuleExtension.getModule();
+		myModule = myModuleExtension.getModule();
 		myRunPage = runPage;
 		myVMParameters = vmParameters;
+		myLibraryPathInfo = GwtLibraryPathProvider.EP_NAME.composite().resolveInfo(myModuleExtension);
+		assert myLibraryPathInfo != null;
 	}
 
 	@Override
@@ -104,10 +111,15 @@ public class GwtCommandLineState extends JavaCommandLineState
 		}
 		params.getVMParametersList().addParametersString(myVMParameters);
 
-		final GwtVersion sdkVersion = myGwtModuleExtension.getSdkVersion();
+		if(myLibraryPathInfo.getDevJarPath() == null)
+		{
+			throw new ExecutionException("gwt-dev.jar is not found");
+		}
+
+		final GwtVersion sdkVersion = myLibraryPathInfo.getVersion();
 		final ParametersList programParameters = params.getProgramParametersList();
 		programParameters.add("-style");
-		programParameters.add(myGwtModuleExtension.getOutputStyle().getId());
+		programParameters.add(myModuleExtension.getOutputStyle().getId());
 		programParameters.add("-out");
 		programParameters.add(getOutputPath().getAbsolutePath());
 		programParameters.add("-gen");
@@ -124,7 +136,7 @@ public class GwtCommandLineState extends JavaCommandLineState
 			params.getClassPath().add(path);
 		}
 
-		params.getClassPath().addFirst(GwtSdkUtil.getDevJarPath(myGwtModuleExtension.getSdk()));
+		params.getClassPath().addFirst(myLibraryPathInfo.getDevJarPath());
 		params.setMainClass(sdkVersion.getShellClassName());
 
 		return params;
@@ -145,6 +157,7 @@ public class GwtCommandLineState extends JavaCommandLineState
 		return new File(GwtCompilerPaths.getOutputRoot(myModule), "run");
 	}
 
+	@NotNull
 	@Override
 	public ExecutionResult execute(@NotNull final Executor executor, @NotNull final ProgramRunner runner) throws ExecutionException
 	{
@@ -185,7 +198,9 @@ public class GwtCommandLineState extends JavaCommandLineState
 
 	private void patchWebXml(final File webXml) throws IOException, JDOMException
 	{
-		File devJar = new File(GwtSdkUtil.getDevJarPath(myGwtModuleExtension.getSdk()));
+		String devJarPath = myLibraryPathInfo.getDevJarPath();
+		assert devJarPath != null;
+		File devJar = new File(devJarPath);
 		if(!devJar.exists())
 		{
 			return;

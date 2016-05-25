@@ -26,7 +26,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GoogleGwtModuleExtensionUtil;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.template.Template;
@@ -35,7 +35,7 @@ import com.intellij.codeInsight.template.TemplateBuilderFactory;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.gwt.module.GwtModulesManager;
-import com.intellij.gwt.sdk.GwtSdkUtil;
+import consulo.gwt.module.extension.path.GwtSdkUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.lang.properties.PropertiesFileProcessor;
 import com.intellij.lang.properties.PropertiesFilesManager;
@@ -143,7 +143,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 		final VirtualFile virtualFile = psiFile.getVirtualFile();
 		LOG.assertTrue(virtualFile != null);
 
-		GwtVersion gwtVersion = GoogleGwtModuleExtensionUtil.getVersion(anInterface);
+		GwtVersion gwtVersion = GwtModuleExtensionUtil.getVersion(anInterface);
 		PsiMethod method = GwtI18nUtil.addMethod(anInterface, key, gwtVersion);
 		if(parameters.length > 0)
 		{
