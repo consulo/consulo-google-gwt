@@ -89,7 +89,7 @@ public class JavaEEGwtLibraryPathProvider implements GwtLibraryPathProvider
 		return new Info(GwtVersionImpl.VERSION_1_6_OR_LATER, file.getPath(), devJar.getPath())
 		{
 			/**
-			 * gwt in maven central not contains asm library inside - but have dependency to last asm library
+			 * gwt from maven central not contains asm library inside - but have dependency to last asm library
 			 * we need found it and add to compilation classpath
 			 */
 			@NotNull
