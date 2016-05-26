@@ -84,7 +84,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 		final Collection<VirtualFile> candidates = DomService.getInstance().getDomFileCandidates(GwtModule.class, myProject, scope);
 		for(VirtualFile file : candidates)
 		{
-			if(myProjectFileIndex.isInSource(file) || myProjectFileIndex.isInLibraryClasses(file))
+			if(myProjectFileIndex.isInSource(file) || myProjectFileIndex.isInResource(file) || myProjectFileIndex.isInLibraryClasses(file))
 			{
 				finder.processFile(file);
 			}

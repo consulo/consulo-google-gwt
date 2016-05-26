@@ -10,6 +10,7 @@
             <element id="module-output" name="gwt-api" />
             <element id="module-production-resource-output" name="gwt-api" />
             <element id="module-output" name="gwt-impl" />
+            <element id="module-production-resource-output" name="gwt-impl" />
           </element>
           <element id="zip-archive" name="google-gwt-javaee.jar">
             <element id="module-output" name="javaee-impl" />
@@ -22,6 +23,14 @@
           <element id="zip-archive" name="google-gwt-javascript.jar">
             <element id="module-output" name="gwt-javascript-impl" />
             <element id="module-production-resource-output" name="gwt-javascript-impl" />
+          </element>
+        </element>
+      </element>
+      <element id="directory" name="vaadin">
+        <element id="directory" name="lib">
+          <element id="zip-archive" name="vaadin.jar">
+            <element id="module-output" name="vaadin" />
+            <element id="module-production-resource-output" name="vaadin" />
           </element>
         </element>
       </element>

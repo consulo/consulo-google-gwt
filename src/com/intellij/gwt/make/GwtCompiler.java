@@ -45,7 +45,6 @@ import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.compiler.ValidityState;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -128,7 +127,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 					final GwtModule[] gwtModules = myGwtModulesManager.getGwtModules(module);
 					for(GwtModule gwtModule : gwtModules)
 					{
-						if(myGwtModulesManager.isLibraryModule(gwtModule))
+						/*if(myGwtModulesManager.isLibraryModule(gwtModule))
 						{
 							if(LOG.isDebugEnabled())
 							{
@@ -136,7 +135,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 										"compiled.");
 							}
 							continue;
-						}
+						}*/
 
 						VirtualFile moduleFile = gwtModule.getModuleFile();
 						if(compilerConfiguration.isExcludedFromCompilation(moduleFile))
@@ -148,42 +147,12 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 							continue;
 						}
 
-						addFilesRecursively(gwtModule, extension, moduleFile, result);
-
-						for(VirtualFile file : gwtModule.getPublicRoots())
-						{
-							addFilesRecursively(gwtModule, extension, file, result);
-						}
-						for(VirtualFile file : gwtModule.getSourceRoots())
-						{
-							addFilesRecursively(gwtModule, extension, file, result);
-						}
+						extension.addFilesForCompilation(gwtModule, result);
 					}
 				}
 			}
 		});
 		return result.toArray(new ProcessingItem[result.size()]);
-	}
-
-	private static void addFilesRecursively(final GwtModule module, GoogleGwtModuleExtension extension, final VirtualFile file, final List<ProcessingItem> result)
-	{
-		if(!file.isValid() || FileTypeManager.getInstance().isFileIgnored(file.getName()))
-		{
-			return;
-		}
-
-		if(file.isDirectory())
-		{
-			final VirtualFile[] children = file.getChildren();
-			for(VirtualFile child : children)
-			{
-				addFilesRecursively(module, extension, child, result);
-			}
-		}
-		else
-		{
-			result.add(new GwtModuleFileProcessingItem(extension, module, file));
-		}
 	}
 
 	@Override

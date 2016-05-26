@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.NumberFormatter;
 
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
@@ -59,7 +61,7 @@ public class GwtModuleExtensionPanel extends JPanel
 	private JComboBox myOutputStyleBox;
 	private JPanel myMainPanel;
 	private JCheckBox myRunGwtCompilerCheckbox;
-	private JTextField myCompilerHeapSizeField;
+	private JFormattedTextField myCompilerHeapSizeField;
 	private JLabel myCompilerHeapSizeLabel;
 	private JPanel myPackagingPathsPanel;
 	private JTextField myAdditionalCompilerParametersField;
@@ -103,14 +105,12 @@ public class GwtModuleExtensionPanel extends JPanel
 			@Override
 			protected void textChanged(DocumentEvent documentEvent)
 			{
-				try
+				Object value = myCompilerHeapSizeField.getValue();
+				if(value == null)
 				{
-					extension.setCompilerMaxHeapSize(Integer.parseInt(myCompilerHeapSizeField.getText()));
+					return;
 				}
-				catch(NumberFormatException e)
-				{
-					myCompilerHeapSizeField.setText("256");
-				}
+				extension.setCompilerMaxHeapSize(((Number) value).intValue());
 			}
 		});
 
@@ -250,10 +250,6 @@ public class GwtModuleExtensionPanel extends JPanel
 		return list;
 	}
 
-	public void disposeUIResources()
-	{
-	}
-
 	private static class ModulePackagingInfo
 	{
 		private final String myModuleName;
@@ -350,5 +346,6 @@ public class GwtModuleExtensionPanel extends JPanel
 	private void createUIComponents()
 	{
 		myMainPanel = this;
+		myCompilerHeapSizeField = new JFormattedTextField(new NumberFormatter());
 	}
 }

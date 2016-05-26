@@ -16,12 +16,12 @@
 
 package com.intellij.gwt;
 
-import consulo.gwt.GoogleGwtIcons;
 import com.intellij.gwt.templates.GwtTemplates;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptorFactory;
 import com.intellij.openapi.fileTypes.FileTypeManager;
+import consulo.gwt.GwtIcons;
 
 /**
  * @author VISTALL
@@ -32,8 +32,7 @@ public class GwtFileTemplateGroupDescriptorFactory implements FileTemplateGroupD
 	@Override
 	public FileTemplateGroupDescriptor getFileTemplatesDescriptor()
 	{
-		final FileTemplateGroupDescriptor group = new FileTemplateGroupDescriptor(GwtBundle.message("file.template.group.titile.gwt"),
-				GoogleGwtIcons.Gwt);
+		final FileTemplateGroupDescriptor group = new FileTemplateGroupDescriptor(GwtBundle.message("file.template.group.titile.gwt"), GwtIcons.Gwt);
 		final FileTypeManager fileTypeManager = FileTypeManager.getInstance();
 		for(String template : GwtTemplates.TEMPLATES)
 		{

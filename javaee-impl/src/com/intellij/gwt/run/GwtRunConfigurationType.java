@@ -21,7 +21,7 @@ import javax.swing.Icon;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.GoogleGwtIcons;
+import consulo.gwt.GwtIcons;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.execution.LocatableConfigurationType;
 import com.intellij.execution.Location;
@@ -164,7 +164,7 @@ public class GwtRunConfigurationType implements ConfigurationType, LocatableConf
 	@Override
 	public Icon getIcon()
 	{
-		return GoogleGwtIcons.Gwt;
+		return GwtIcons.Gwt;
 	}
 
 	@Override

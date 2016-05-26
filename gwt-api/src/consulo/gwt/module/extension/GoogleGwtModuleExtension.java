@@ -16,10 +16,13 @@
 
 package consulo.gwt.module.extension;
 
+import java.util.List;
+
 import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.module.model.GwtModule;
+import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.util.PathsList;
 
 /**
@@ -43,4 +46,6 @@ public interface GoogleGwtModuleExtension<T extends GoogleGwtModuleExtension<T>>
 	String getCompilerOutputPath();
 
 	void setupCompilerClasspath(PathsList pathsList);
+
+	void addFilesForCompilation(GwtModule gwtModule, List<FileProcessingCompiler.ProcessingItem> result);
 }

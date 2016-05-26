@@ -109,6 +109,12 @@ public class GwtCompilerProcessHandler extends OSProcessHandler
 	public void notifyTextAvailable(final String text, final Key outputType)
 	{
 		super.notifyTextAvailable(text, outputType);
+
+		if(text.startsWith("Error: "))
+		{
+			myContext.addMessage(CompilerMessageCategory.ERROR, text, null, -1, -1);
+		}
+
 		if(outputType == ProcessOutputTypes.STDERR)
 		{
 			return;

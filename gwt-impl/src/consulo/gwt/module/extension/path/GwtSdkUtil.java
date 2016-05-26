@@ -58,7 +58,7 @@ public class GwtSdkUtil
 	{
 	}
 
-	static GwtVersion detectVersion(Sdk sdk)
+	public static GwtVersion detectVersion(Sdk sdk)
 	{
 		if(sdk == null)
 		{
@@ -133,8 +133,7 @@ public class GwtSdkUtil
 		return JarArchiveFileType.INSTANCE.getFileSystem().findFileByPath(FileUtil.toSystemIndependentName(jarPath) + ArchiveFileSystem.ARCHIVE_SEPARATOR);
 	}
 
-
-	static String getUserJarPath(String base)
+	public static String getUserJarPath(String base)
 	{
 		return base + File.separator + GWT_USER_JAR;
 	}
@@ -144,7 +143,7 @@ public class GwtSdkUtil
 		return getDevJarPath(sdk.getHomePath());
 	}
 
-	static String getDevJarPath(String base)
+	public static String getDevJarPath(String base)
 	{
 		return base + File.separator + getDevJarName();
 	}

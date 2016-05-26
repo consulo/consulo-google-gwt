@@ -17,15 +17,13 @@
 package consulo.gwt.module.extension;
 
 import org.consulo.module.extension.MutableModuleExtensionWithSdk;
-import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 
 /**
  * @author VISTALL
  * @since 21.08.14
  */
-public interface GoogleGwtMutableModuleExtension<T extends GoogleGwtModuleExtensionImpl<T>> extends GoogleGwtModuleExtension<T>,
-		MutableModuleExtensionWithSdk<T>
+public interface GoogleGwtMutableModuleExtension<T extends GoogleGwtModuleExtension<T>> extends GoogleGwtModuleExtension<T>, MutableModuleExtensionWithSdk<T>
 {
 	void setOutputStyle(final GwtJavaScriptOutputStyle outputStyle);
 

@@ -16,14 +16,20 @@
 
 package consulo.gwt.module.extension.impl;
 
+import java.util.List;
+
 import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
+import com.intellij.gwt.make.GwtModuleFileProcessingItem;
 import com.intellij.gwt.module.model.GwtModule;
+import com.intellij.openapi.compiler.FileProcessingCompiler;
+import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.sdk.GoogleGwtSdkType;
@@ -44,6 +50,42 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	public GoogleGwtModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
+	}
+
+	@Override
+	public void addFilesForCompilation(GwtModule gwtModule, List<FileProcessingCompiler.ProcessingItem> result)
+	{
+		addFilesRecursively(gwtModule, this, gwtModule.getModuleFile(), result);
+
+		for(VirtualFile file : gwtModule.getPublicRoots())
+		{
+			addFilesRecursively(gwtModule, this, file, result);
+		}
+		for(VirtualFile file : gwtModule.getSourceRoots())
+		{
+			addFilesRecursively(gwtModule, this, file, result);
+		}
+	}
+
+	protected static void addFilesRecursively(final GwtModule module, GoogleGwtModuleExtension extension, final VirtualFile file, final List<FileProcessingCompiler.ProcessingItem> result)
+	{
+		if(!file.isValid() || FileTypeManager.getInstance().isFileIgnored(file.getName()))
+		{
+			return;
+		}
+
+		if(file.isDirectory())
+		{
+			final VirtualFile[] children = file.getChildren();
+			for(VirtualFile child : children)
+			{
+				addFilesRecursively(module, extension, child, result);
+			}
+		}
+		else
+		{
+			result.add(new GwtModuleFileProcessingItem(extension, module, file));
+		}
 	}
 
 	@Override

@@ -7,12 +7,9 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.GoogleGwtIcons;
-import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.types.BinariesOrderRootType;
 import com.intellij.openapi.roots.types.DocumentationOrderRootType;
 import com.intellij.openapi.roots.types.SourcesOrderRootType;
@@ -20,12 +17,14 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
+import consulo.gwt.GwtIcons;
+import consulo.gwt.module.extension.path.GwtSdkUtil;
 
 /**
  * @author VISTALL
  * @since 09.07.13.
  */
-public class GoogleGwtSdkType extends SdkType
+public class GoogleGwtSdkType extends GwtSdkBaseType
 {
 	private static final String LINE_START = "Google Web Toolkit ";
 
@@ -34,11 +33,30 @@ public class GoogleGwtSdkType extends SdkType
 		super("GOOGLE_GWT_SDK");
 	}
 
+	@Override
+	@NotNull
+	public GwtVersion getVersion(Sdk sdk)
+	{
+		return GwtSdkUtil.detectVersion(sdk);
+	}
+
+	@Nullable
+	public String getDevJarPath(Sdk sdk)
+	{
+		return GwtSdkUtil.getDevJarPath(sdk.getHomePath());
+	}
+
+	@Nullable
+	public String getUserJarPath(Sdk sdk)
+	{
+		return GwtSdkUtil.getUserJarPath(sdk.getHomePath());
+	}
+
 	@Nullable
 	@Override
 	public Icon getIcon()
 	{
-		return GoogleGwtIcons.Gwt;
+		return GwtIcons.Gwt;
 	}
 
 	@Override
@@ -55,7 +73,7 @@ public class GoogleGwtSdkType extends SdkType
 		File file = new File(s, "about.txt");
 		if(!file.exists())
 		{
-			return "unknown";
+			return "0.0";
 		}
 		try
 		{
@@ -69,7 +87,7 @@ public class GoogleGwtSdkType extends SdkType
 		catch(IOException ignored)
 		{
 		}
-		return "unknown";
+		return "0.0";
 	}
 
 	@Override
@@ -121,20 +139,13 @@ public class GoogleGwtSdkType extends SdkType
 	@Override
 	public String suggestSdkName(String currentSdkName, String sdkHome)
 	{
-		File file = new File(sdkHome);
-		return file.getName();
-	}
-
-	@Override
-	public boolean isRootTypeApplicable(OrderRootType type)
-	{
-		return JavaSdk.getInstance().isRootTypeApplicable(type);
+		return getPresentableName() + " " + getVersionString(sdkHome);
 	}
 
 	@NotNull
 	@Override
 	public String getPresentableName()
 	{
-		return "Google GWT SDK";
+		return "GWT";
 	}
 }

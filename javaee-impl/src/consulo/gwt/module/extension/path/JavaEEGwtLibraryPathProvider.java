@@ -37,6 +37,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
 import com.intellij.util.ArrayUtil;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 
 /**
  * @author VISTALL
@@ -48,6 +49,11 @@ public class JavaEEGwtLibraryPathProvider implements GwtLibraryPathProvider
 	@Override
 	public Info resolveInfo(@NotNull GoogleGwtModuleExtension<?> extension)
 	{
+		if(!(extension instanceof JavaEEGoogleGwtModuleExtension))
+		{
+			return null;
+		}
+
 		ModuleExtension mavenExtension = extension.getModuleRootLayer().getExtension("maven");
 		if(mavenExtension == null)
 		{

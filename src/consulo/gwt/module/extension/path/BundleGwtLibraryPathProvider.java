@@ -20,8 +20,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.extensions.CompositeExtensionPointName;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ModuleRootLayer;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.gwt.sdk.GwtSdkBaseType;
 
 /**
  * @author VISTALL
@@ -39,7 +41,12 @@ public class BundleGwtLibraryPathProvider implements GwtLibraryPathProvider
 			return new Info(GwtSdkUtil.detectVersion(null), null, null);
 		}
 
-		return new Info(GwtSdkUtil.detectVersion(sdk), GwtSdkUtil.getUserJarPath(sdk), GwtSdkUtil.getDevJarPath(sdk));
+		SdkTypeId sdkType = sdk.getSdkType();
+		if(!(sdkType instanceof GwtSdkBaseType))
+		{
+			return new Info(GwtSdkUtil.detectVersion(null), null, null);
+		}
+		return new Info(((GwtSdkBaseType) sdkType).getVersion(sdk), ((GwtSdkBaseType) sdkType).getUserJarPath(sdk), ((GwtSdkBaseType) sdkType).getDevJarPath(sdk));
 	}
 
 	@CompositeExtensionPointName.BooleanBreakResult(breakValue = false)
