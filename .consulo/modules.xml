@@ -53,7 +53,7 @@
       </module>
       <module name="javaee-impl" dirurl="file://$PROJECT_DIR$/javaee-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
           <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -136,7 +136,7 @@
       </module>
       <module name="gwt-javascript-impl" dirurl="file://$PROJECT_DIR$/gwt-javascript-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
           <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -183,7 +183,7 @@
       </module>
       <module name="gwt-api" dirurl="file://$PROJECT_DIR$/gwt-api" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
           <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -226,7 +226,7 @@
       </module>
       <module name="gwt-impl" dirurl="file://$PROJECT_DIR$/gwt-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
           <extension id="java" sdk-module-name="" sdk-name="1.6" language-level-module-name="" language-level-name="JDK_1_6" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -275,7 +275,7 @@
       </module>
       <module name="vaadin" dirurl="file://$PROJECT_DIR$/extract/vaadin" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1335 (predefined)" custom-plugin-dir-url="file://$MODULE_DIR$/../../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="Consulo 1335 (predefined)" custom-plugin-dir-url="file://$MODULE_DIR$/../../dep" />
           <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
