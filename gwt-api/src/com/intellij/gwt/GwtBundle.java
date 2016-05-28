@@ -16,21 +16,9 @@
 
 package com.intellij.gwt;
 
-import java.util.ResourceBundle;
+import org.consulo.lombok.annotations.Bundle;
 
-import org.jetbrains.annotations.PropertyKey;
-import com.intellij.CommonBundle;
-
+@Bundle("com.intellij.gwt.GwtBundle")
 public class GwtBundle
 {
-	private static final ResourceBundle ourBundle = ResourceBundle.getBundle("com.intellij.gwt.GwtBundle");
-
-	private GwtBundle()
-	{
-	}
-
-	public static String message(@PropertyKey(resourceBundle = "com.intellij.gwt.GwtBundle") String key, Object... params)
-	{
-		return CommonBundle.message(ourBundle, key, params);
-	}
 }

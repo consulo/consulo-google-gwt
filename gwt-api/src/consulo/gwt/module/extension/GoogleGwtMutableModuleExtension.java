@@ -29,7 +29,9 @@ public interface GoogleGwtMutableModuleExtension<T extends GoogleGwtModuleExtens
 
 	void setRunGwtCompilerOnMake(final boolean runGwtCompiler);
 
-	void setAdditionalCompilerParameters(final String additionalCompilerParameters);
+	void setAdditionalCompilerParameters(final String parameters);
+
+	void setAdditionalCompilerVmParameters(final String parameters);
 
 	void setCompilerMaxHeapSize(final int compilerMaxHeapSize);
 

@@ -21,6 +21,7 @@ import java.util.List;
 import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.make.GwtModuleFileProcessingItem;
 import com.intellij.gwt.module.model.GwtModule;
@@ -45,6 +46,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	protected boolean myRunGwtCompilerOnMake = true;
 	protected int myCompilerMaxHeapSize = 256;
 	protected String myAdditionalCompilerParameters = "";
+	protected String myAdditionalCompilerVmParameters = "";
 	protected String myCompilerOutputPath = "";
 
 	public GoogleGwtModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer rootModel)
@@ -107,9 +109,17 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	}
 
 	@Override
+	@NotNull
 	public String getAdditionalCompilerParameters()
 	{
 		return myAdditionalCompilerParameters;
+	}
+
+	@NotNull
+	@Override
+	public String getAdditionalVmCompilerParameters()
+	{
+		return myAdditionalCompilerVmParameters;
 	}
 
 	@Override
@@ -141,9 +151,14 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		myRunGwtCompilerOnMake = runGwtCompiler;
 	}
 
-	public void setAdditionalCompilerParameters(final String additionalCompilerParameters)
+	public void setAdditionalCompilerParameters(String additionalCompilerParameters)
 	{
 		myAdditionalCompilerParameters = additionalCompilerParameters;
+	}
+
+	public void setAdditionalCompilerVmParameters(final String vmAdditionalCompilerParameters)
+	{
+		myAdditionalCompilerVmParameters = vmAdditionalCompilerParameters;
 	}
 
 	public void setCompilerMaxHeapSize(final int compilerMaxHeapSize)
@@ -163,6 +178,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		return "";
 	}
 
+	@RequiredReadAction
 	@Override
 	protected void loadStateImpl(@NotNull Element element)
 	{
@@ -171,6 +187,8 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		myOutputStyle = GwtJavaScriptOutputStyle.valueOf(element.getAttributeValue("output-style", "PRETTY"));
 		myCompilerOutputPath = element.getAttributeValue("compiler-path");
 		myCompilerMaxHeapSize = Integer.parseInt(element.getAttributeValue("compiler-max-heap-size", "256"));
+		myAdditionalCompilerParameters = element.getAttributeValue("compiler-parameters", "");
+		myAdditionalCompilerVmParameters = element.getAttributeValue("compiler-vm-parameters", "");
 	}
 
 	@Override
@@ -181,6 +199,8 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		element.setAttribute("output-style", myOutputStyle.name());
 		element.setAttribute("compiler-path", myCompilerOutputPath);
 		element.setAttribute("compiler-max-heap-size", String.valueOf(myCompilerMaxHeapSize));
+		element.setAttribute("compiler-parameters", myAdditionalCompilerParameters);
+		element.setAttribute("compiler-vm-parameters", myAdditionalCompilerVmParameters);
 	}
 
 	@Override
@@ -189,6 +209,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		super.commit(mutableModuleExtension);
 
 		myAdditionalCompilerParameters = mutableModuleExtension.myAdditionalCompilerParameters;
+		myAdditionalCompilerVmParameters = mutableModuleExtension.myAdditionalCompilerVmParameters;
 		myOutputStyle = mutableModuleExtension.myOutputStyle;
 		myRunGwtCompilerOnMake = mutableModuleExtension.myRunGwtCompilerOnMake;
 		myCompilerMaxHeapSize = mutableModuleExtension.myCompilerMaxHeapSize;
@@ -210,6 +231,10 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 			return true;
 		}
 		if(myCompilerMaxHeapSize != originExtension.myCompilerMaxHeapSize)
+		{
+			return true;
+		}
+		if(!Comparing.equal(myAdditionalCompilerVmParameters, originExtension.myAdditionalCompilerVmParameters))
 		{
 			return true;
 		}

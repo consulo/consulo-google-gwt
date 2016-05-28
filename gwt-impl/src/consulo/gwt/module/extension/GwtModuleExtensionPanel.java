@@ -32,6 +32,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.NumberFormatter;
 
 import com.intellij.gwt.GwtBundle;
@@ -65,6 +67,7 @@ public class GwtModuleExtensionPanel extends JPanel
 	private JLabel myCompilerHeapSizeLabel;
 	private JPanel myPackagingPathsPanel;
 	private JTextField myAdditionalCompilerParametersField;
+	private JTextField myAdditionalCompilerVmParametersField;
 	private JLabel myAdditionalCompilerParametersLabel;
 	private TextFieldWithBrowseButton myCompilerOutputDirField;
 	private JLabel myCompilerOutputDirLabel;
@@ -90,6 +93,7 @@ public class GwtModuleExtensionPanel extends JPanel
 		myOutputStyleBox.setSelectedItem(extension.getOutputStyle());
 		myRunGwtCompilerCheckbox.setSelected(extension.isRunGwtCompilerOnMake());
 		myAdditionalCompilerParametersField.setText(extension.getAdditionalCompilerParameters());
+		myAdditionalCompilerVmParametersField.setText(extension.getAdditionalVmCompilerParameters());
 		myCompilerOutputDirField.setText(extension.getCompilerOutputPath());
 		myCompilerOutputDirField.getTextField().getDocument().addDocumentListener(new DocumentAdapter()
 		{
@@ -114,6 +118,39 @@ public class GwtModuleExtensionPanel extends JPanel
 			}
 		});
 
+		myAdditionalCompilerParametersField.getDocument().addDocumentListener(new DocumentAdapter()
+		{
+			@Override
+			protected void textChanged(DocumentEvent documentEvent)
+			{
+				Document document = documentEvent.getDocument();
+				try
+				{
+					extension.setAdditionalCompilerParameters(document.getText(0, document.getLength()));
+				}
+				catch(BadLocationException ignored)
+				{
+					//
+				}
+			}
+		});
+
+		myAdditionalCompilerVmParametersField.getDocument().addDocumentListener(new DocumentAdapter()
+		{
+			@Override
+			protected void textChanged(DocumentEvent documentEvent)
+			{
+				Document document = documentEvent.getDocument();
+				try
+				{
+					extension.setAdditionalCompilerVmParameters(document.getText(0, document.getLength()));
+				}
+				catch(BadLocationException ignored)
+				{
+					//
+				}
+			}
+		});
 
 		myRunGwtCompilerCheckbox.addActionListener(new ActionListener()
 		{
@@ -185,6 +222,7 @@ public class GwtModuleExtensionPanel extends JPanel
 		myCompilerHeapSizeField.setEnabled(enabled);
 		myAdditionalCompilerParametersLabel.setEnabled(enabled);
 		myAdditionalCompilerParametersField.setEnabled(enabled);
+		myAdditionalCompilerVmParametersField.setEnabled(enabled);
 		myCompilerOutputDirLabel.setEnabled(enabled);
 		myCompilerOutputDirField.setEnabled(enabled);
 
@@ -218,7 +256,7 @@ public class GwtModuleExtensionPanel extends JPanel
 		myConfiguration.setOutputStyle(getOutputStyle());
 		myConfiguration.setWebFacetName(getSelectedWebFacet());
 		myConfiguration.setRunGwtCompilerOnMake(myRunGwtCompilerCheckbox.isSelected());
-		myConfiguration.setAdditionalCompilerParameters(myAdditionalCompilerParametersField.getText().trim());
+		myConfiguration.setAdditionalCompilerParameters(myAdditionalCompilerVmParametersField.getText().trim());
 		myConfiguration.setCompilerOutputPath(FileUtil.toSystemIndependentName(myCompilerOutputDirField.getText().trim()));
 		try
 		{

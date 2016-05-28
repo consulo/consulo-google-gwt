@@ -39,7 +39,11 @@ public interface GoogleGwtModuleExtension<T extends GoogleGwtModuleExtension<T>>
 
 	boolean isRunGwtCompilerOnMake();
 
+	@NotNull
 	String getAdditionalCompilerParameters();
+
+	@NotNull
+	String getAdditionalVmCompilerParameters();
 
 	int getCompilerMaxHeapSize();
 

@@ -241,7 +241,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 				{
 					file.setLastModified(System.currentTimeMillis());
 					LOG.info("Updating timestamp for " + file.getPath());
-					return false;
+					return true;
 				}
 				return true;
 			}
@@ -258,13 +258,14 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		final JavaParameters javaParameters = new JavaParameters();
 		javaParameters.setJdk(ModuleUtilCore.getSdk(extension.getModule(), JavaModuleExtension.class));
 		ParametersList vmParameters = javaParameters.getVMParametersList();
-		vmParameters.addParametersString(extension.getAdditionalCompilerParameters());
+		vmParameters.addParametersString(extension.getAdditionalVmCompilerParameters());
 		vmParameters.replaceOrAppend("-Xmx", "-Xmx" + extension.getCompilerMaxHeapSize() + "m");
 
 		createClasspath(extension, pathInfo, module.getModule(), javaParameters.getClassPath());
 		final GwtVersion sdkVersion = pathInfo.getVersion();
 		javaParameters.setMainClass(sdkVersion.getCompilerClassName());
 		ParametersList parameters = javaParameters.getProgramParametersList();
+		parameters.add(extension.getAdditionalCompilerParameters());
 		parameters.add(LOG_LEVEL_ARGUMENT);
 		parameters.add("TRACE");
 		parameters.add(sdkVersion.getCompilerOutputDirParameterName());
