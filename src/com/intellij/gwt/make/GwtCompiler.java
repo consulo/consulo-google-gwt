@@ -265,7 +265,11 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		final GwtVersion sdkVersion = pathInfo.getVersion();
 		javaParameters.setMainClass(sdkVersion.getCompilerClassName());
 		ParametersList parameters = javaParameters.getProgramParametersList();
-		parameters.add(extension.getAdditionalCompilerParameters());
+		String additionalCompilerParameters = extension.getAdditionalCompilerParameters();
+		if(!StringUtil.isEmpty(additionalCompilerParameters))
+		{
+			parameters.add(additionalCompilerParameters);
+		}
 		parameters.add(LOG_LEVEL_ARGUMENT);
 		parameters.add("TRACE");
 		parameters.add(sdkVersion.getCompilerOutputDirParameterName());

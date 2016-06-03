@@ -47,8 +47,11 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.table.TableView;
@@ -94,13 +97,16 @@ public class GwtModuleExtensionPanel extends JPanel
 		myRunGwtCompilerCheckbox.setSelected(extension.isRunGwtCompilerOnMake());
 		myAdditionalCompilerParametersField.setText(extension.getAdditionalCompilerParameters());
 		myAdditionalCompilerVmParametersField.setText(extension.getAdditionalVmCompilerParameters());
-		myCompilerOutputDirField.setText(extension.getCompilerOutputPath());
+		String compilerOutputUrl = extension.getCompilerOutputUrl();
+		myCompilerOutputDirField.setText(StringUtil.isEmpty(compilerOutputUrl) ? null : VirtualFileManager.extractPath(compilerOutputUrl));
 		myCompilerOutputDirField.getTextField().getDocument().addDocumentListener(new DocumentAdapter()
 		{
 			@Override
 			protected void textChanged(DocumentEvent documentEvent)
 			{
-				extension.setCompilerOutputPath(myCompilerOutputDirField.getText());
+				String path = StringUtil.nullize(myCompilerOutputDirField.getText(), true);
+
+				extension.setCompilerOutputUrl(path == null ? null : VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL, FileUtil.toSystemIndependentName(path)));
 			}
 		});
 		myCompilerHeapSizeField.setText(String.valueOf(extension.getCompilerMaxHeapSize()));

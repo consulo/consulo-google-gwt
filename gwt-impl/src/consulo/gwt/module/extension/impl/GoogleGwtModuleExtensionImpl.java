@@ -47,7 +47,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	protected int myCompilerMaxHeapSize = 256;
 	protected String myAdditionalCompilerParameters = "";
 	protected String myAdditionalCompilerVmParameters = "";
-	protected String myCompilerOutputPath = "";
+	protected String myCompilerOutputUrl = "";
 
 	public GoogleGwtModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer rootModel)
 	{
@@ -129,9 +129,9 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	}
 
 	@Override
-	public String getCompilerOutputPath()
+	public String getCompilerOutputUrl()
 	{
-		return myCompilerOutputPath;
+		return myCompilerOutputUrl;
 	}
 
 	@NotNull
@@ -166,9 +166,9 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		myCompilerMaxHeapSize = compilerMaxHeapSize;
 	}
 
-	public void setCompilerOutputPath(final String compilerOutputPath)
+	public void setCompilerOutputUrl(final String compilerOutputUrl)
 	{
-		myCompilerOutputPath = compilerOutputPath;
+		myCompilerOutputUrl = compilerOutputUrl;
 	}
 
 	@Override
@@ -185,7 +185,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		super.loadStateImpl(element);
 
 		myOutputStyle = GwtJavaScriptOutputStyle.valueOf(element.getAttributeValue("output-style", "PRETTY"));
-		myCompilerOutputPath = element.getAttributeValue("compiler-path");
+		myCompilerOutputUrl = element.getAttributeValue("compiler-output-url");
 		myCompilerMaxHeapSize = Integer.parseInt(element.getAttributeValue("compiler-max-heap-size", "256"));
 		myAdditionalCompilerParameters = element.getAttributeValue("compiler-parameters", "");
 		myAdditionalCompilerVmParameters = element.getAttributeValue("compiler-vm-parameters", "");
@@ -197,7 +197,10 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		super.getStateImpl(element);
 
 		element.setAttribute("output-style", myOutputStyle.name());
-		element.setAttribute("compiler-path", myCompilerOutputPath);
+		if(myCompilerOutputUrl != null)
+		{
+			element.setAttribute("compiler-output-url", myCompilerOutputUrl);
+		}
 		element.setAttribute("compiler-max-heap-size", String.valueOf(myCompilerMaxHeapSize));
 		element.setAttribute("compiler-parameters", myAdditionalCompilerParameters);
 		element.setAttribute("compiler-vm-parameters", myAdditionalCompilerVmParameters);
@@ -213,7 +216,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		myOutputStyle = mutableModuleExtension.myOutputStyle;
 		myRunGwtCompilerOnMake = mutableModuleExtension.myRunGwtCompilerOnMake;
 		myCompilerMaxHeapSize = mutableModuleExtension.myCompilerMaxHeapSize;
-		myCompilerOutputPath = mutableModuleExtension.myCompilerOutputPath;
+		myCompilerOutputUrl = mutableModuleExtension.myCompilerOutputUrl;
 	}
 
 	public boolean isModifiedImpl(@NotNull T originExtension)
@@ -242,7 +245,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		{
 			return true;
 		}
-		if(!Comparing.equal(myCompilerOutputPath, originExtension.myCompilerOutputPath))
+		if(!Comparing.equal(myCompilerOutputUrl, originExtension.myCompilerOutputUrl))
 		{
 			return true;
 		}

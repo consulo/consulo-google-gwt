@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.consulo.module.extension.ModuleExtensionWithSdk;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
@@ -47,7 +48,8 @@ public interface GoogleGwtModuleExtension<T extends GoogleGwtModuleExtension<T>>
 
 	int getCompilerMaxHeapSize();
 
-	String getCompilerOutputPath();
+	@Nullable
+	String getCompilerOutputUrl();
 
 	void setupCompilerClasspath(PathsList pathsList);
 

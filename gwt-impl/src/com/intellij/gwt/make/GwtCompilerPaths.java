@@ -20,12 +20,13 @@ import java.io.File;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 
 /**
  * @author nik
@@ -105,17 +106,18 @@ public class GwtCompilerPaths
 		}
 	}
 
-	public static File getOutputDirectory(final GoogleGwtModuleExtension facet)
+	@NotNull
+	public static File getOutputDirectory(final GoogleGwtModuleExtension extension)
 	{
-		String outputPath = facet.getCompilerOutputPath();
+		String outputUrl = extension.getCompilerOutputUrl();
 		final File outputDir;
-		if(StringUtil.isEmpty(outputPath))
+		if(StringUtil.isEmpty(outputUrl))
 		{
-			outputDir = new File(getCompilerOutputRoot(facet.getModule()), "www");
+			outputDir = new File(getCompilerOutputRoot(extension.getModule()), "www");
 		}
 		else
 		{
-			outputDir = new File(FileUtil.toSystemDependentName(outputPath));
+			outputDir = new File(FileUtil.toSystemDependentName(VirtualFileManager.extractPath(outputUrl)));
 		}
 		return outputDir;
 	}

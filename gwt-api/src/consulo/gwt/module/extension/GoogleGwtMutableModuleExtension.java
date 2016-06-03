@@ -35,5 +35,5 @@ public interface GoogleGwtMutableModuleExtension<T extends GoogleGwtModuleExtens
 
 	void setCompilerMaxHeapSize(final int compilerMaxHeapSize);
 
-	void setCompilerOutputPath(final String compilerOutputPath);
+	void setCompilerOutputUrl(final String compilerOutputUrl);
 }
