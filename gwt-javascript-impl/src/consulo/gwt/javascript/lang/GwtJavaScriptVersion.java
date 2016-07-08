@@ -1,10 +1,7 @@
 package consulo.gwt.javascript.lang;
 
-import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.javascript.ide.highlight.GwtSyntaxHighlighter;
-import consulo.gwt.javascript.lang.parsing.GwtJavaScriptParser;
 import org.mustbe.consulo.javascript.lang.BaseJavaScriptLanguageVersion;
 import org.mustbe.consulo.javascript.lang.JavaScriptLanguage;
 import com.intellij.lang.PsiParser;
@@ -13,6 +10,9 @@ import com.intellij.lang.javascript.JavaScriptParsingFlexLexer;
 import com.intellij.lang.javascript.highlighting.JSHighlighter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
+import consulo.gwt.javascript.ide.highlight.GwtSyntaxHighlighter;
+import consulo.gwt.javascript.lang.parsing.GwtJavaScriptParser;
+import consulo.lombok.annotations.Lazy;
 
 /**
  * @author VISTALL
@@ -21,7 +21,7 @@ import com.intellij.openapi.project.Project;
 public class GwtJavaScriptVersion extends BaseJavaScriptLanguageVersion
 {
 	@NotNull
-	@LazyInstance
+	@Lazy
 	public static GwtJavaScriptVersion getInstance()
 	{
 		return JavaScriptLanguage.INSTANCE.findVersionByClass(GwtJavaScriptVersion.class);

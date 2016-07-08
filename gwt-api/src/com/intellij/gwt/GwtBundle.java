@@ -16,7 +16,7 @@
 
 package com.intellij.gwt;
 
-import org.consulo.lombok.annotations.Bundle;
+import consulo.lombok.annotations.Bundle;
 
 @Bundle("com.intellij.gwt.GwtBundle")
 public class GwtBundle
