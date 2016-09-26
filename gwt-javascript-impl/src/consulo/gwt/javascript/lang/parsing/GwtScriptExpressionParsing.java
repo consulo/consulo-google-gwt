@@ -1,13 +1,13 @@
 package consulo.gwt.javascript.lang.parsing;
 
-import consulo.gwt.javascript.lang.GwtJavaScriptElements;
-import org.mustbe.consulo.javascript.lang.parsing.ExpressionParsing;
-import org.mustbe.consulo.javascript.lang.parsing.JavaScriptParsingContext;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.javascript.JSElementTypes;
 import com.intellij.lang.javascript.JSTokenTypes;
 import com.intellij.lang.javascript.JavaScriptBundle;
 import com.intellij.psi.tree.IElementType;
+import consulo.gwt.javascript.lang.GwtJavaScriptElements;
+import consulo.javascript.lang.parsing.ExpressionParsing;
+import consulo.javascript.lang.parsing.JavaScriptParsingContext;
 
 /**
  * @author VISTALL

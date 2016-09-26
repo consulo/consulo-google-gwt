@@ -16,10 +16,10 @@
 
 package consulo.gwt.javascript.lang;
 
-import org.mustbe.consulo.javascript.lang.JavaScriptLanguage;
 import com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl;
-import com.intellij.psi.tree.ElementTypeAsPsiFactory;
 import com.intellij.psi.tree.IElementType;
+import consulo.javascript.lang.JavaScriptLanguage;
+import consulo.psi.tree.ElementTypeAsPsiFactory;
 
 /**
  * @author VISTALL

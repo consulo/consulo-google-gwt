@@ -16,8 +16,8 @@
 
 package consulo.gwt.module.extension;
 
-import org.consulo.module.extension.MutableModuleExtensionWithSdk;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
+import consulo.module.extension.MutableModuleExtensionWithSdk;
 
 /**
  * @author VISTALL

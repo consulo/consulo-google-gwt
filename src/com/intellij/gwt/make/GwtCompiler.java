@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.execution.configurations.CommandLineBuilder;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -61,6 +60,7 @@ import com.intellij.util.PathsList;
 import com.intellij.util.Processor;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
+import consulo.java.module.extension.JavaModuleExtension;
 
 public class GwtCompiler implements ClassInstrumentingCompiler
 {

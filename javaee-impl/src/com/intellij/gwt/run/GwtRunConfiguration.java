@@ -22,7 +22,6 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.java.module.extension.JavaModuleExtension;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
@@ -45,6 +44,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.java.module.extension.JavaModuleExtension;
 
 public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule>
 {

@@ -17,11 +17,11 @@
 package com.intellij.gwt.run;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.module.extension.ModuleExtensionHelper;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.module.extension.ModuleExtensionHelper;
 
 public class GwtRunConfigurationFactory extends ConfigurationFactory
 {

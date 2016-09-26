@@ -18,22 +18,22 @@ package consulo.gwt.module.extension.impl;
 
 import java.util.List;
 
-import org.consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.RequiredReadAction;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.make.GwtModuleFileProcessingItem;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
+import consulo.annotations.RequiredReadAction;
+import consulo.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.sdk.GoogleGwtSdkType;
+import consulo.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL

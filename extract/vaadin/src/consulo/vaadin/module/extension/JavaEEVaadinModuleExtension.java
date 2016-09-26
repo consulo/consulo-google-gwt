@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.roots.ContentFolderScopes;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.roots.ContentFolder;
-import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.vfs.VirtualFile;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
+import consulo.roots.ContentFolderScopes;
+import consulo.roots.ModuleRootLayer;
 import consulo.vaadin.bundle.VaadinBundleType;
 
 /**

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.consulo.psi.PsiPackage;
+import consulo.psi.PsiPackage;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtInheritsEntry;
 import com.intellij.gwt.module.model.GwtModule;

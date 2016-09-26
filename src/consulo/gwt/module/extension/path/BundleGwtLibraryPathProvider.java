@@ -18,12 +18,12 @@ package consulo.gwt.module.extension.path;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.extensions.CompositeExtensionPointName;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
-import com.intellij.openapi.roots.ModuleRootLayer;
+import consulo.extensions.CompositeExtensionPointName;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.sdk.GwtSdkBaseType;
+import consulo.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL

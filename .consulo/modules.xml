@@ -4,7 +4,7 @@
     <modules>
       <module name="consulo-google-gwt" dirurl="file://$PROJECT_DIR$" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo 1.SNAPSHOT" custom-plugin-dir-url="file://$MODULE_DIR$/dep" />
+          <extension id="consulo-plugin" sdk-module-name="" sdk-name="Consulo SNAPSHOT" />
           <extension id="java" sdk-module-name="" sdk-name="1.8" language-level-module-name="" language-level-name="JDK_1_8" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="EXCLUDED" url="file://$MODULE_DIR$/.consulo/sandbox" />
@@ -14,46 +14,15 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:Properties Support">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/dep/properties/lib/properties.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:Java">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/dep/java/lib/asm-all.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/coverate_rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/instrumentation-util.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/jacocoant.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/java-i18n.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/java-manifest.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/java-rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/java.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/jdi.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/jdk-annotations.jar!/" />
-                <root url="jar://$MODULE_DIR$/dep/java/lib/jimage-jdk6.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="module" module-name="gwt-impl" exported="" />
+          <orderEntry type="library" name="consulo-plugin: consulo.java" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.properties" level="project" />
         </module-layer>
       </module>
       <module name="javaee-impl" dirurl="file://$PROJECT_DIR$/javaee-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" />
           <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -63,59 +32,15 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="consulo-google-gwt" />
-          <orderEntry type="module-library">
-            <library name="consulo:Java">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-manifest.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jdi.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jdk-annotations.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:JavaEE">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/javaee/lib/javaee.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:Maven Integration">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/artifact-resolver-m2.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/artifact-resolver-m3.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/artifact-resolver-m31.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/commons-cli-1.2.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/lucene-core-2.4.1.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/maven-server-api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/maven.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/maven2-server-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/maven3-server-common.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/maven30-server-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/maven32-server-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/plexus-archiver-2.4.4.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/plexus-utils-2.0.6.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/maven/lib/wadl-core.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
+          <orderEntry type="library" name="consulo-plugin: consulo.java" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
+          <orderEntry type="library" name="consulo-plugin: consulo.javaee" level="project" />
+          <orderEntry type="library" name="consulo-plugin: org.jetbrains.idea.maven" level="project" />
         </module-layer>
       </module>
       <module name="play1-impl" dirurl="file://$PROJECT_DIR$/play1-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" />
           <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -125,18 +50,12 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="consulo-google-gwt" />
-          <orderEntry type="module-library">
-            <library name="consulo:Play 1.x.x">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/play/lib/play.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
+          <orderEntry type="library" name="consulo-plugin: consulo.play" level="project" />
         </module-layer>
       </module>
       <module name="gwt-javascript-impl" dirurl="file://$PROJECT_DIR$/gwt-javascript-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" />
           <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -145,45 +64,14 @@
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module-library">
-            <library name="consulo:JavaScript Support">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/debugger-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/gwt-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/javascript.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/json-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/json_simple-1.1.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/lib.org.chromium.sdk.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/javascript/lib/lib.org.chromium.sdk.wipbackend.protocol_1_0.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:Java">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/asm-all.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/coverage-report-idea.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/coverage-report.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/coverate_rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/instrumentation-util.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jacocoagent.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jacocoant.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-i18n.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-manifest.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jdi.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jdk-annotations.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jimage-jdk6.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
           <orderEntry type="module" module-name="gwt-impl" />
+          <orderEntry type="library" name="consulo-plugin: consulo.java" level="project" />
+          <orderEntry type="library" name="consulo-plugin: consulo.javascript" level="project" />
         </module-layer>
       </module>
       <module name="gwt-api" dirurl="file://$PROJECT_DIR$/gwt-api" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" />
           <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
           <extension id="lombok" />
           <content url="file://$MODULE_DIR$">
@@ -193,41 +81,13 @@
           <orderEntry type="module-extension-sdk" extension-id="consulo-plugin" />
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
-          <orderEntry type="module-library">
-            <library name="consulo:Java">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/asm-all.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/coverage-report-idea.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/coverage-report.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/coverate_rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/instrumentation-util.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jacocoagent.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jacocoant.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-i18n.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-manifest.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jdi.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jdk-annotations.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jimage-jdk6.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
+          <orderEntry type="library" name="consulo-plugin: consulo.java" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
         </module-layer>
       </module>
       <module name="gwt-impl" dirurl="file://$PROJECT_DIR$/gwt-impl" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" />
           <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -237,46 +97,14 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="gwt-api" exported="" />
-          <orderEntry type="module-library">
-            <library name="consulo:Java">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/asm-all.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/coverate_rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/instrumentation-util.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jacocoant.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-i18n.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-manifest.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java-rt.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/java.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/javascript-impl.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jdi.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jdk-annotations.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/java/lib/jimage-jdk6.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:Properties Support">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/properties/lib/properties.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/../dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
+          <orderEntry type="library" name="consulo-plugin: consulo.java" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
+          <orderEntry type="library" name="consulo-plugin: com.intellij.properties" level="project" />
         </module-layer>
       </module>
       <module name="vaadin" dirurl="file://$PROJECT_DIR$/extract/vaadin" current-layer="Default">
         <module-layer name="Default">
-          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" custom-plugin-dir-url="file://$MODULE_DIR$/../../dep" />
+          <extension id="consulo-plugin" sdk-module-name="consulo-google-gwt" sdk-name="" />
           <extension id="java" sdk-module-name="consulo-google-gwt" sdk-name="" language-level-module-name="consulo-google-gwt" language-level-name="" special-dir-location="SOURCE_DIR" />
           <content url="file://$MODULE_DIR$">
             <content-folder type="PRODUCTION_RESOURCE" url="file://$MODULE_DIR$/resources" />
@@ -286,23 +114,8 @@
           <orderEntry type="module-extension-sdk" extension-id="java" />
           <orderEntry type="sourceFolder" />
           <orderEntry type="module" module-name="gwt-impl" />
-          <orderEntry type="module-library">
-            <library name="consulo:XML">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../../dep/xml/lib/jsr173_1.0_api.jar!/" />
-                <root url="jar://$MODULE_DIR$/../../dep/xml/lib/resolver.jar!/" />
-                <root url="jar://$MODULE_DIR$/../../dep/xml/lib/xerces.jar!/" />
-                <root url="jar://$MODULE_DIR$/../../dep/xml/lib/xml.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
-          <orderEntry type="module-library">
-            <library name="consulo:JavaEE">
-              <binaries>
-                <root url="jar://$MODULE_DIR$/../../dep/javaee/lib/javaee.jar!/" />
-              </binaries>
-            </library>
-          </orderEntry>
+          <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
+          <orderEntry type="library" name="consulo-plugin: consulo.javaee" level="project" />
         </module-layer>
       </module>
     </modules>

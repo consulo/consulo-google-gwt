@@ -19,7 +19,7 @@ package consulo.gwt.play1.module.extension;
 import org.jetbrains.annotations.NotNull;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
-import com.intellij.openapi.roots.ModuleRootLayer;
+import consulo.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL

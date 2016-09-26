@@ -7,14 +7,14 @@
 	<description>Significantly simplifies development of AJAX applications based on Google Web Toolkit</description>
 	<version>SNAPSHOT</version>
 
-	<depends>org.consulo.java</depends>
-	<depends optional="true" config-file="org.mustbe.consulo.javascript.xml">org.mustbe.consulo.javascript</depends>
+	<depends>consulo.java</depends>
+	<depends optional="true" config-file="consulo.javascript.xml">consulo.javascript</depends>
 	<depends optional="true" config-file="org.jetbrains.idea.maven.xml">org.jetbrains.idea.maven</depends>
 	<depends>com.intellij.properties</depends>
 	<depends>com.intellij.xml</depends>
 
-	<depends config-file="javaee.xml" optional="true">org.mustbe.consulo.javaee</depends>
-	<depends config-file="play1.xml" optional="true">org.consulo.play1</depends>
+	<depends config-file="javaee.xml" optional="true">consulo.javaee</depends>
+	<depends config-file="play1.xml" optional="true">consulo.play</depends>
 
 	<vendor>JetBrains</vendor>
 	<category>Web/JavaEE Technologies</category>
@@ -23,8 +23,11 @@
 		<extensionPoint name="libraryPathProvider" interface="consulo.gwt.module.extension.path.GwtLibraryPathProvider"/>
 	</extensionPoints>
 
-	<extensions defaultExtensionNs="org.consulo.java">
+	<extensions defaultExtensionNs="consulo.java">
 		<resourceBundleManager implementation="com.intellij.gwt.i18n.GwtResourceBundleManager"/>
+		<overridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtOverridingServiceMethodsSearcher"/>
+		<allOverridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtAllOverridingServiceMethodsSearcher"/>
+		<superMethodsSearch implementation="com.intellij.gwt.rpc.GwtAsyncMethodSearcher"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.gwt">
@@ -36,7 +39,6 @@
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
-		<errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
 		<compiler implementation="com.intellij.gwt.make.GwtCompiler"/>
 
 		<fileBasedIndex implementation="com.intellij.gwt.module.index.GwtHtmlFileIndex"/>
@@ -58,13 +60,6 @@
 		<fileTemplateGroup implementation="com.intellij.gwt.GwtFileTemplateGroupDescriptorFactory"/>
 		<inspectionToolProvider implementation="com.intellij.gwt.GwtInspectionToolProvider"/>
 	</extensions>
-
-	<extensions defaultExtensionNs="org.consulo.java">
-		<overridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtOverridingServiceMethodsSearcher"/>
-		<allOverridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtAllOverridingServiceMethodsSearcher"/>
-		<superMethodsSearch implementation="com.intellij.gwt.rpc.GwtAsyncMethodSearcher"/>
-	</extensions>
-
 
 	<project-components>
 		<component>

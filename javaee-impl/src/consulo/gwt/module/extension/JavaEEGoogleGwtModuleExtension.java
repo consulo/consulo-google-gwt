@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.openapi.roots.ModuleRootLayer;
+import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
+import consulo.roots.ModuleRootLayer;
 
 /**
  * @author VISTALL

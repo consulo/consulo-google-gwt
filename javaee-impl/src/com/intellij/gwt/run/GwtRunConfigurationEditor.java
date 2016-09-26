@@ -31,8 +31,6 @@ import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
-import org.mustbe.consulo.java.web.module.extension.JavaWebModuleExtension;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
@@ -60,6 +58,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.ComboboxWithBrowseButton;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.RawCommandLineEditor;
+import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.javaee.module.extension.JavaWebModuleExtension;
 
 public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguration>
 {
@@ -355,7 +355,7 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
 		}
 
 		@Override
-		protected void onFileChoosen(final VirtualFile chosenFile)
+		protected void onFileChosen(final VirtualFile chosenFile)
 		{
 			List<Pair<GwtModule, String>> pairs = myGwtModulesManager.findGwtModulesByPublicFile(chosenFile);
 			Pair<GwtModule, String> pair = null;

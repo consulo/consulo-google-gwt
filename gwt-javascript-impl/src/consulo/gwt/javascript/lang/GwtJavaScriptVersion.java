@@ -1,17 +1,15 @@
 package consulo.gwt.javascript.lang;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.javascript.lang.BaseJavaScriptLanguageVersion;
-import org.mustbe.consulo.javascript.lang.JavaScriptLanguage;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.javascript.DialectOptionHolder;
 import com.intellij.lang.javascript.JavaScriptParsingFlexLexer;
 import com.intellij.lang.javascript.highlighting.JSHighlighter;
 import com.intellij.lexer.Lexer;
-import com.intellij.openapi.project.Project;
 import consulo.gwt.javascript.ide.highlight.GwtSyntaxHighlighter;
 import consulo.gwt.javascript.lang.parsing.GwtJavaScriptParser;
+import consulo.javascript.lang.BaseJavaScriptLanguageVersion;
+import consulo.javascript.lang.JavaScriptLanguage;
 import consulo.lombok.annotations.Lazy;
 
 /**
@@ -36,14 +34,14 @@ public class GwtJavaScriptVersion extends BaseJavaScriptLanguageVersion
 
 	@NotNull
 	@Override
-	public PsiParser createParser(@Nullable Project project)
+	public PsiParser createParser()
 	{
 		return new GwtJavaScriptParser();
 	}
 
 	@NotNull
 	@Override
-	public Lexer createLexer(@Nullable Project project)
+	public Lexer createLexer()
 	{
 		return new JavaScriptParsingFlexLexer(myDialectOptionHolder);
 	}

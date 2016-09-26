@@ -21,23 +21,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.consulo.module.extension.ModuleExtension;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.idea.maven.model.MavenArtifact;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
-import org.mustbe.consulo.extensions.CompositeExtensionPointName;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;
-import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
 import com.intellij.util.ArrayUtil;
+import consulo.extensions.CompositeExtensionPointName;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.module.extension.ModuleExtension;
+import consulo.roots.ModuleRootLayer;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
  * @author VISTALL

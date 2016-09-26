@@ -19,7 +19,6 @@ package com.intellij.gwt.junit;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.roots.ContentFolderScopes;
 import com.intellij.execution.JavaTestPatcher;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
@@ -36,6 +35,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
+import consulo.roots.ContentFolderScopes;
 
 /**
  * @author nik

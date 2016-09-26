@@ -17,8 +17,8 @@
 package consulo.gwt.javascript.lang.parsing;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.javascript.lang.parsing.JavaScriptParser;
-import org.mustbe.consulo.javascript.lang.parsing.JavaScriptParsingContext;
+import consulo.javascript.lang.parsing.JavaScriptParser;
+import consulo.javascript.lang.parsing.JavaScriptParsingContext;
 
 /**
  * @author VISTALL

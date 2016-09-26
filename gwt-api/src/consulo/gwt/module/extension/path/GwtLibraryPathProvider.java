@@ -21,13 +21,13 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.extensions.CompositeExtensionPointName;
 import com.intellij.gwt.sdk.GwtVersion;
-import com.intellij.openapi.roots.ModuleRootLayer;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.util.ArchiveVfsUtil;
+import consulo.extensions.CompositeExtensionPointName;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.roots.ModuleRootLayer;
+import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
  * @author VISTALL
