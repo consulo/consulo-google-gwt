@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.NonNls;
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.gwt.GwtBundle;
@@ -97,9 +99,9 @@ public class GwtCompilerProcessHandler extends OSProcessHandler
 	private final String myModuleFileUrl;
 	private final Module myModule;
 
-	public GwtCompilerProcessHandler(final Process process, final CompileContext context, final String moduleFileUrl, final Module module)
+	public GwtCompilerProcessHandler(final GeneralCommandLine commandLine, final CompileContext context, final String moduleFileUrl, final Module module) throws ExecutionException
 	{
-		super(process, "");
+		super(commandLine);
 		myContext = context;
 		myModuleFileUrl = moduleFileUrl;
 		myModule = module;

@@ -220,7 +220,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 			commandLine.setWorkDirectory(outputDir);
 			context.getProgressIndicator().setText(GwtBundle.message("progress.text.compiling.gwt.module.0", gwtModuleName.get()));
 
-			GwtCompilerProcessHandler handler = new GwtCompilerProcessHandler(commandLine.createProcess(), context, gwtModuleFile.get().getUrl(), extension.getModule());
+			GwtCompilerProcessHandler handler = new GwtCompilerProcessHandler(commandLine, context, gwtModuleFile.get().getUrl(), extension.getModule());
 			handler.startNotify();
 			handler.waitFor();
 		}
