@@ -27,6 +27,7 @@ import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.projectRoots.SdkType;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
 import consulo.annotations.RequiredReadAction;
@@ -39,8 +40,7 @@ import consulo.roots.ModuleRootLayer;
  * @author VISTALL
  * @since 03.12.13.
  */
-public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExtensionImpl<T>> extends ModuleExtensionWithSdkImpl<T> implements
-		GoogleGwtModuleExtension<T>
+public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExtensionImpl<T>> extends ModuleExtensionWithSdkImpl<T> implements GoogleGwtModuleExtension<T>
 {
 	protected GwtJavaScriptOutputStyle myOutputStyle = GwtJavaScriptOutputStyle.DETAILED;
 	protected boolean myRunGwtCompilerOnMake = true;
@@ -86,7 +86,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		}
 		else
 		{
-			result.add(new GwtModuleFileProcessingItem(extension, module, file));
+			result.add(new GwtModuleFileProcessingItem(extension, module, VfsUtilCore.virtualToIoFile(file)));
 		}
 	}
 

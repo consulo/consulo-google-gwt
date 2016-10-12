@@ -16,13 +16,14 @@
 
 package com.intellij.gwt.make;
 
+import java.io.File;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.compiler.ValidityState;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 
 /**
  * @author nik
@@ -30,11 +31,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 public class GwtModuleFileProcessingItem implements FileProcessingCompiler.ProcessingItem
 {
 	private GwtModule myModule;
-	private VirtualFile myFile;
+	private File myFile;
 	private ValidityState myValidityState;
 	private GoogleGwtModuleExtension myFacet;
 
-	public GwtModuleFileProcessingItem(final GoogleGwtModuleExtension facet, final GwtModule module, VirtualFile file)
+	public GwtModuleFileProcessingItem(final GoogleGwtModuleExtension facet, final GwtModule module, File file)
 	{
 		myModule = module;
 		myFile = file;
@@ -44,7 +45,7 @@ public class GwtModuleFileProcessingItem implements FileProcessingCompiler.Proce
 
 	@Override
 	@NotNull
-	public VirtualFile getFile()
+	public File getFile()
 	{
 		return myFile;
 	}
