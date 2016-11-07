@@ -16,7 +16,7 @@
 
 <idea-plugin>
 	<id>consulo.vaadin</id>
-	<name>Vaadion</name>
+	<name>Vaadin</name>
 	<version>SNAPSHOT</version>
 	<depends>com.intellij.gwt</depends>
 
