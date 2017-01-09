@@ -24,7 +24,6 @@ import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.javascript.DialectOptionHolder;
 import com.intellij.lang.javascript.JSTokenTypes;
 import com.intellij.lang.javascript.highlighting.JSHighlighter;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.tree.IElementType;
 
@@ -39,9 +38,9 @@ public class GwtSyntaxHighlighter extends JSHighlighter
 	{
 		super(dialectOptionHolder);
 		myKeysMap.put(JSTokenTypes.COLON_COLON, JS_OPERATION_SIGN);
-		myKeysMap.put(JSTokenTypes.GWT_FIELD_OR_METHOD, CodeInsightColors.METHOD_CALL_ATTRIBUTES);
+		myKeysMap.put(JSTokenTypes.GWT_FIELD_OR_METHOD, JavaHighlightingColors.METHOD_CALL_ATTRIBUTES);
 		myKeysMap.put(JSTokenTypes.AT, JS_OPERATION_SIGN);
-		myKeysMap.put(JSTokenTypes.IDENTIFIER, JavaHighlightingColors.CLASS_NAME);
+		myKeysMap.put(JSTokenTypes.IDENTIFIER, JavaHighlightingColors.CLASS_NAME_ATTRIBUTES);
 	}
 
 	@Override
