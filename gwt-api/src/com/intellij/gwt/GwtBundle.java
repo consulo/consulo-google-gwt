@@ -16,9 +16,26 @@
 
 package com.intellij.gwt;
 
-import consulo.lombok.annotations.Bundle;
+import org.jetbrains.annotations.PropertyKey;
+import com.intellij.AbstractBundle;
 
-@Bundle("com.intellij.gwt.GwtBundle")
-public class GwtBundle
+public class GwtBundle extends AbstractBundle
 {
+	private static final String BUNDLE = "com.intellij.gwt.GwtBundle";
+	private static final GwtBundle ourInstance = new GwtBundle();
+
+	private GwtBundle()
+	{
+		super(BUNDLE);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = BUNDLE) String key)
+	{
+		return ourInstance.getMessage(key);
+	}
+
+	public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params)
+	{
+		return ourInstance.getMessage(key, params);
+	}
 }

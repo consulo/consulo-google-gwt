@@ -24,12 +24,10 @@ import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.gwt.GwtBundle;
 import consulo.gwt.GwtIcons;
-import consulo.lombok.annotations.Lazy;
 
 public class GwtRunConfigurationType implements ConfigurationType
 {
 	@NotNull
-	@Lazy
 	public static GwtRunConfigurationType getInstance()
 	{
 		return CONFIGURATION_TYPE_EP.findExtension(GwtRunConfigurationType.class);

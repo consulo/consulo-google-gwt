@@ -10,7 +10,6 @@ import consulo.gwt.javascript.ide.highlight.GwtSyntaxHighlighter;
 import consulo.gwt.javascript.lang.parsing.GwtJavaScriptParser;
 import consulo.javascript.lang.BaseJavaScriptLanguageVersion;
 import consulo.javascript.lang.JavaScriptLanguage;
-import consulo.lombok.annotations.Lazy;
 
 /**
  * @author VISTALL
@@ -19,7 +18,6 @@ import consulo.lombok.annotations.Lazy;
 public class GwtJavaScriptVersion extends BaseJavaScriptLanguageVersion
 {
 	@NotNull
-	@Lazy
 	public static GwtJavaScriptVersion getInstance()
 	{
 		return JavaScriptLanguage.INSTANCE.findVersionByClass(GwtJavaScriptVersion.class);
