@@ -2,18 +2,49 @@ package com.intellij.gwt.refactorings;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.gwt.i18n.GwtI18nManager;
+import com.intellij.gwt.rpc.RemoteServiceUtil;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.javadoc.JavadocTagInfo;
 import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.util.ArrayUtil;
 
 /**
  * @author nik
  */
 abstract class GwtJavadocTagInfo implements JavadocTagInfo
 {
+	public static class GwtTypeArgs extends GwtJavadocTagInfo
+	{
+		public GwtTypeArgs()
+		{
+			super("gwt.typeArgs");
+		}
+
+		@Override
+		protected boolean isValidFor(final @NotNull PsiMethod psiMethod)
+		{
+			return RemoteServiceUtil.isRemoteServiceInterface(psiMethod.getContainingClass());
+		}
+	}
+
+	public static class GwtKey extends GwtJavadocTagInfo
+	{
+		public GwtKey()
+		{
+			super("gwt.key");
+		}
+
+		@Override
+		protected boolean isValidFor(final @NotNull PsiMethod psiMethod)
+		{
+			PsiClass aClass = psiMethod.getContainingClass();
+			return aClass != null && GwtI18nManager.getInstance(psiMethod.getProject()).isLocalizableInterface(aClass);
+		}
+	}
+
 	private String myName;
 
 	GwtJavadocTagInfo(final @NonNls String name)
@@ -40,12 +71,6 @@ abstract class GwtJavadocTagInfo implements JavadocTagInfo
 	}
 
 	protected abstract boolean isValidFor(final @NotNull PsiMethod psiMethod);
-
-	@Override
-	public Object[] getPossibleValues(final PsiElement context, final PsiElement place, final String prefix)
-	{
-		return ArrayUtil.EMPTY_OBJECT_ARRAY;
-	}
 
 	@Override
 	public String checkTagValue(final PsiDocTagValue value)

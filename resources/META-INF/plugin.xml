@@ -28,6 +28,9 @@
 		<overridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtOverridingServiceMethodsSearcher"/>
 		<allOverridingMethodsSearch implementation="com.intellij.gwt.rpc.GwtAllOverridingServiceMethodsSearcher"/>
 		<superMethodsSearch implementation="com.intellij.gwt.rpc.GwtAsyncMethodSearcher"/>
+
+		<javadocTagInfo implementation="com.intellij.gwt.refactorings.GwtJavadocTagInfo$GwtKey"/>
+		<javadocTagInfo implementation="com.intellij.gwt.refactorings.GwtJavadocTagInfo$GwtTypeArgs"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.gwt">

@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.lang.properties.IProperty;
@@ -36,8 +35,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.impl.source.javadoc.JavadocManagerImpl;
-import com.intellij.psi.javadoc.JavadocManager;
 import com.intellij.refactoring.RefactoringFactory;
 import com.intellij.refactoring.RenameRefactoring;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
@@ -45,18 +42,12 @@ import com.intellij.refactoring.listeners.RefactoringElementListenerProvider;
 import com.intellij.refactoring.listeners.RefactoringListenerManager;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Function;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 
 public class GwtRefactoringListenerProvider implements ProjectComponent, RefactoringElementListenerProvider
 {
 	private Project myProject;
-	private static final Function<String, String> STRING2STRING_ID = new Function<String, String>()
-	{
-		@Override
-		public String fun(final String s)
-		{
-			return s;
-		}
-	};
+	private static final Function<String, String> STRING2STRING_ID = s -> s;
 	private ThreadLocal<Boolean> myInsideGwtListener = new ThreadLocal<Boolean>()
 	{
 		@Override
@@ -69,24 +60,6 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 	public GwtRefactoringListenerProvider(final Project project)
 	{
 		myProject = project;
-		JavadocManagerImpl javadocManager = (JavadocManagerImpl) JavadocManager.SERVICE.getInstance(project);
-		javadocManager.registerTagInfo(new GwtJavadocTagInfo("gwt.typeArgs")
-		{
-			@Override
-			protected boolean isValidFor(final @NotNull PsiMethod psiMethod)
-			{
-				return RemoteServiceUtil.isRemoteServiceInterface(psiMethod.getContainingClass());
-			}
-		});
-		javadocManager.registerTagInfo(new GwtJavadocTagInfo("gwt.key")
-		{
-			@Override
-			protected boolean isValidFor(final @NotNull PsiMethod psiMethod)
-			{
-				PsiClass aClass = psiMethod.getContainingClass();
-				return aClass != null && GwtI18nManager.getInstance(project).isLocalizableInterface(aClass);
-			}
-		});
 	}
 
 	@Override
