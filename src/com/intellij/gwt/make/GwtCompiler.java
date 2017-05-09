@@ -94,12 +94,6 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 	}
 
 	@Override
-	public void init(@NotNull CompilerManager compilerManager)
-	{
-
-	}
-
-	@Override
 	public ValidityState createValidityState(DataInput in) throws IOException
 	{
 		return new GwtItemValidityState(in);
