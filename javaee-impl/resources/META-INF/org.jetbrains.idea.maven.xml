@@ -20,6 +20,7 @@
 	</extensions>
 
 	<extensions defaultExtensionNs="org.jetbrains.idea.maven">
-		<importer implementation="consulo.gwt.maven.JavaEEGwtMavenImporter" />
+		<importer implementation="consulo.gwt.maven.JavaEEMojoGwtMavenImporter" />
+		<importer implementation="consulo.gwt.maven.JavaEELtGtGwtMavenImporter" />
 	</extensions>
 </idea-plugin>

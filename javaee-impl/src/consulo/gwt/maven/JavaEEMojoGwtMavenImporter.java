@@ -35,9 +35,9 @@ import consulo.module.extension.impl.ModuleExtensionProviders;
  * @author VISTALL
  * @since 25-May-16
  */
-public class JavaEEGwtMavenImporter extends MavenImporterFromBuildPlugin
+public class JavaEEMojoGwtMavenImporter extends MavenImporterFromBuildPlugin
 {
-	public JavaEEGwtMavenImporter()
+	public JavaEEMojoGwtMavenImporter()
 	{
 		super("org.codehaus.mojo", "gwt-maven-plugin");
 	}
@@ -45,7 +45,6 @@ public class JavaEEGwtMavenImporter extends MavenImporterFromBuildPlugin
 	@Override
 	public void preProcess(Module module, MavenProject mavenProject, MavenProjectChanges mavenProjectChanges, MavenModifiableModelsProvider mavenModifiableModelsProvider)
 	{
-
 	}
 
 	@Override
