@@ -29,6 +29,7 @@ import com.intellij.openapi.module.Module;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import consulo.maven.importing.MavenImporterFromBuildPlugin;
 import consulo.module.extension.ModuleExtensionProviderEP;
+import consulo.module.extension.impl.ModuleExtensionProviders;
 
 /**
  * @author VISTALL
@@ -58,7 +59,7 @@ public class JavaEEGwtMavenImporter extends MavenImporterFromBuildPlugin
 			List<MavenProjectsProcessorTask> list)
 	{
 		// it can be - when Maven plugin installed, but not JavaEE plugin
-		ModuleExtensionProviderEP providerEP = ModuleExtensionProviderEP.findProviderEP("javaee-google-gwt");
+		ModuleExtensionProviderEP providerEP = ModuleExtensionProviders.findProvider("javaee-google-gwt");
 		if(providerEP == null)
 		{
 			return;
