@@ -27,6 +27,7 @@ import consulo.vfs.util.ArchiveVfsUtil;
 public class GoogleGwtSdkType extends GwtSdkBaseType
 {
 	private static final String LINE_START = "Google Web Toolkit ";
+	private static final String LINE_START2 = "GWT ";
 
 	public GoogleGwtSdkType()
 	{
@@ -79,9 +80,17 @@ public class GoogleGwtSdkType extends GwtSdkBaseType
 		{
 			String text = FileUtil.loadFile(file, "UTF-8");
 			String[] lines = text.split("\n");
-			if(lines.length > 0 && lines[0].startsWith(LINE_START))
+			if(lines.length > 0)
 			{
-				return lines[0].substring(LINE_START.length(), lines[0].length());
+				String line = lines[0];
+				if(line.startsWith(LINE_START))
+				{
+					return line.substring(LINE_START.length(), line.length());
+				}
+				else if(line.startsWith(LINE_START2))
+				{
+					return line.substring(LINE_START2.length(), line.length());
+				}
 			}
 		}
 		catch(IOException ignored)
