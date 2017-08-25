@@ -217,6 +217,11 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 			GwtCompilerProcessHandler handler = new GwtCompilerProcessHandler(commandLine, context, gwtModuleFile.get().getUrl(), extension.getModule());
 			handler.startNotify();
 			handler.waitFor();
+			Integer exitCode = handler.getExitCode();
+			if(exitCode == null || exitCode != 0)
+			{
+				context.addMessage(CompilerMessageCategory.ERROR, "Compiler process exited with code: " + exitCode, null, -1, 1);
+			}
 		}
 		catch(Exception e)
 		{
@@ -247,7 +252,12 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 	}
 
 	@NotNull
-	private static JavaParameters createCommand(GoogleGwtModuleExtension extension, GwtLibraryPathProvider.Info pathInfo, final GwtModule module, final File outputDir, final File generatedDir, final String gwtModuleName)
+	private static JavaParameters createCommand(GoogleGwtModuleExtension extension,
+			GwtLibraryPathProvider.Info pathInfo,
+			final GwtModule module,
+			final File outputDir,
+			final File generatedDir,
+			final String gwtModuleName)
 	{
 		final JavaParameters javaParameters = new JavaParameters();
 		javaParameters.setJdk(ModuleUtilCore.getSdk(extension.getModule(), JavaModuleExtension.class));

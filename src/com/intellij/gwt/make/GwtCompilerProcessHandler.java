@@ -79,7 +79,7 @@ public class GwtCompilerProcessHandler extends OSProcessHandler
 	@NonNls
 	private static final String STACKTRACE_PREFIX = "at ";
 	@NonNls
-	private static final Set<String> MODULE_FILE_ERRORS = new HashSet<String>(Arrays.asList("Module has no entry points defined"));
+	private static final Set<String> MODULE_FILE_ERRORS = new HashSet<>(Arrays.asList("Module has no entry points defined"));
 	@NonNls
 	private static final String[] CLASS_NAME_PREFIXES = {
 			"Type ",
@@ -87,14 +87,8 @@ public class GwtCompilerProcessHandler extends OSProcessHandler
 			"Parameter: "
 	};
 
-	private final Map<Key, GwtCompilerOutputParser> myParsers = new FactoryMap<Key, GwtCompilerOutputParser>()
-	{
-		@Override
-		protected GwtCompilerOutputParser create(final Key key)
-		{
-			return new GwtCompilerOutputParser(ProcessOutputTypes.STDERR.equals(key));
-		}
-	};
+	private final Map<Key, GwtCompilerOutputParser> myParsers = FactoryMap.createMap(key -> new GwtCompilerOutputParser(ProcessOutputTypes.STDERR.equals(key)));
+
 	private final CompileContext myContext;
 	private final String myModuleFileUrl;
 	private final Module myModule;
@@ -111,6 +105,13 @@ public class GwtCompilerProcessHandler extends OSProcessHandler
 	public void notifyTextAvailable(final String text, final Key outputType)
 	{
 		super.notifyTextAvailable(text, outputType);
+
+		if(outputType.equals(ProcessOutputTypes.STDERR) && text.contains(OutOfMemoryError.class.getName()))
+		{
+			myContext.addMessage(CompilerMessageCategory.ERROR, text.trim(), null, -1, -1);
+			destroyProcess();
+			return;
+		}
 
 		if(text.startsWith("Error: "))
 		{
