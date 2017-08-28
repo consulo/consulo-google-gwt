@@ -16,7 +16,6 @@
 
 package consulo.gwt.sdk;
 
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +60,7 @@ public abstract class GwtSdkBaseType extends SdkType
 			String name = virtualFile.getName();
 
 			// skip compiler library
-			if(StringUtils.startsWith(name, "vaadin-client-compiler"))
+			if(StringUtil.startsWith(name, "vaadin-client-compiler"))
 			{
 				continue;
 			}
