@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
+<project>
   <component name="ModuleManager">
     <modules>
       <module name="consulo-google-gwt" dirurl="file://$PROJECT_DIR$" current-layer="Default">
@@ -116,6 +116,7 @@
           <orderEntry type="module" module-name="gwt-impl" />
           <orderEntry type="library" name="consulo-plugin: com.intellij.xml" level="project" />
           <orderEntry type="library" name="consulo-plugin: consulo.javaee" level="project" />
+          <orderEntry type="library" name="consulo-plugin: consulo.java" level="project" />
         </module-layer>
       </module>
     </modules>

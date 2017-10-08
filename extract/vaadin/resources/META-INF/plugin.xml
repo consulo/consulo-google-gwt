@@ -29,5 +29,7 @@
 								 mutableClass="consulo.vaadin.module.extension.JavaEEVaadinMutableModuleExtension" />
 
 		<sdkType implementation="consulo.vaadin.bundle.VaadinBundleType" />
+
+		<implicitUsageProvider implementation="consulo.vaadin.psi.VaadinImplicitUsageProvider"/>
 	</extensions>
 </idea-plugin>
