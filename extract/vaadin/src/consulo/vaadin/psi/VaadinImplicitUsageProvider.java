@@ -16,6 +16,7 @@
 
 package consulo.vaadin.psi;
 
+import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -31,7 +32,7 @@ public class VaadinImplicitUsageProvider implements ImplicitUsageProvider
 	@Override
 	public boolean isImplicitUsage(PsiElement psiElement)
 	{
-		return psiElement instanceof PsiClass && COM_VAADIN_SHARED_UI_CONNECT.equals(((PsiClass) psiElement).getQualifiedName());
+		return psiElement instanceof PsiClass && AnnotationUtil.isAnnotated((PsiClass)psiElement, COM_VAADIN_SHARED_UI_CONNECT, false);
 	}
 
 	@Override
