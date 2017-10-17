@@ -73,8 +73,8 @@ public class CreateGwtTestCaseAction extends GwtCreateActionBase
 			return false;
 		}
 
-		final Project project = PlatformDataKeys.PROJECT.getData(dataContext);
-		final IdeView view = LangDataKeys.IDE_VIEW.getData(dataContext);
+		final Project project = dataContext.getData(PlatformDataKeys.PROJECT);
+		final IdeView view = dataContext.getData(LangDataKeys.IDE_VIEW);
 		if(view == null || project == null)
 		{
 			return false;
