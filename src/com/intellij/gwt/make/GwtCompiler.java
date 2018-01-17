@@ -26,9 +26,7 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.CompilerUtil;
-import com.intellij.execution.configurations.CommandLineBuilder;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
@@ -60,6 +58,7 @@ import com.intellij.util.PathsList;
 import com.intellij.util.Processor;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
+import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.module.extension.JavaModuleExtension;
 
 public class GwtCompiler implements ClassInstrumentingCompiler
@@ -205,8 +204,8 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 				return false;
 			}
 
-			JavaParameters command = createCommand(extension, pathInfo, gwtModule, outputDir, generatedDir, gwtModuleName.get());
-			GeneralCommandLine commandLine = CommandLineBuilder.createFromJavaParameters(command);
+			OwnJavaParameters command = createCommand(extension, pathInfo, gwtModule, outputDir, generatedDir, gwtModuleName.get());
+			GeneralCommandLine commandLine = command.toCommandLine();
 			if(LOG.isDebugEnabled())
 			{
 				LOG.debug("GWT Compiler command line: " + commandLine.getCommandLineString());
@@ -252,14 +251,14 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 	}
 
 	@NotNull
-	private static JavaParameters createCommand(GoogleGwtModuleExtension extension,
+	private static OwnJavaParameters createCommand(GoogleGwtModuleExtension extension,
 			GwtLibraryPathProvider.Info pathInfo,
 			final GwtModule module,
 			final File outputDir,
 			final File generatedDir,
 			final String gwtModuleName)
 	{
-		final JavaParameters javaParameters = new JavaParameters();
+		final OwnJavaParameters javaParameters = new OwnJavaParameters();
 		javaParameters.setJdk(ModuleUtilCore.getSdk(extension.getModule(), JavaModuleExtension.class));
 		ParametersList vmParameters = javaParameters.getVMParametersList();
 		vmParameters.addParametersString(extension.getAdditionalVmCompilerParameters());

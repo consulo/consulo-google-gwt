@@ -35,7 +35,6 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.JavaCommandLineState;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
@@ -61,6 +60,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.SystemProperties;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
+import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
  * @author nik
@@ -97,13 +97,13 @@ public class GwtCommandLineState extends JavaCommandLineState
 	}
 
 	@Override
-	protected JavaParameters createJavaParameters() throws ExecutionException
+	protected OwnJavaParameters createJavaParameters() throws ExecutionException
 	{
-		final JavaParameters params = new JavaParameters();
+		final OwnJavaParameters params = new OwnJavaParameters();
 
 		params.setWorkingDirectory(getTempOutputDir());
 
-		params.configureByModule(myModule, JavaParameters.JDK_AND_CLASSES);
+		params.configureByModule(myModule, OwnJavaParameters.JDK_AND_CLASSES);
 
 		if(SystemInfo.isMac)
 		{

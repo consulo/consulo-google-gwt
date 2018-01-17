@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.execution.JavaTestPatcher;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.gwt.make.GwtCompilerPaths;
 import com.intellij.gwt.module.GwtModulesManager;
@@ -35,6 +34,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
+import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.roots.ContentFolderScopes;
 
 /**
@@ -45,7 +45,7 @@ public class GwtJUnitPatcher implements JavaTestPatcher
 	@NonNls
 	private static final String GWT_ARGS_PROPERTY = "gwt.args";
 
-	public void patchJavaParameters(@Nullable Module module, @NotNull JavaParameters javaParameters)
+	public void patchJavaParameters(@Nullable Module module, @NotNull OwnJavaParameters javaParameters)
 	{
 		if(module == null)
 		{
