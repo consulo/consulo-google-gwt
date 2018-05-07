@@ -16,6 +16,7 @@
 
 package com.intellij.gwt.actions;
 
+import consulo.awt.TargetAWT;
 import consulo.gwt.GwtIcons;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -30,7 +31,7 @@ public class GwtCreateActionGroup extends DefaultActionGroup
 	{
 		super(GwtBundle.message("action.group.gwt.title"), true);
 		getTemplatePresentation().setDescription(GwtBundle.message("action.group.gwt.description"));
-		getTemplatePresentation().setIcon(GwtIcons.Gwt);
+		getTemplatePresentation().setIcon(TargetAWT.to(GwtIcons.Gwt));
 	}
 
 

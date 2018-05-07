@@ -19,6 +19,7 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import consulo.awt.TargetAWT;
 import consulo.gwt.GwtIcons;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import com.intellij.gwt.module.model.GwtModule;
@@ -43,7 +44,7 @@ public class GwtDomFileDescription extends DomFileDescription<GwtModule>
 	@Override
 	public Icon getFileIcon(@Iconable.IconFlags int flags)
 	{
-		return GwtIcons.Gwt;
+		return TargetAWT.to(GwtIcons.Gwt);
 	}
 
 	@Override

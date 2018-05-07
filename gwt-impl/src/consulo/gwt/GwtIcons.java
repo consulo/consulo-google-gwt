@@ -1,11 +1,10 @@
 package consulo.gwt;
 
-import javax.swing.Icon;
-
 import com.intellij.openapi.util.IconLoader;
+import consulo.ui.image.Image;
 
 // Generated Consulo DevKit plugin 
 public interface GwtIcons
 {
-	Icon Gwt = IconLoader.getIcon("/icons/gwt.png");  // 16x16
+	Image Gwt = IconLoader.getIcon("/icons/gwt.png");  // 16x16
 }

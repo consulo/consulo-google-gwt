@@ -18,6 +18,7 @@ import consulo.gwt.module.extension.path.GwtSdkUtil;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.DocumentationOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
+import consulo.ui.image.Image;
 import consulo.vfs.util.ArchiveVfsUtil;
 
 /**
@@ -55,7 +56,7 @@ public class GoogleGwtSdkType extends GwtSdkBaseType
 
 	@Nullable
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return GwtIcons.Gwt;
 	}

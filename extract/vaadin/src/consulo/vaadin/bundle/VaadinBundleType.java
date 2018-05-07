@@ -28,6 +28,7 @@ import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;
 import com.intellij.openapi.projectRoots.Sdk;
 import consulo.gwt.sdk.GwtSdkBaseType;
+import consulo.ui.image.Image;
 import consulo.vaadin.VaadinIcons;
 
 /**
@@ -88,7 +89,7 @@ public class VaadinBundleType extends GwtSdkBaseType
 
 	@Nullable
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return VaadinIcons.Vaadin;
 	}

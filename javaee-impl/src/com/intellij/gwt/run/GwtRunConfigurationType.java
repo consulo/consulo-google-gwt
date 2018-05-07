@@ -23,7 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.gwt.GwtBundle;
+import consulo.awt.TargetAWT;
 import consulo.gwt.GwtIcons;
+import consulo.ui.image.Image;
 
 public class GwtRunConfigurationType implements ConfigurationType
 {
@@ -53,7 +55,7 @@ public class GwtRunConfigurationType implements ConfigurationType
 	}
 
 	@Override
-	public Icon getIcon()
+	public Image getIcon()
 	{
 		return GwtIcons.Gwt;
 	}
