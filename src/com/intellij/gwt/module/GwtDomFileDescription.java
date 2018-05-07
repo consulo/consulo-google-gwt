@@ -16,19 +16,17 @@
 package com.intellij.gwt.module;
 
 import javax.annotation.Nonnull;
-import javax.swing.Icon;
-
 import javax.annotation.Nullable;
-import consulo.awt.TargetAWT;
-import consulo.gwt.GwtIcons;
-import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
+
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.impl.GwtModuleImpl;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomFileDescription;
+import consulo.gwt.GwtIcons;
+import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
+import consulo.ui.image.Image;
 
 /**
  * @author peter
@@ -42,9 +40,9 @@ public class GwtDomFileDescription extends DomFileDescription<GwtModule>
 
 	@Nullable
 	@Override
-	public Icon getFileIcon(@Iconable.IconFlags int flags)
+	public Image getFileIcon(@Iconable.IconFlags int flags)
 	{
-		return TargetAWT.to(GwtIcons.Gwt);
+		return GwtIcons.Gwt;
 	}
 
 	@Override
@@ -54,9 +52,9 @@ public class GwtDomFileDescription extends DomFileDescription<GwtModule>
 	}
 
 	@Override
-	public boolean isMyFile(@Nonnull XmlFile file, final Module module)
+	public boolean isMyFile(@Nonnull XmlFile file)
 	{
-		if(!(file.getName().endsWith(GwtModulesManager.GWT_XML_SUFFIX) && super.isMyFile(file, module)))
+		if(!(file.getName().endsWith(GwtModulesManager.GWT_XML_SUFFIX) && super.isMyFile(file)))
 		{
 			return false;
 		}
