@@ -5,9 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
@@ -31,7 +33,7 @@ public class GwtGenericsUtil
 	{
 	}
 
-	public static List<PsiType> getTypeParameters(@NotNull PsiElement context, @Nullable String typeParametersString)
+	public static List<PsiType> getTypeParameters(@Nonnull PsiElement context, @Nullable String typeParametersString)
 	{
 		if(typeParametersString == null)
 		{

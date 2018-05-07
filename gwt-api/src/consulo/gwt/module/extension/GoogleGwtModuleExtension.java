@@ -18,8 +18,9 @@ package consulo.gwt.module.extension;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
@@ -32,18 +33,18 @@ import consulo.module.extension.ModuleExtensionWithSdk;
  */
 public interface GoogleGwtModuleExtension<T extends GoogleGwtModuleExtension<T>> extends ModuleExtensionWithSdk<T>
 {
-	@NotNull
-	String getPackagingRelativePath(@NotNull GwtModule module);
+	@Nonnull
+	String getPackagingRelativePath(@Nonnull GwtModule module);
 
-	@NotNull
+	@Nonnull
 	GwtJavaScriptOutputStyle getOutputStyle();
 
 	boolean isRunGwtCompilerOnMake();
 
-	@NotNull
+	@Nonnull
 	String getAdditionalCompilerParameters();
 
-	@NotNull
+	@Nonnull
 	String getAdditionalVmCompilerParameters();
 
 	int getCompilerMaxHeapSize();

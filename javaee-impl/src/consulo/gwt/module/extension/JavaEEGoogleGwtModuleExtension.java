@@ -19,7 +19,8 @@ package consulo.gwt.module.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.gwt.module.model.GwtModule;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import consulo.roots.ModuleRootLayer;
@@ -32,14 +33,14 @@ public class JavaEEGoogleGwtModuleExtension extends GoogleGwtModuleExtensionImpl
 {
 	protected final Map<String, String> myPackagingPaths = new HashMap<String, String>();
 
-	public JavaEEGoogleGwtModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
+	public JavaEEGoogleGwtModuleExtension(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}
 
 	@Override
-	@NotNull
-	public String getPackagingRelativePath(@NotNull GwtModule module)
+	@Nonnull
+	public String getPackagingRelativePath(@Nonnull GwtModule module)
 	{
 		String moduleName = module.getQualifiedName();
 		String path = myPackagingPaths.get(moduleName);

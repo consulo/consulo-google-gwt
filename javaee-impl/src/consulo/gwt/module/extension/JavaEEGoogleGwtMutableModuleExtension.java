@@ -16,11 +16,11 @@
 
 package consulo.gwt.module.extension;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.Comparing;
@@ -36,12 +36,12 @@ import consulo.roots.ModuleRootLayer;
  */
 public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModuleExtension implements GoogleGwtMutableModuleExtension<JavaEEGoogleGwtModuleExtension>
 {
-	public JavaEEGoogleGwtMutableModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
+	public JavaEEGoogleGwtMutableModuleExtension(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk()
 	{
@@ -51,7 +51,7 @@ public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModule
 	@Nullable
 	@Override
 	@RequiredDispatchThread
-	public JComponent createConfigurablePanel(@NotNull Runnable runnable)
+	public JComponent createConfigurablePanel(@Nonnull Runnable runnable)
 	{
 		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));
 		if(GwtLibraryPathProvider.EP_NAME.composite().canChooseBundle(getModuleRootLayer()))
@@ -69,7 +69,7 @@ public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModule
 	}
 
 	@Override
-	public boolean isModified(@NotNull JavaEEGoogleGwtModuleExtension originExtension)
+	public boolean isModified(@Nonnull JavaEEGoogleGwtModuleExtension originExtension)
 	{
 		if(isModifiedImpl(originExtension))
 		{

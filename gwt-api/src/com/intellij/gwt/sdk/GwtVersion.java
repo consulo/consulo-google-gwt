@@ -16,19 +16,20 @@
 
 package com.intellij.gwt.sdk;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author nik
  */
 public interface GwtVersion
 {
-	@NotNull
+	@Nonnull
 	@NonNls
 	String getGwtModuleHtmlTemplate();
 
-	@NotNull
+	@Nonnull
 	@NonNls
 	String getGwtServiceJavaTemplate();
 
@@ -40,15 +41,15 @@ public interface GwtVersion
 
 	boolean isNewExpressionInJavaScriptSupported();
 
-	@NotNull
+	@Nonnull
 	@NonNls
 	String getCompilerClassName();
 
-	@NotNull
+	@Nonnull
 	@NonNls
 	String getShellClassName();
 
-	@NotNull
+	@Nonnull
 	@NonNls
 	String getCompilerOutputDirParameterName();
 }

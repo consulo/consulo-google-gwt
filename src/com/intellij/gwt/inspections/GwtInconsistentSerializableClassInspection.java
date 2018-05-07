@@ -19,10 +19,12 @@ package com.intellij.gwt.inspections;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -56,7 +58,7 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 
 	@Override
 	@Nls
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.incorrect.serializable.class");
@@ -64,7 +66,7 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 
 	@Override
 	@NonNls
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "GwtInconsistentSerializableClass";
@@ -74,10 +76,10 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension,
-			@NotNull GwtVersion version,
-			@NotNull PsiClass aClass,
-			@NotNull InspectionManager manager,
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension,
+			@Nonnull GwtVersion version,
+			@Nonnull PsiClass aClass,
+			@Nonnull InspectionManager manager,
 			boolean isOnTheFly)
 	{
 		PsiFile containingFile = aClass.getContainingFile();
@@ -152,7 +154,7 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			try
 			{
@@ -176,7 +178,7 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			try
 			{

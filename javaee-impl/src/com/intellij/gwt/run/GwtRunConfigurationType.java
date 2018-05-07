@@ -16,20 +16,18 @@
 
 package com.intellij.gwt.run;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.gwt.GwtBundle;
-import consulo.awt.TargetAWT;
 import consulo.gwt.GwtIcons;
 import consulo.ui.image.Image;
 
 public class GwtRunConfigurationType implements ConfigurationType
 {
-	@NotNull
+	@Nonnull
 	public static GwtRunConfigurationType getInstance()
 	{
 		return CONFIGURATION_TYPE_EP.findExtension(GwtRunConfigurationType.class);
@@ -68,7 +66,7 @@ public class GwtRunConfigurationType implements ConfigurationType
 
 	@Override
 	@NonNls
-	@NotNull
+	@Nonnull
 	public String getId()
 	{
 		return "GWT.ConfigurationType";

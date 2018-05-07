@@ -23,8 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
@@ -80,7 +81,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDescription()
 	{
 		return GwtBundle.message("compiler.description.google.compiler");
@@ -99,7 +100,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public ProcessingItem[] getProcessingItems(final CompileContext context)
 	{
 		final ArrayList<ProcessingItem> result = new ArrayList<ProcessingItem>();
@@ -250,7 +251,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		return context.getMessageCount(CompilerMessageCategory.ERROR) == 0;
 	}
 
-	@NotNull
+	@Nonnull
 	private static OwnJavaParameters createCommand(GoogleGwtModuleExtension extension,
 			GwtLibraryPathProvider.Info pathInfo,
 			final GwtModule module,
@@ -285,7 +286,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		return javaParameters;
 	}
 
-	private static void createClasspath(@NotNull GoogleGwtModuleExtension extension, GwtLibraryPathProvider.Info pathInfo, Module module, final PathsList classPath)
+	private static void createClasspath(@Nonnull GoogleGwtModuleExtension extension, GwtLibraryPathProvider.Info pathInfo, Module module, final PathsList classPath)
 	{
 		OrderEnumerator orderEnumerator = ModuleRootManager.getInstance(module).orderEntries();
 

@@ -18,8 +18,9 @@ package consulo.gwt.module.extension.impl;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.make.GwtModuleFileProcessingItem;
 import com.intellij.gwt.module.model.GwtModule;
@@ -49,7 +50,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	protected String myAdditionalCompilerVmParameters = "";
 	protected String myCompilerOutputUrl = "";
 
-	public GoogleGwtModuleExtensionImpl(@NotNull String id, @NotNull ModuleRootLayer rootModel)
+	public GoogleGwtModuleExtensionImpl(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}
@@ -96,7 +97,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public GwtJavaScriptOutputStyle getOutputStyle()
 	{
 		return myOutputStyle;
@@ -109,13 +110,13 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getAdditionalCompilerParameters()
 	{
 		return myAdditionalCompilerParameters;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getAdditionalVmCompilerParameters()
 	{
@@ -134,7 +135,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		return myCompilerOutputUrl;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Class<? extends SdkType> getSdkTypeClass()
 	{
@@ -172,15 +173,15 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	}
 
 	@Override
-	@NotNull
-	public String getPackagingRelativePath(@NotNull GwtModule module)
+	@Nonnull
+	public String getPackagingRelativePath(@Nonnull GwtModule module)
 	{
 		return "";
 	}
 
 	@RequiredReadAction
 	@Override
-	protected void loadStateImpl(@NotNull Element element)
+	protected void loadStateImpl(@Nonnull Element element)
 	{
 		super.loadStateImpl(element);
 
@@ -192,7 +193,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	}
 
 	@Override
-	protected void getStateImpl(@NotNull Element element)
+	protected void getStateImpl(@Nonnull Element element)
 	{
 		super.getStateImpl(element);
 
@@ -207,7 +208,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 	}
 
 	@Override
-	public void commit(@NotNull T mutableModuleExtension)
+	public void commit(@Nonnull T mutableModuleExtension)
 	{
 		super.commit(mutableModuleExtension);
 
@@ -219,7 +220,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		myCompilerOutputUrl = mutableModuleExtension.myCompilerOutputUrl;
 	}
 
-	public boolean isModifiedImpl(@NotNull T originExtension)
+	public boolean isModifiedImpl(@Nonnull T originExtension)
 	{
 		if(super.isModifiedImpl(originExtension))
 		{

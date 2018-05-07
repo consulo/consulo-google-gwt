@@ -2,8 +2,9 @@ package com.intellij.gwt.rpc;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.module.model.GwtServlet;
@@ -22,13 +23,13 @@ public class GwtServletUtil
 	{
 	}
 
-	@NotNull
+	@Nonnull
 	public static String getDefaultServletPath(GwtModule module, String serviceName)
 	{
 		return "/" + module.getQualifiedName() + "/" + serviceName;
 	}
 
-	@NotNull
+	@Nonnull
 	private static String getServletPath(GwtModule module, String serviceName, String serviceImplClassName)
 	{
 		List<GwtServlet> list = module.getServlets();

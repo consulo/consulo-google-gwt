@@ -19,9 +19,10 @@ package com.intellij.gwt.actions;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
@@ -103,7 +104,7 @@ public class CreateGwtRemoteServiceAction extends GwtCreateActionBase
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected PsiElement[] doCreate(String serviceName, PsiDirectory directory, final GwtModule gwtModule) throws Exception
 	{
 		ArrayList<PsiElement> res = new ArrayList<PsiElement>(0);

@@ -17,8 +17,8 @@
 package consulo.gwt.sdk;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -109,7 +109,7 @@ public abstract class GwtSdkBaseType extends SdkType
 		return JavaSdk.getInstance().isRootTypeApplicable(type);
 	}
 
-	@NotNull
+	@Nonnull
 	public abstract GwtVersion getVersion(Sdk sdk);
 
 	@Nullable

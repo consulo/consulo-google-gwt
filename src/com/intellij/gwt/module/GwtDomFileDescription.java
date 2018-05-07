@@ -15,10 +15,10 @@
  */
 package com.intellij.gwt.module;
 
+import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import consulo.awt.TargetAWT;
 import consulo.gwt.GwtIcons;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
@@ -54,7 +54,7 @@ public class GwtDomFileDescription extends DomFileDescription<GwtModule>
 	}
 
 	@Override
-	public boolean isMyFile(@NotNull XmlFile file, final Module module)
+	public boolean isMyFile(@Nonnull XmlFile file, final Module module)
 	{
 		if(!(file.getName().endsWith(GwtModulesManager.GWT_XML_SUFFIX) && super.isMyFile(file, module)))
 		{

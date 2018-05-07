@@ -20,10 +20,8 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.Icon;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -45,7 +43,7 @@ public class VaadinBundleType extends GwtSdkBaseType
 		super("VAADIN_BUNDLE");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public GwtVersion getVersion(Sdk sdk)
 	{
@@ -80,7 +78,7 @@ public class VaadinBundleType extends GwtSdkBaseType
 		return getPresentableName() + " " + getVersionString(sdkHome);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableName()
 	{

@@ -18,7 +18,7 @@ package com.intellij.gwt.actions;
 
 import java.util.ArrayList;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
@@ -75,7 +75,7 @@ public class CreateGwtModuleAction extends GwtCreateActionBase
 	 * @return created elements. Never null.
 	 */
 	@Override
-	@NotNull
+	@Nonnull
 	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
 	{
 		JavaDirectoryService javaDirectoryService = JavaDirectoryService.getInstance();

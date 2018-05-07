@@ -18,10 +18,12 @@ package com.intellij.gwt.run;
 
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
@@ -67,7 +69,7 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 		this(GwtBundle.message("default.gwt.run.configuration.name"), project, configurationFactory);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
@@ -75,7 +77,7 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	public RunProfileState getState(@NotNull final Executor executor, @NotNull final ExecutionEnvironment env) throws ExecutionException
+	public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
 	{
 		final Module module = getModule();
 		if(module == null)

@@ -18,9 +18,10 @@ package com.intellij.gwt.inspections;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -37,14 +38,14 @@ import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 {
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.gwt.remote.service.is.not.registered.in.web.xml");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -53,7 +54,7 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@NotNull final PsiFile file, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		/*if(!DeploymentDescriptorsConstants.WEB_XML_META_DATA.getFileName().equals(file.getName()))
 		{
@@ -187,7 +188,7 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly)
 	{
 	/*	if(!shouldCheck(aClass))
 		{

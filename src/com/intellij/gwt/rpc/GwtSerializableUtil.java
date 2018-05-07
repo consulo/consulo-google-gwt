@@ -24,9 +24,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import consulo.annotations.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.GwtBundle;
@@ -92,7 +93,7 @@ public class GwtSerializableUtil
 	}
 
 	@Nullable
-	public static PsiMethod findNoArgConstructor(@NotNull PsiClass psiClass)
+	public static PsiMethod findNoArgConstructor(@Nonnull PsiClass psiClass)
 	{
 		for(PsiMethod constructor : psiClass.getConstructors())
 		{
@@ -219,12 +220,12 @@ public class GwtSerializableUtil
 			return true;
 		}
 
-		public boolean isGwtSerializable(@NotNull PsiClass psiClass)
+		public boolean isGwtSerializable(@Nonnull PsiClass psiClass)
 		{
 			return myIsSerializableInterface != null && psiClass.isInheritor(myIsSerializableInterface, true);
 		}
 
-		public boolean isMarkedSerializable(final @NotNull PsiClass psiClass)
+		public boolean isMarkedSerializable(final @Nonnull PsiClass psiClass)
 		{
 			for(PsiClass markerInterface : mySerializableMarkerInterfaces)
 			{

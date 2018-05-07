@@ -16,7 +16,8 @@
 
 package com.intellij.gwt.actions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.templates.GwtTemplates;
@@ -52,7 +53,7 @@ public class CreateGwtEntryPointAction extends GwtCreateActionBase
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
 	{
 		final PsiClass entryPointClass = createClassFromTemplate(directory, name, GwtTemplates.GWT_ENTRY_POINT_JAVA);

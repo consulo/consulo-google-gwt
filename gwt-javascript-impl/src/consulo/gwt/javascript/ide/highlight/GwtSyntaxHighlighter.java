@@ -19,7 +19,8 @@ package consulo.gwt.javascript.ide.highlight;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.javascript.DialectOptionHolder;
 import com.intellij.lang.javascript.JSTokenTypes;
@@ -44,7 +45,7 @@ public class GwtSyntaxHighlighter extends JSHighlighter
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public TextAttributesKey[] getTokenHighlights(final IElementType tokenType)
 	{
 		if(myKeysMap.containsKey(tokenType))

@@ -16,7 +16,8 @@
 
 package com.intellij.gwt.run;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
@@ -31,7 +32,7 @@ public class GwtRunConfigurationFactory extends ConfigurationFactory
 	}
 
 	@Override
-	public boolean isApplicable(@NotNull Project project)
+	public boolean isApplicable(@Nonnull Project project)
 	{
 		return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaEEGoogleGwtModuleExtension.class);
 	}

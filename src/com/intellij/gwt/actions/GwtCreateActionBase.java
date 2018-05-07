@@ -21,8 +21,9 @@ import java.util.List;
 import java.util.Properties;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.CommonBundle;
 import com.intellij.gwt.GwtBundle;
@@ -72,7 +73,7 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected final PsiElement[] invokeDialog(final Project project, final PsiDirectory directory)
 	{
 		Module module = ModuleUtil.findModuleForFile(directory.getVirtualFile(), project);
@@ -167,7 +168,7 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected PsiElement[] create(String newName, PsiDirectory directory) throws Exception
 	{
 		final GwtModule gwtModule;
@@ -182,7 +183,7 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 		return doCreate(newName, directory, gwtModule);
 	}
 
-	@NotNull
+	@Nonnull
 	protected abstract PsiElement[] doCreate(String newName, PsiDirectory directory, final GwtModule gwtModule) throws Exception;
 
 	protected static PsiClass createClassFromTemplate(final PsiDirectory directory, String className, String templateName,

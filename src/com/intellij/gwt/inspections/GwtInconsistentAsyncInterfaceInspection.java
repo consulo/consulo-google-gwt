@@ -19,9 +19,11 @@ package com.intellij.gwt.inspections;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInspection.InspectionManager;
@@ -53,7 +55,7 @@ public class GwtInconsistentAsyncInterfaceInspection extends BaseGwtInspection
 	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly)
 	{
 		GoogleGwtModuleExtension gwtFacet = getExtension(aClass);
 		if(gwtFacet == null)
@@ -149,14 +151,14 @@ public class GwtInconsistentAsyncInterfaceInspection extends BaseGwtInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.inconsistent.gwt.remoteservice");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -177,7 +179,7 @@ public class GwtInconsistentAsyncInterfaceInspection extends BaseGwtInspection
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			VirtualFile file = mySync.getContainingFile().getVirtualFile();
 			if(file == null || ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(file).hasReadonlyFiles())
@@ -227,7 +229,7 @@ public class GwtInconsistentAsyncInterfaceInspection extends BaseGwtInspection
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			if(ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(myAsync.getContainingFile().getVirtualFile()).hasReadonlyFiles())
 			{
@@ -263,7 +265,7 @@ public class GwtInconsistentAsyncInterfaceInspection extends BaseGwtInspection
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			if(ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(myAsync.getContainingFile().getVirtualFile()).hasReadonlyFiles())
 			{
@@ -295,7 +297,7 @@ public class GwtInconsistentAsyncInterfaceInspection extends BaseGwtInspection
 		}
 
 		@Override
-		public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
 		{
 			try
 			{

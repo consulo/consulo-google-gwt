@@ -19,8 +19,8 @@ package com.intellij.gwt.refactorings;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.lang.properties.IProperty;
@@ -73,7 +73,7 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getComponentName()
 	{
 		return "GwtRefactoringListenerProvider";
@@ -130,7 +130,7 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 		return new RefactoringElementListenerBase()
 		{
 			@Override
-			public void elementRenamed(@NotNull final PsiElement newElement)
+			public void elementRenamed(@Nonnull final PsiElement newElement)
 			{
 				rename(asyncMethod, ((PsiMethod) newElement).getName());
 			}
@@ -155,7 +155,7 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 		return new RefactoringElementListenerBase()
 		{
 			@Override
-			public void elementRenamed(@NotNull PsiElement newElement)
+			public void elementRenamed(@Nonnull PsiElement newElement)
 			{
 				rename(async, ((PsiClass) newElement).getName() + RemoteServiceUtil.ASYNC_SUFFIX);
 			}
@@ -219,7 +219,7 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 			return new RefactoringElementListenerBase()
 			{
 				@Override
-				public void elementRenamed(@NotNull PsiElement newElement)
+				public void elementRenamed(@Nonnull PsiElement newElement)
 				{
 					for(Map.Entry<PsiNamedElement, Function<String, String>> entry : elementsToRename.entrySet())
 					{
@@ -262,12 +262,12 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 	private static abstract class RefactoringElementListenerBase implements RefactoringElementListener
 	{
 		@Override
-		public void elementMoved(@NotNull PsiElement newElement)
+		public void elementMoved(@Nonnull PsiElement newElement)
 		{
 		}
 
 		@Override
-		public void elementRenamed(@NotNull PsiElement newElement)
+		public void elementRenamed(@Nonnull PsiElement newElement)
 		{
 		}
 	}

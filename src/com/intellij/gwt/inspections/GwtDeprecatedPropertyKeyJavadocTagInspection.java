@@ -3,7 +3,8 @@ package com.intellij.gwt.inspections;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.annotations.RequiredReadAction;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.InspectionManager;
@@ -36,7 +37,7 @@ public class GwtDeprecatedPropertyKeyJavadocTagInspection extends BaseGwtInspect
 
 	@RequiredReadAction
 	@Override
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		if(!version.isGenericsSupported())
 		{
@@ -73,21 +74,21 @@ public class GwtDeprecatedPropertyKeyJavadocTagInspection extends BaseGwtInspect
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public HighlightDisplayLevel getDefaultLevel()
 	{
 		return HighlightDisplayLevel.WARNING;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.deprecated.gwt.key.tag.in.javadoc.comments");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "GwtDeprecatedPropertyKeyJavadocTag";
@@ -107,7 +108,7 @@ public class GwtDeprecatedPropertyKeyJavadocTagInspection extends BaseGwtInspect
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			String propertyName = myTag.getValueElement().getText();
 			try

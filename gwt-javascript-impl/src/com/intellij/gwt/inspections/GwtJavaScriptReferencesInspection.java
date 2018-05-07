@@ -21,8 +21,9 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import consulo.gwt.javascript.lang.GwtJavaScriptVersion;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -43,7 +44,7 @@ public class GwtJavaScriptReferencesInspection extends BaseGwtInspection
 {
 	@Override
 	@Nls
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.unresolved.references.in.jsni.methods");
@@ -51,7 +52,7 @@ public class GwtJavaScriptReferencesInspection extends BaseGwtInspection
 
 	@Override
 	@NonNls
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "GwtJavaScriptReferences";
@@ -59,7 +60,7 @@ public class GwtJavaScriptReferencesInspection extends BaseGwtInspection
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@NotNull final PsiFile file, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		if(!(file.getLanguageVersion() instanceof GwtJavaScriptVersion))
 		{

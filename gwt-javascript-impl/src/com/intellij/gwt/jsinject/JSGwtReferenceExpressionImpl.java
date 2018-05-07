@@ -15,7 +15,7 @@
  */
 package com.intellij.gwt.jsinject;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.javascript.JSTokenTypes;
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl;
@@ -33,7 +33,7 @@ public class JSGwtReferenceExpressionImpl extends JSReferenceExpressionImpl
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public PsiReference[] getReferences()
 	{
 		PsiElement at = findChildByType(JSTokenTypes.AT);

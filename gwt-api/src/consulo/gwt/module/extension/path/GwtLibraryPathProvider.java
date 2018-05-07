@@ -19,8 +19,9 @@ package consulo.gwt.module.extension.path;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -48,7 +49,7 @@ public interface GwtLibraryPathProvider
 			myDevJarPath = devJarPath;
 		}
 
-		@NotNull
+		@Nonnull
 		public GwtVersion getVersion()
 		{
 			return myVersion;
@@ -81,7 +82,7 @@ public interface GwtLibraryPathProvider
 			return myDevJarPath;
 		}
 
-		@NotNull
+		@Nonnull
 		public List<String> getAdditionalClasspath()
 		{
 			return Collections.emptyList();
@@ -91,8 +92,8 @@ public interface GwtLibraryPathProvider
 	CompositeExtensionPointName<GwtLibraryPathProvider> EP_NAME = CompositeExtensionPointName.applicationPoint("com.intellij.gwt.libraryPathProvider", GwtLibraryPathProvider.class);
 
 	@Nullable
-	Info resolveInfo(@NotNull GoogleGwtModuleExtension<?> extension);
+	Info resolveInfo(@Nonnull GoogleGwtModuleExtension<?> extension);
 
 	@CompositeExtensionPointName.BooleanBreakResult(breakValue = false)
-	boolean canChooseBundle(@NotNull ModuleRootLayer layer);
+	boolean canChooseBundle(@Nonnull ModuleRootLayer layer);
 }

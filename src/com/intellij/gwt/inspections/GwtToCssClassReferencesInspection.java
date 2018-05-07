@@ -16,8 +16,9 @@
 
 package com.intellij.gwt.inspections;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.openapi.diagnostic.Logger;
@@ -28,8 +29,8 @@ public class GwtToCssClassReferencesInspection extends BaseGwtInspection
 	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.inspections.GwtToCssClassReferencesInspection");
 
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly)
 	{
 		/*Project project = holder.getManager().getProject();
 		if(hasGwtFacets(project))
@@ -40,14 +41,14 @@ public class GwtToCssClassReferencesInspection extends BaseGwtInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.unresolved.references.to.css.classes.display.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{

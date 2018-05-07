@@ -18,9 +18,11 @@ package com.intellij.gwt.module;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
@@ -47,50 +49,50 @@ public abstract class GwtModulesManager
 	@NonNls
 	public static final String DEFAULT_SOURCE_PATH = "client";
 
-	public static GwtModulesManager getInstance(@NotNull Project project)
+	public static GwtModulesManager getInstance(@Nonnull Project project)
 	{
 		return ServiceManager.getService(project, GwtModulesManager.class);
 	}
 
-	@NotNull
+	@Nonnull
 	public abstract GwtModule[] getAllGwtModules();
 
-	@NotNull
-	public abstract GwtModule[] getGwtModules(@NotNull Module module);
+	@Nonnull
+	public abstract GwtModule[] getGwtModules(@Nonnull Module module);
 
-	@NotNull
-	public abstract List<GwtModule> findGwtModulesByClientSourceFile(@NotNull VirtualFile file);
-
-	@Nullable
-	public abstract GwtModule findGwtModuleByClientSourceFile(@NotNull VirtualFile file);
+	@Nonnull
+	public abstract List<GwtModule> findGwtModulesByClientSourceFile(@Nonnull VirtualFile file);
 
 	@Nullable
-	public abstract GwtModule findGwtModuleByClientOrPublicFile(@NotNull VirtualFile file);
+	public abstract GwtModule findGwtModuleByClientSourceFile(@Nonnull VirtualFile file);
 
 	@Nullable
-	public abstract GwtModule findGwtModuleByName(final @NotNull String qualifiedName, final GlobalSearchScope scope);
-
-	@NotNull
-	public abstract List<GwtModule> findModulesByClass(@NotNull PsiElement context, final @Nullable String className);
+	public abstract GwtModule findGwtModuleByClientOrPublicFile(@Nonnull VirtualFile file);
 
 	@Nullable
-	public abstract GwtModule findGwtModuleByEntryPoint(@NotNull PsiClass psiClass);
+	public abstract GwtModule findGwtModuleByName(final @Nonnull String qualifiedName, final GlobalSearchScope scope);
 
-
-	@NotNull
-	public abstract List<Pair<GwtModule, String>> findGwtModulesByPublicFile(@NotNull VirtualFile file);
-
-	@Nullable
-	public abstract String getPathFromPublicRoot(@NotNull GwtModule gwtModule, @NotNull VirtualFile file);
+	@Nonnull
+	public abstract List<GwtModule> findModulesByClass(@Nonnull PsiElement context, final @Nullable String className);
 
 	@Nullable
-	public abstract XmlFile findHtmlFileByModule(@NotNull GwtModule module);
+	public abstract GwtModule findGwtModuleByEntryPoint(@Nonnull PsiClass psiClass);
+
+
+	@Nonnull
+	public abstract List<Pair<GwtModule, String>> findGwtModulesByPublicFile(@Nonnull VirtualFile file);
+
+	@Nullable
+	public abstract String getPathFromPublicRoot(@Nonnull GwtModule gwtModule, @Nonnull VirtualFile file);
+
+	@Nullable
+	public abstract XmlFile findHtmlFileByModule(@Nonnull GwtModule module);
 
 
 	@Nullable
-	public abstract PsiElement findTagById(@NotNull XmlFile htmlFile, String id);
+	public abstract PsiElement findTagById(@Nonnull XmlFile htmlFile, String id);
 
-	public abstract String[] getAllIds(@NotNull XmlFile htmlFile);
+	public abstract String[] getAllIds(@Nonnull XmlFile htmlFile);
 
 	public abstract boolean isGwtModuleFile(final VirtualFile file);
 
@@ -103,6 +105,6 @@ public abstract class GwtModulesManager
 	public abstract boolean isUnderGwtModule(final VirtualFile virtualFile);
 
 	@Nullable
-	public abstract GwtModule getGwtModuleByXmlFile(@NotNull PsiFile file);
+	public abstract GwtModule getGwtModuleByXmlFile(@Nonnull PsiFile file);
 
 }

@@ -1,7 +1,8 @@
 package com.intellij.gwt.refactorings;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.psi.PsiClass;
@@ -24,7 +25,7 @@ abstract class GwtJavadocTagInfo implements JavadocTagInfo
 		}
 
 		@Override
-		protected boolean isValidFor(final @NotNull PsiMethod psiMethod)
+		protected boolean isValidFor(final @Nonnull PsiMethod psiMethod)
 		{
 			return RemoteServiceUtil.isRemoteServiceInterface(psiMethod.getContainingClass());
 		}
@@ -38,7 +39,7 @@ abstract class GwtJavadocTagInfo implements JavadocTagInfo
 		}
 
 		@Override
-		protected boolean isValidFor(final @NotNull PsiMethod psiMethod)
+		protected boolean isValidFor(final @Nonnull PsiMethod psiMethod)
 		{
 			PsiClass aClass = psiMethod.getContainingClass();
 			return aClass != null && GwtI18nManager.getInstance(psiMethod.getProject()).isLocalizableInterface(aClass);
@@ -70,7 +71,7 @@ abstract class GwtJavadocTagInfo implements JavadocTagInfo
 		return element instanceof PsiMethod && isValidFor((PsiMethod) element);
 	}
 
-	protected abstract boolean isValidFor(final @NotNull PsiMethod psiMethod);
+	protected abstract boolean isValidFor(final @Nonnull PsiMethod psiMethod);
 
 	@Override
 	public String checkTagValue(final PsiDocTagValue value)

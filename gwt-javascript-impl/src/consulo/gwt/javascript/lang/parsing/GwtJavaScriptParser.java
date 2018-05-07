@@ -16,7 +16,7 @@
 
 package consulo.gwt.javascript.lang.parsing;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.javascript.lang.parsing.JavaScriptParser;
 import consulo.javascript.lang.parsing.JavaScriptParsingContext;
 
@@ -26,7 +26,7 @@ import consulo.javascript.lang.parsing.JavaScriptParsingContext;
  */
 public class GwtJavaScriptParser extends JavaScriptParser
 {
-	@NotNull
+	@Nonnull
 	@Override
 	public JavaScriptParsingContext createParsingContext()
 	{

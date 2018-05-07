@@ -16,8 +16,8 @@
 
 package com.intellij.gwt.inspections;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
@@ -40,7 +40,7 @@ public abstract class BaseGwtInspection extends BaseJavaLocalInspectionTool
 {
 	@Override
 	@RequiredReadAction
-	public final ProblemDescriptor[] checkClass(@NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public final ProblemDescriptor[] checkClass(@Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		GoogleGwtModuleExtension extension = getExtension(aClass);
 		if(extension == null)
@@ -53,48 +53,48 @@ public abstract class BaseGwtInspection extends BaseJavaLocalInspectionTool
 	}
 
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull final InspectionManager manager,
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager,
 			final boolean isOnTheFly)
 	{
 		return ProblemDescriptor.EMPTY_ARRAY;
 	}
 
 	@RequiredReadAction
-	protected static boolean shouldCheck(@NotNull PsiElement psiElement)
+	protected static boolean shouldCheck(@Nonnull PsiElement psiElement)
 	{
 		return getExtension(psiElement) != null;
 	}
 
 	@Nullable
 	@RequiredReadAction
-	protected static GoogleGwtModuleExtension getExtension(@NotNull PsiElement psiElement)
+	protected static GoogleGwtModuleExtension getExtension(@Nonnull PsiElement psiElement)
 	{
 		return ModuleUtilCore.getExtension(psiElement, GoogleGwtModuleExtension.class);
 	}
 
-	@NotNull
-	protected static PsiElement getElementToHighlight(@NotNull PsiClass psiClass)
+	@Nonnull
+	protected static PsiElement getElementToHighlight(@Nonnull PsiClass psiClass)
 	{
 		PsiIdentifier identifier = psiClass.getNameIdentifier();
 		return identifier != null ? identifier : psiClass;
 	}
 
-	@NotNull
-	protected static PsiElement getElementToHighlight(@NotNull PsiMethod psiMethod)
+	@Nonnull
+	protected static PsiElement getElementToHighlight(@Nonnull PsiMethod psiMethod)
 	{
 		PsiIdentifier identifier = psiMethod.getNameIdentifier();
 		return identifier != null ? identifier : psiMethod;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGroupDisplayName()
 	{
 		return GwtBundle.message("group.gwt.inspections.name");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public HighlightDisplayLevel getDefaultLevel()
 	{
 		return HighlightDisplayLevel.ERROR;

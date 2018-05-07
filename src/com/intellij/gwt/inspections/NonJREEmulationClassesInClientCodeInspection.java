@@ -19,9 +19,11 @@ package com.intellij.gwt.inspections;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -50,14 +52,14 @@ import consulo.gwt.module.extension.path.GwtSdkUtil;
 public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspection
 {
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.classes.not.from.jre.emulation.library.in.client.code");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{
@@ -66,7 +68,7 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull final InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, boolean isOnTheFly)
 	{
 		if(!shouldCheck(file))
 		{
@@ -196,7 +198,7 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor problemDescriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor problemDescriptor)
 		{
 			if(!ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(myGwtModule.getModuleFile()).hasReadonlyFiles())
 			{

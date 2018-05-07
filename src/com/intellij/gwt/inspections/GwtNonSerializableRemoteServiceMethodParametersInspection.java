@@ -20,6 +20,7 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -28,8 +29,8 @@ import javax.swing.event.ChangeListener;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.gwt.sdk.GwtVersion;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
@@ -68,7 +69,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull PsiClass aClass, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly)
 	{
 		GoogleGwtModuleExtension gwtFacet = getExtension(aClass);
 		if(gwtFacet == null)
@@ -262,14 +263,14 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.non.serializable.service.method.parameters");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{

@@ -1,7 +1,8 @@
 package com.intellij.gwt.sdk.impl;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.templates.GwtTemplates;
 
@@ -26,14 +27,14 @@ public enum GwtVersionImpl implements GwtVersion
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGwtModuleHtmlTemplate()
 	{
 		return isGwt14OrLater() ? GwtTemplates.GWT_MODULE_HTML_1_4 : GwtTemplates.GWT_MODULE_HTML;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getGwtServiceJavaTemplate()
 	{
 		return this == VERSION_1_0 ? GwtTemplates.GWT_SERVICE_JAVA_1_0 : GwtTemplates.GWT_SERVICE_JAVA;
@@ -69,14 +70,14 @@ public enum GwtVersionImpl implements GwtVersion
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getCompilerClassName()
 	{
 		return this == VERSION_1_6_OR_LATER ? GWT_16_COMPILER_MAIN_CLASS : GWT_15_COMPILER_MAIN_CLASS;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShellClassName()
 	{
 		//todo[nik]
@@ -85,7 +86,7 @@ public enum GwtVersionImpl implements GwtVersion
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getCompilerOutputDirParameterName()
 	{
 		return this == VERSION_1_6_OR_LATER ? "-war" : "-out";

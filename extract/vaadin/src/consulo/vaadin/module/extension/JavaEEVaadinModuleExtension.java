@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.projectRoots.SdkType;
@@ -39,7 +40,7 @@ public class JavaEEVaadinModuleExtension extends GoogleGwtModuleExtensionImpl<Ja
 {
 	protected final Map<String, String> myPackagingPaths = new HashMap<String, String>();
 
-	public JavaEEVaadinModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
+	public JavaEEVaadinModuleExtension(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 		myCompilerMaxHeapSize = 1024;
@@ -61,7 +62,7 @@ public class JavaEEVaadinModuleExtension extends GoogleGwtModuleExtensionImpl<Ja
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Class<? extends SdkType> getSdkTypeClass()
 	{
@@ -69,8 +70,8 @@ public class JavaEEVaadinModuleExtension extends GoogleGwtModuleExtensionImpl<Ja
 	}
 
 	@Override
-	@NotNull
-	public String getPackagingRelativePath(@NotNull GwtModule module)
+	@Nonnull
+	public String getPackagingRelativePath(@Nonnull GwtModule module)
 	{
 		String moduleName = module.getQualifiedName();
 		String path = myPackagingPaths.get(moduleName);

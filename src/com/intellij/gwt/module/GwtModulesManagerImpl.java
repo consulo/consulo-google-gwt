@@ -25,9 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import consulo.psi.PsiPackage;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
 import com.intellij.gwt.module.model.GwtEntryPoint;
 import com.intellij.gwt.module.model.GwtModule;
@@ -72,13 +73,13 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public GwtModule[] getAllGwtModules()
 	{
 		return getGwtModules(GlobalSearchScope.allScope(myProject));
 	}
 
-	private GwtModule[] getGwtModules(@NotNull GlobalSearchScope scope)
+	private GwtModule[] getGwtModules(@Nonnull GlobalSearchScope scope)
 	{
 		final GwtModulesFinder finder = new GwtModulesFinder(myProject);
 		final Collection<VirtualFile> candidates = DomService.getInstance().getDomFileCandidates(GwtModule.class, myProject, scope);
@@ -95,8 +96,8 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 	}
 
 	@Override
-	@NotNull
-	public GwtModule[] getGwtModules(@NotNull final Module module)
+	@Nonnull
+	public GwtModule[] getGwtModules(@Nonnull final Module module)
 	{
 		return getGwtModules(GlobalSearchScope.moduleScope(module));
 	}
@@ -104,28 +105,28 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 
 	@Override
 	@Nullable
-	public GwtModule findGwtModuleByClientSourceFile(@NotNull VirtualFile file)
+	public GwtModule findGwtModuleByClientSourceFile(@Nonnull VirtualFile file)
 	{
 		List<GwtModule> gwtModules = findGwtModulesByClientSourceFile(file);
 		return !gwtModules.isEmpty() ? gwtModules.get(0) : null;
 	}
 
 	@Override
-	@NotNull
-	public List<GwtModule> findGwtModulesByClientSourceFile(@NotNull final VirtualFile file)
+	@Nonnull
+	public List<GwtModule> findGwtModulesByClientSourceFile(@Nonnull final VirtualFile file)
 	{
 		return findModulesByClientOrPublicFile(file, true, false);
 	}
 
 	@Override
 	@Nullable
-	public GwtModule findGwtModuleByClientOrPublicFile(@NotNull VirtualFile file)
+	public GwtModule findGwtModuleByClientOrPublicFile(@Nonnull VirtualFile file)
 	{
 		List<GwtModule> gwtModules = findModulesByClientOrPublicFile(file, true, true);
 		return !gwtModules.isEmpty() ? gwtModules.get(0) : null;
 	}
 
-	@NotNull
+	@Nonnull
 	private List<GwtModule> findModulesByClientOrPublicFile(final VirtualFile file, final boolean clientFileAllowed, final boolean publicFileAllowed)
 	{
 		final GwtModulesFinder finder = new GwtModulesFinder(myProject);
@@ -168,7 +169,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 	//todo[nik] return all files
 	@Override
 	@Nullable
-	public XmlFile findHtmlFileByModule(@NotNull GwtModule module)
+	public XmlFile findHtmlFileByModule(@Nonnull GwtModule module)
 	{
 		final Collection<VirtualFile> htmlFiles = GwtHtmlFileIndex.getHtmlFilesByModule(myProject, module.getQualifiedName());
 		if(htmlFiles.isEmpty())
@@ -200,7 +201,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 
 	@Override
 	@Nullable
-	public PsiElement findTagById(@NotNull XmlFile htmlFile, final String id)
+	public PsiElement findTagById(@Nonnull XmlFile htmlFile, final String id)
 	{
 		final Map<String, XmlTag> id2Tag = getHtmlId2TagMap(htmlFile);
 		return id2Tag.get(id);
@@ -299,7 +300,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 
 	@Override
 	@Nullable
-	public GwtModule findGwtModuleByName(final @NotNull String qualifiedName, final GlobalSearchScope scope)
+	public GwtModule findGwtModuleByName(final @Nonnull String qualifiedName, final GlobalSearchScope scope)
 	{
 		final GwtModule[] gwtModules = findGwtModulesByName(qualifiedName, scope);
 		return gwtModules.length > 0 ? gwtModules[0] : null;
@@ -307,7 +308,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 
 	@Override
 	@Nullable
-	public String getPathFromPublicRoot(@NotNull final GwtModule gwtModule, @NotNull VirtualFile file)
+	public String getPathFromPublicRoot(@Nonnull final GwtModule gwtModule, @Nonnull VirtualFile file)
 	{
 		for(VirtualFile root : gwtModule.getPublicRoots())
 		{
@@ -360,15 +361,15 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 	}
 
 	@Override
-	public String[] getAllIds(@NotNull XmlFile htmlFile)
+	public String[] getAllIds(@Nonnull XmlFile htmlFile)
 	{
 		final Set<String> idSet = getHtmlId2TagMap(htmlFile).keySet();
 		return ArrayUtil.toStringArray(idSet);
 	}
 
 	@Override
-	@NotNull
-	public List<GwtModule> findModulesByClass(@NotNull final PsiElement context, final @Nullable String className)
+	@Nonnull
+	public List<GwtModule> findModulesByClass(@Nonnull final PsiElement context, final @Nullable String className)
 	{
 		if(className == null)
 		{
@@ -396,7 +397,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 	}
 
 	@Override
-	public GwtModule findGwtModuleByEntryPoint(@NotNull final PsiClass psiClass)
+	public GwtModule findGwtModuleByEntryPoint(@Nonnull final PsiClass psiClass)
 	{
 		PsiFile psiFile = psiClass.getContainingFile();
 		if(psiFile == null)
@@ -427,8 +428,8 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 	}
 
 	@Override
-	@NotNull
-	public List<Pair<GwtModule, String>> findGwtModulesByPublicFile(@NotNull final VirtualFile file)
+	@Nonnull
+	public List<Pair<GwtModule, String>> findGwtModulesByPublicFile(@Nonnull final VirtualFile file)
 	{
 		List<GwtModule> gwtModules = findModulesByClientOrPublicFile(file, false, true);
 		List<Pair<GwtModule, String>> pairs = new ArrayList<Pair<GwtModule, String>>();
@@ -445,7 +446,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 
 	@Override
 	@Nullable
-	public GwtModule getGwtModuleByXmlFile(@NotNull PsiFile file)
+	public GwtModule getGwtModuleByXmlFile(@Nonnull PsiFile file)
 	{
 		if(file instanceof XmlFile)
 		{

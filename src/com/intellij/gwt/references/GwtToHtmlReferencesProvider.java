@@ -16,7 +16,7 @@
 
 package com.intellij.gwt.references;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import consulo.annotations.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -33,9 +33,9 @@ public class GwtToHtmlReferencesProvider extends PsiReferenceProvider
 {
 
 	@Override
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
-	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context)
+	public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context)
 	{
 		if(element instanceof PsiLiteralExpression)
 		{

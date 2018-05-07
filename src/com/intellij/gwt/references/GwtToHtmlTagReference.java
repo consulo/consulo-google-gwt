@@ -16,7 +16,7 @@
 
 package com.intellij.gwt.references;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.xml.XmlFile;
@@ -51,7 +51,7 @@ public class GwtToHtmlTagReference extends BaseGwtReference
 		return myGwtModulesManager.findTagById(xmlFile, id);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Object[] getVariants()
 	{

@@ -18,8 +18,9 @@ package com.intellij.gwt.make;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -41,32 +42,32 @@ public class GwtCompilerPaths
 	{
 	}
 
-	public static File getDirectoryForGenerated(final @NotNull Module module)
+	public static File getDirectoryForGenerated(final @Nonnull Module module)
 	{
 		return new File(getCompilerOutputRoot(module), "gen");
 	}
 
-	public static File getCompilerOutputRoot(final @NotNull Module module)
+	public static File getCompilerOutputRoot(final @Nonnull Module module)
 	{
 		return new File(getOutputRoot(module), "compile");
 	}
 
-	public static File getTestGenDirectory(@NotNull Module module)
+	public static File getTestGenDirectory(@Nonnull Module module)
 	{
 		return new File(getTestOutputRoot(module), "gen");
 	}
 
-	public static File getTestOutputDirectory(@NotNull Module module)
+	public static File getTestOutputDirectory(@Nonnull Module module)
 	{
 		return new File(getTestOutputRoot(module), "www");
 	}
 
-	private static File getTestOutputRoot(@NotNull Module module)
+	private static File getTestOutputRoot(@Nonnull Module module)
 	{
 		return new File(getOutputRoot(module), "test");
 	}
 
-	public static File getOutputRoot(final @NotNull Module module)
+	public static File getOutputRoot(final @Nonnull Module module)
 	{
 		final Project project = module.getProject();
 		final String cacheDirName = project.getName() + "." + project.getLocationHash();
@@ -78,7 +79,7 @@ public class GwtCompilerPaths
 		return new File(PathManager.getSystemPath() + File.separator + "gwt");
 	}
 
-	private static String getOutputDirectoryName(@NotNull Module module)
+	private static String getOutputDirectoryName(@Nonnull Module module)
 	{
 		final String moduleName = module.getName();
 		final String modulePath = module.getModuleDirPath();
@@ -106,7 +107,7 @@ public class GwtCompilerPaths
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	public static File getOutputDirectory(final GoogleGwtModuleExtension extension)
 	{
 		String outputUrl = extension.getCompilerOutputUrl();

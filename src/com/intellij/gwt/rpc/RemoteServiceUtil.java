@@ -16,9 +16,11 @@
 
 package com.intellij.gwt.rpc;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -50,12 +52,12 @@ public class RemoteServiceUtil
 	{
 	}
 
-	public static boolean isMethodPresentedInAsync(@NotNull PsiMethod method, @NotNull PsiClass async)
+	public static boolean isMethodPresentedInAsync(@Nonnull PsiMethod method, @Nonnull PsiClass async)
 	{
 		return findMethodInAsync(method, async) != null;
 	}
 
-	public static boolean isMethodPresentedInSync(@NotNull PsiMethod asyncMethod, @NotNull PsiClass sync)
+	public static boolean isMethodPresentedInSync(@Nonnull PsiMethod asyncMethod, @Nonnull PsiClass sync)
 	{
 		return findMethodInSync(asyncMethod, sync) != null;
 	}
@@ -79,7 +81,7 @@ public class RemoteServiceUtil
 	}
 
 	@Nullable
-	public static PsiMethod findMethodInAsync(@NotNull PsiMethod method, @NotNull PsiClass async)
+	public static PsiMethod findMethodInAsync(@Nonnull PsiMethod method, @Nonnull PsiClass async)
 	{
 		PsiParameter[] parameters = method.getParameterList().getParameters();
 
@@ -147,7 +149,7 @@ public class RemoteServiceUtil
 		return actualTypeParameter != null && syncReturnType != null && areErasuresEqual(syncReturnType, actualTypeParameter);
 	}
 
-	private static boolean areErasuresEqual(@NotNull PsiType t1, @NotNull PsiType t2)
+	private static boolean areErasuresEqual(@Nonnull PsiType t1, @Nonnull PsiType t2)
 	{
 		final PsiType type1 = TypeConversionUtil.erasure(t1);
 		final PsiType type2 = TypeConversionUtil.erasure(t2);
@@ -228,7 +230,7 @@ public class RemoteServiceUtil
 	}
 
 	@Nullable
-	public static PsiMethod findAsynchronousMethod(@NotNull PsiMethod method)
+	public static PsiMethod findAsynchronousMethod(@Nonnull PsiMethod method)
 	{
 		PsiClass psiClass = method.getContainingClass();
 		if(psiClass == null || !isRemoteServiceInterface(psiClass))
@@ -245,7 +247,7 @@ public class RemoteServiceUtil
 		return findMethodInAsync(method, asyncClass);
 	}
 
-	public static void copyAllMethodsToAsync(@NotNull PsiClass sync, @NotNull PsiClass async, @NotNull GwtVersion gwtVersion) throws
+	public static void copyAllMethodsToAsync(@Nonnull PsiClass sync, @Nonnull PsiClass async, @Nonnull GwtVersion gwtVersion) throws
 			IncorrectOperationException
 	{
 		PsiElementFactory elementFactory = JavaPsiFacade.getInstance(sync.getProject()).getElementFactory();
@@ -261,14 +263,14 @@ public class RemoteServiceUtil
 		}
 	}
 
-	public static PsiMethod copyMethodToAsync(@NotNull PsiMethod method, @NotNull PsiClass async, @NotNull GwtVersion gwtVersion) throws
+	public static PsiMethod copyMethodToAsync(@Nonnull PsiMethod method, @Nonnull PsiClass async, @Nonnull GwtVersion gwtVersion) throws
 			IncorrectOperationException
 	{
 		return copyMethodToAsync(method, async, JavaPsiFacade.getInstance(method.getProject()).getElementFactory(), gwtVersion);
 	}
 
-	private static PsiMethod copyMethodToAsync(final @NotNull PsiMethod method, final @NotNull PsiClass async,
-			final @NotNull PsiElementFactory elementFactory, final @NotNull GwtVersion gwtVersion) throws IncorrectOperationException
+	private static PsiMethod copyMethodToAsync(final @Nonnull PsiMethod method, final @Nonnull PsiClass async,
+			final @Nonnull PsiElementFactory elementFactory, final @Nonnull GwtVersion gwtVersion) throws IncorrectOperationException
 	{
 		final PsiType asyncCallbackType;
 		if(!gwtVersion.isGenericsSupported())
@@ -293,7 +295,7 @@ public class RemoteServiceUtil
 		return (PsiMethod) async.add(newMethod);
 	}
 
-	public static PsiClassType createAsynchCallbackType(@NotNull PsiElement context, @Nullable PsiType parameter)
+	public static PsiClassType createAsynchCallbackType(@Nonnull PsiElement context, @Nullable PsiType parameter)
 	{
 		Project project = context.getProject();
 		JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -318,7 +320,7 @@ public class RemoteServiceUtil
 	}
 
 	@Nullable
-	private static PsiClassType getBoxedType(@NotNull PsiPrimitiveType type, @NotNull GlobalSearchScope scope, @NotNull Project project)
+	private static PsiClassType getBoxedType(@Nonnull PsiPrimitiveType type, @Nonnull GlobalSearchScope scope, @Nonnull Project project)
 	{
 		if(TypeConversionUtil.isVoidType(type))
 		{

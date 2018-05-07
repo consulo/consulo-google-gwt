@@ -17,7 +17,7 @@
 package com.intellij.gwt.facet;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.gwt.GwtBundle;
 
 /**

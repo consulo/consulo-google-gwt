@@ -26,11 +26,12 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.annotation.Nonnull;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
@@ -157,9 +158,9 @@ public class GwtCommandLineState extends JavaCommandLineState
 		return new File(GwtCompilerPaths.getOutputRoot(myModule), "run");
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public ExecutionResult execute(@NotNull final Executor executor, @NotNull final ProgramRunner runner) throws ExecutionException
+	public ExecutionResult execute(@Nonnull final Executor executor, @Nonnull final ProgramRunner runner) throws ExecutionException
 	{
 		getOutputPath().mkdirs();
 		getGenPath().mkdirs();

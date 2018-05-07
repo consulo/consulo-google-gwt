@@ -3,8 +3,9 @@ package com.intellij.gwt.jsinject;
 import java.util.Collections;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.hint.api.impls.MethodParameterInfoHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -106,7 +107,7 @@ public class GwtJSParameterInfoHandler implements ParameterInfoHandlerWithTabAct
 	}
 
 	@Override
-	public void showParameterInfo(@NotNull final JSArgumentList element, final CreateParameterInfoContext context)
+	public void showParameterInfo(@Nonnull final JSArgumentList element, final CreateParameterInfoContext context)
 	{
 		context.showHint(element, element.getTextOffset(), this);
 	}
@@ -118,7 +119,7 @@ public class GwtJSParameterInfoHandler implements ParameterInfoHandlerWithTabAct
 	}
 
 	@Override
-	public void updateParameterInfo(@NotNull final JSArgumentList o, final UpdateParameterInfoContext context)
+	public void updateParameterInfo(@Nonnull final JSArgumentList o, final UpdateParameterInfoContext context)
 	{
 		context.setCurrentParameter(ParameterInfoUtils.getCurrentParameterIndex(o.getNode(), context.getOffset(), JSTokenTypes.COMMA));
 	}
@@ -150,34 +151,34 @@ public class GwtJSParameterInfoHandler implements ParameterInfoHandlerWithTabAct
 	}
 
 	@Override
-	@NotNull
-	public JSExpression[] getActualParameters(@NotNull final JSArgumentList o)
+	@Nonnull
+	public JSExpression[] getActualParameters(@Nonnull final JSArgumentList o)
 	{
 		return o.getArguments();
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public IElementType getActualParameterDelimiterType()
 	{
 		return JSTokenTypes.COMMA;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public IElementType getActualParametersRBraceType()
 	{
 		return JSTokenTypes.RBRACE;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Set<Class> getArgumentListAllowedParentClasses()
 	{
 		return Collections.singleton((Class) JSCallExpression.class);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Set<? extends Class> getArgListStopSearchClasses()
 	{
@@ -185,7 +186,7 @@ public class GwtJSParameterInfoHandler implements ParameterInfoHandlerWithTabAct
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public Class<JSArgumentList> getArgumentListClass()
 	{
 		return JSArgumentList.class;

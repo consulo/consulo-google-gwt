@@ -19,11 +19,11 @@ package com.intellij.gwt.i18n;
 import java.text.MessageFormat;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.lang.properties.IProperty;
@@ -64,12 +64,12 @@ public class GwtI18nUtil
 	{
 	}
 
-	public static void navigateToProperty(@NotNull IProperty property)
+	public static void navigateToProperty(@Nonnull IProperty property)
 	{
 		property.navigate(true);
 	}
 
-	public static String suggetsPropertyKey(@NotNull String value, final PsiNameHelper nameHelper, final LanguageLevel languageLevel)
+	public static String suggetsPropertyKey(@Nonnull String value, final PsiNameHelper nameHelper, final LanguageLevel languageLevel)
 	{
 		List<String> words = StringUtil.getWordsIn(value);
 		StringBuilder key = new StringBuilder();

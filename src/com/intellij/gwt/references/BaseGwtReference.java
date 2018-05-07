@@ -16,7 +16,7 @@
 
 package com.intellij.gwt.references;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.vfs.VirtualFile;

@@ -19,8 +19,8 @@ package consulo.gwt.play1.module.extension;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import consulo.annotations.RequiredDispatchThread;
@@ -36,7 +36,7 @@ import consulo.roots.ModuleRootLayer;
  */
 public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension implements GoogleGwtMutableModuleExtension<Play1GwtModuleExtension>
 {
-	public Play1GwtMutableModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
+	public Play1GwtMutableModuleExtension(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}
@@ -44,7 +44,7 @@ public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension impl
 	@Nullable
 	@Override
 	@RequiredDispatchThread
-	public JComponent createConfigurablePanel(@NotNull Runnable runnable)
+	public JComponent createConfigurablePanel(@Nonnull Runnable runnable)
 	{
 		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));
 		panel.add(ModuleExtensionSdkBoxBuilder.createAndDefine(this, runnable).build());
@@ -59,12 +59,12 @@ public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension impl
 	}
 
 	@Override
-	public boolean isModified(@NotNull Play1GwtModuleExtension play1GwtModuleExtension)
+	public boolean isModified(@Nonnull Play1GwtModuleExtension play1GwtModuleExtension)
 	{
 		return isModifiedImpl(play1GwtModuleExtension);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk()
 	{

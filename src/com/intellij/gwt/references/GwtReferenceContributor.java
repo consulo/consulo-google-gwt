@@ -11,7 +11,8 @@ import static com.intellij.patterns.XmlPatterns.xmlAttribute;
 import static com.intellij.patterns.XmlPatterns.xmlAttributeValue;
 import static com.intellij.patterns.XmlPatterns.xmlTag;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.gwt.i18n.GwtI18nUtil;
 import com.intellij.gwt.i18n.GwtPropertyReference;
 import com.intellij.gwt.module.GwtModulesManager;
@@ -44,8 +45,8 @@ public class GwtReferenceContributor extends PsiReferenceContributor
 		registrar.registerReferenceProvider(literalExpression().annotationParam(GwtI18nUtil.KEY_ANNOTATION_CLASS, "value"), new PsiReferenceProvider()
 		{
 			@Override
-			@NotNull
-			public PsiReference[] getReferencesByElement(@NotNull final PsiElement element, @NotNull final ProcessingContext context)
+			@Nonnull
+			public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull final ProcessingContext context)
 			{
 				if(element instanceof PsiLiteralExpression)
 				{
@@ -83,9 +84,9 @@ public class GwtReferenceContributor extends PsiReferenceContributor
 		registrar.registerReferenceProvider(literalExpression().withParent(psiBinaryExpression().operation(PsiJavaPatterns.psiElement(JavaTokenType.PLUS))
 				.and(psiExpression().methodCallParameter(0, setEntryPointMethodPattern))), new PsiReferenceProvider()
 		{
-			@NotNull
+			@Nonnull
 			@Override
-			public PsiReference[] getReferencesByElement(@NotNull final PsiElement element, @NotNull final ProcessingContext context)
+			public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull final ProcessingContext context)
 			{
 				if(element instanceof PsiLiteralExpression)
 				{

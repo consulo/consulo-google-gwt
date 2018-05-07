@@ -16,8 +16,9 @@
 
 package com.intellij.gwt;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.gwt.make.GwtCompilerPaths;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -31,7 +32,7 @@ public class GwtApplicationComponent implements ApplicationComponent
 
 	@Override
 	@NonNls
-	@NotNull
+	@Nonnull
 	public String getComponentName()
 	{
 		return "GwtApplicationComponent";

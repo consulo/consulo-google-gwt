@@ -1,7 +1,7 @@
 package consulo.gwt.module.extension;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;
 import com.intellij.openapi.module.Module;
@@ -20,7 +20,7 @@ import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 public class GwtModuleExtensionUtil
 {
 	@Nullable
-	public static GoogleGwtModuleExtension<?> findModuleExtension(@NotNull Project project, @Nullable VirtualFile file)
+	public static GoogleGwtModuleExtension<?> findModuleExtension(@Nonnull Project project, @Nullable VirtualFile file)
 	{
 		if(file == null)
 		{
@@ -36,12 +36,12 @@ public class GwtModuleExtensionUtil
 		return ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
 	}
 
-	public static boolean hasModuleExtension(final @NotNull Project project, final @Nullable VirtualFile file)
+	public static boolean hasModuleExtension(final @Nonnull Project project, final @Nullable VirtualFile file)
 	{
 		return findModuleExtension(project, file) != null;
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	public static GwtVersion getVersion(@Nullable PsiElement psiElement)
 	{
@@ -52,7 +52,7 @@ public class GwtModuleExtensionUtil
 		return getVersion(ModuleUtilCore.findModuleForPsiElement(psiElement));
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	public static GwtVersion getVersion(@Nullable Module module)
 	{
@@ -64,7 +64,7 @@ public class GwtModuleExtensionUtil
 		return getVersion(extension);
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
 	public static GwtVersion getVersion(@Nullable GoogleGwtModuleExtension<?> extension)
 	{

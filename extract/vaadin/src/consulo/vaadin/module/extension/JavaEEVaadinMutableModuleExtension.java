@@ -16,11 +16,11 @@
 
 package consulo.vaadin.module.extension;
 
+import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.Comparing;
@@ -38,12 +38,12 @@ import consulo.roots.ModuleRootLayer;
  */
 public class JavaEEVaadinMutableModuleExtension extends JavaEEVaadinModuleExtension implements GoogleGwtMutableModuleExtension<JavaEEVaadinModuleExtension>
 {
-	public JavaEEVaadinMutableModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
+	public JavaEEVaadinMutableModuleExtension(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk()
 	{
@@ -53,7 +53,7 @@ public class JavaEEVaadinMutableModuleExtension extends JavaEEVaadinModuleExtens
 	@Nullable
 	@Override
 	@RequiredDispatchThread
-	public JComponent createConfigurablePanel(@NotNull Runnable runnable)
+	public JComponent createConfigurablePanel(@Nonnull Runnable runnable)
 	{
 		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));
 		if(GwtLibraryPathProvider.EP_NAME.composite().canChooseBundle(getModuleRootLayer()))
@@ -71,7 +71,7 @@ public class JavaEEVaadinMutableModuleExtension extends JavaEEVaadinModuleExtens
 	}
 
 	@Override
-	public boolean isModified(@NotNull JavaEEVaadinModuleExtension originExtension)
+	public boolean isModified(@Nonnull JavaEEVaadinModuleExtension originExtension)
 	{
 		if(isModifiedImpl(originExtension))
 		{

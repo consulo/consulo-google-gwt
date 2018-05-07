@@ -16,8 +16,9 @@
 
 package consulo.gwt.module.extension.path;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import consulo.extensions.CompositeExtensionPointName;
@@ -33,7 +34,7 @@ public class BundleGwtLibraryPathProvider implements GwtLibraryPathProvider
 {
 	@Nullable
 	@Override
-	public Info resolveInfo(@NotNull GoogleGwtModuleExtension<?> extension)
+	public Info resolveInfo(@Nonnull GoogleGwtModuleExtension<?> extension)
 	{
 		Sdk sdk = extension.getSdk();
 		if(sdk == null)
@@ -50,7 +51,7 @@ public class BundleGwtLibraryPathProvider implements GwtLibraryPathProvider
 	}
 
 	@CompositeExtensionPointName.BooleanBreakResult(breakValue = false)
-	public boolean canChooseBundle(@NotNull ModuleRootLayer layer)
+	public boolean canChooseBundle(@Nonnull ModuleRootLayer layer)
 	{
 		return true;
 	}

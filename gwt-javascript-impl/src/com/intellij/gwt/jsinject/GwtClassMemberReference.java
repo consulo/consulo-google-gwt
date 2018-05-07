@@ -21,9 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
@@ -103,7 +105,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 	}
 
 	@Nullable
-	private Map<String, PsiMember> getMembersMap(final @NotNull PsiClass aClass)
+	private Map<String, PsiMember> getMembersMap(final @Nonnull PsiClass aClass)
 	{
 		CachedValue<Map<String, PsiMember>> value = aClass.getUserData(CACHED_MEMBER_MAP_KEY);
 		if(value == null)
@@ -197,7 +199,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 		return map;
 	}
 
-	private static boolean appendEnclosingClassType(final @NotNull StringBuilder signature, final @NotNull PsiClass psiClass)
+	private static boolean appendEnclosingClassType(final @Nonnull StringBuilder signature, final @Nonnull PsiClass psiClass)
 	{
 		PsiClass containingClass = psiClass.getContainingClass();
 		PsiModifierList modifierList = psiClass.getModifierList();
@@ -264,7 +266,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 	}
 
 	@Nullable
-	private static String getJvmClassName(final @NotNull PsiClass psiClass)
+	private static String getJvmClassName(final @Nonnull PsiClass psiClass)
 	{
 		PsiClass parent = PsiTreeUtil.getParentOfType(psiClass, PsiClass.class, true);
 		if(parent != null)
@@ -275,7 +277,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 		return qualifiedName != null ? qualifiedName.replace('.', '/') : null;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public Object[] getVariants()
 	{
@@ -325,7 +327,7 @@ public class GwtClassMemberReference extends PsiReferenceBase<JSGwtReferenceExpr
 	}
 
 	@Override
-	public PsiElement bindToElement(@NotNull final PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException
 	{
 		if(element instanceof PsiMember)
 		{

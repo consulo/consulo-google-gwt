@@ -19,8 +19,9 @@ package consulo.gwt.module.extension.path;
 import java.io.File;
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.gwt.i18n.GwtI18nUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;

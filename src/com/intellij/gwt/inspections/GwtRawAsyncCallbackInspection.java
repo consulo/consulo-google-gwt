@@ -3,8 +3,8 @@ package com.intellij.gwt.inspections;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.InspectionManager;
@@ -33,7 +33,7 @@ public class GwtRawAsyncCallbackInspection extends BaseGwtInspection
 
 	@RequiredReadAction
 	@Override
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		if(!version.isGenericsSupported())
 		{
@@ -74,7 +74,7 @@ public class GwtRawAsyncCallbackInspection extends BaseGwtInspection
 		return problems.isEmpty() ? null : problems.toArray(new ProblemDescriptor[problems.size()]);
 	}
 
-	private static ProblemDescriptor[] checkAsyncronousInterface(final @NotNull PsiClass async, final @NotNull PsiClass sync,
+	private static ProblemDescriptor[] checkAsyncronousInterface(final @Nonnull PsiClass async, final @Nonnull PsiClass sync,
 			final InspectionManager manager)
 	{
 		final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
@@ -166,21 +166,21 @@ public class GwtRawAsyncCallbackInspection extends BaseGwtInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.raw.use.of.asynccallback.in.asynchronous.service.interfaces");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "gwtRawAsyncCallback";
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public HighlightDisplayLevel getDefaultLevel()
 	{
 		return HighlightDisplayLevel.WARNING;
@@ -192,7 +192,7 @@ public class GwtRawAsyncCallbackInspection extends BaseGwtInspection
 		private final PsiMethod myMethodToFix;
 		private final PsiAnonymousClass myAnonymousToFix;
 
-		private GenerifyAsyncCallbackFix(final @NotNull PsiType type, final @Nullable PsiMethod methodToFix,
+		private GenerifyAsyncCallbackFix(final @Nonnull PsiType type, final @Nullable PsiMethod methodToFix,
 				final @Nullable PsiAnonymousClass anonymousToFix)
 		{
 			super(GwtBundle.message("quickfix.name.replace.asynccallback.by.asynccallback.0", type.getCanonicalText()));
@@ -202,7 +202,7 @@ public class GwtRawAsyncCallbackInspection extends BaseGwtInspection
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			List<VirtualFile> affectedFiles = new ArrayList<VirtualFile>();
 			if(myMethodToFix != null)
@@ -237,7 +237,7 @@ public class GwtRawAsyncCallbackInspection extends BaseGwtInspection
 			}
 		}
 
-		private static void generifyAnonymous(final @NotNull PsiAnonymousClass anonymous, final @NotNull PsiType type, final Project project,
+		private static void generifyAnonymous(final @Nonnull PsiAnonymousClass anonymous, final @Nonnull PsiType type, final Project project,
 				final PsiElementFactory elementFactory) throws IncorrectOperationException
 		{
 			PsiReferenceParameterList list = anonymous.getBaseClassReference().getParameterList();
@@ -262,7 +262,7 @@ public class GwtRawAsyncCallbackInspection extends BaseGwtInspection
 			}
 		}
 
-		private static void generifyMethod(final @NotNull PsiMethod method, final @NotNull PsiType type, final PsiElementFactory elementFactory) throws
+		private static void generifyMethod(final @Nonnull PsiMethod method, final @Nonnull PsiType type, final PsiElementFactory elementFactory) throws
 				IncorrectOperationException
 		{
 			PsiParameter[] parameters = method.getParameterList().getParameters();

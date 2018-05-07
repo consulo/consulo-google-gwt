@@ -23,9 +23,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.codeInsight.CodeInsightUtilBase;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
@@ -110,7 +112,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 	}
 
 	@Override
-	public String suggestPropertyKey(final @NotNull String value)
+	public String suggestPropertyKey(final @Nonnull String value)
 	{
 		return GwtI18nUtil.suggetsPropertyKey(value, PsiNameHelper.getInstance(myProject), LanguageLevel.HIGHEST);
 	}
@@ -209,7 +211,7 @@ public class GwtResourceBundleManager extends ResourceBundleManager
 			return qualifier + "." + methodName + "(" + parameters + ")";
 		}
 
-		private String getLocalizableInstance(final @NotNull PsiClass anInterface, final @NotNull PsiLiteralExpression context)
+		private String getLocalizableInstance(final @Nonnull PsiClass anInterface, final @Nonnull PsiLiteralExpression context)
 		{
 			PsiClassType type = JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createType(anInterface);
 			Set<String> expressions = JavaI18nUtil.suggestExpressionOfType(type, context);

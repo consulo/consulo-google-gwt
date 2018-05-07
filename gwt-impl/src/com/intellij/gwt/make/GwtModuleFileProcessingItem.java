@@ -18,8 +18,9 @@ package com.intellij.gwt.make;
 
 import java.io.File;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.openapi.compiler.FileProcessingCompiler;
 import com.intellij.openapi.compiler.ValidityState;
@@ -44,7 +45,7 @@ public class GwtModuleFileProcessingItem implements FileProcessingCompiler.Proce
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public File getFile()
 	{
 		return myFile;

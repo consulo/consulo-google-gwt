@@ -16,8 +16,8 @@
 
 package com.intellij.gwt.i18n;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
@@ -37,21 +37,21 @@ public abstract class GwtI18nManager
 		return ServiceManager.getService(project, GwtI18nManager.class);
 	}
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
-	public abstract PropertiesFile[] getPropertiesFiles(@NotNull PsiClass anInterface);
+	public abstract PropertiesFile[] getPropertiesFiles(@Nonnull PsiClass anInterface);
 
 	@Nullable
-	public abstract PsiClass getPropertiesInterface(@NotNull PropertiesFile file);
+	public abstract PsiClass getPropertiesInterface(@Nonnull PropertiesFile file);
 
-	@NotNull
+	@Nonnull
 	@RequiredReadAction
-	public abstract IProperty[] getProperties(@NotNull PsiMethod method);
+	public abstract IProperty[] getProperties(@Nonnull PsiMethod method);
 
 	@Nullable
-	public abstract PsiMethod getMethod(@NotNull IProperty property);
+	public abstract PsiMethod getMethod(@Nonnull IProperty property);
 
-	public abstract boolean isConstantsInterface(@NotNull PsiClass aClass);
+	public abstract boolean isConstantsInterface(@Nonnull PsiClass aClass);
 
-	public abstract boolean isLocalizableInterface(@NotNull PsiClass aClass);
+	public abstract boolean isLocalizableInterface(@Nonnull PsiClass aClass);
 }

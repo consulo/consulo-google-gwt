@@ -16,7 +16,8 @@
 
 package consulo.gwt.play1.module.extension;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import consulo.roots.ModuleRootLayer;
@@ -27,7 +28,7 @@ import consulo.roots.ModuleRootLayer;
  */
 public class Play1GwtModuleExtension extends GoogleGwtModuleExtensionImpl<Play1GwtModuleExtension> implements GoogleGwtModuleExtension<Play1GwtModuleExtension>
 {
-	public Play1GwtModuleExtension(@NotNull String id, @NotNull ModuleRootLayer rootModel)
+	public Play1GwtModuleExtension(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}

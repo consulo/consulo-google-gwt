@@ -19,8 +19,8 @@ package com.intellij.gwt.i18n;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.lang.properties.IProperty;
@@ -52,7 +52,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 		myPsiManager = psiManager;
 	}
 
-	private boolean isConstantsOrMessagesInterface(@NotNull PsiClass aClass)
+	private boolean isConstantsOrMessagesInterface(@Nonnull PsiClass aClass)
 	{
 		if(!GwtModuleExtensionUtil.hasModuleExtension(myProject, getOriginalContainingFile(aClass).getVirtualFile()) || !aClass.isInterface())
 		{
@@ -74,21 +74,21 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 	}
 
 	@Override
-	public boolean isConstantsInterface(@NotNull final PsiClass aClass)
+	public boolean isConstantsInterface(@Nonnull final PsiClass aClass)
 	{
 		return isExtendingInterface(aClass, GwtI18nUtil.CONSTANTS_INTERFACE_NAME);
 	}
 
 	@Override
-	public boolean isLocalizableInterface(@NotNull PsiClass aClass)
+	public boolean isLocalizableInterface(@Nonnull PsiClass aClass)
 	{
 		return isExtendingInterface(aClass, GwtI18nUtil.LOCALIZABLE_INTERFACE_NAME);
 	}
 
 	@RequiredReadAction
 	@Override
-	@NotNull
-	public PropertiesFile[] getPropertiesFiles(@NotNull PsiClass anInterface)
+	@Nonnull
+	public PropertiesFile[] getPropertiesFiles(@Nonnull PsiClass anInterface)
 	{
 		PsiFile containingFile = getOriginalContainingFile(anInterface);
 		final PsiDirectory psiDirectory = containingFile.getContainingDirectory();
@@ -134,7 +134,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 
 	@Override
 	@Nullable
-	public PsiClass getPropertiesInterface(@NotNull PropertiesFile file)
+	public PsiClass getPropertiesInterface(@Nonnull PropertiesFile file)
 	{
 		final String fileName = file.getName();
 		final PsiDirectory directory = file.getContainingFile().getContainingDirectory();
@@ -163,8 +163,8 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 
 	@RequiredReadAction
 	@Override
-	@NotNull
-	public IProperty[] getProperties(@NotNull PsiMethod method)
+	@Nonnull
+	public IProperty[] getProperties(@Nonnull PsiMethod method)
 	{
 		final PsiClass aClass = method.getContainingClass();
 		if(aClass == null)
@@ -193,7 +193,7 @@ public class GwtI18nManagerImpl extends GwtI18nManager
 
 	@Override
 	@Nullable
-	public PsiMethod getMethod(@NotNull IProperty property)
+	public PsiMethod getMethod(@Nonnull IProperty property)
 	{
 		final PsiClass psiClass = getPropertiesInterface(property.getPropertiesFile());
 		if(psiClass == null)

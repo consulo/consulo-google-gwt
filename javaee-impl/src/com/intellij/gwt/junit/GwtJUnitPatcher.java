@@ -16,9 +16,11 @@
 
 package com.intellij.gwt.junit;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.execution.JavaTestPatcher;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
@@ -45,7 +47,7 @@ public class GwtJUnitPatcher implements JavaTestPatcher
 	@NonNls
 	private static final String GWT_ARGS_PROPERTY = "gwt.args";
 
-	public void patchJavaParameters(@Nullable Module module, @NotNull OwnJavaParameters javaParameters)
+	public void patchJavaParameters(@Nullable Module module, @Nonnull OwnJavaParameters javaParameters)
 	{
 		if(module == null)
 		{

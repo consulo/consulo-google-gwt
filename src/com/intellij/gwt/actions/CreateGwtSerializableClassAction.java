@@ -16,7 +16,7 @@
 
 package com.intellij.gwt.actions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.templates.GwtTemplates;
@@ -61,7 +61,7 @@ public class CreateGwtSerializableClassAction extends GwtCreateActionBase
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
 	{
 		return new PsiElement[]{

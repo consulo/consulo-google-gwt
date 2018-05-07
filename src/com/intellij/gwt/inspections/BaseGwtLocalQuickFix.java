@@ -1,6 +1,6 @@
 package com.intellij.gwt.inspections;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.gwt.GwtBundle;
 
@@ -17,14 +17,14 @@ public abstract class BaseGwtLocalQuickFix implements LocalQuickFix
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getName()
 	{
 		return myName;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getFamilyName()
 	{
 		return GwtBundle.message("quick.fixes.gwt.family.name");

@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -29,8 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
@@ -151,14 +151,14 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
 	}
 
 	@Nullable
-	private String getPath(@NotNull GwtModule gwtModule, @NotNull VirtualFile file)
+	private String getPath(@Nonnull GwtModule gwtModule, @Nonnull VirtualFile file)
 	{
 		final String path = myGwtModulesManager.getPathFromPublicRoot(gwtModule, file);
 		return path != null ? getPath(gwtModule, path) : null;
 	}
 
-	@NotNull
-	public static String getPath(@NotNull GwtModule gwtModule, @NotNull String relativePath)
+	@Nonnull
+	public static String getPath(@Nonnull GwtModule gwtModule, @Nonnull String relativePath)
 	{
 		return gwtModule.getQualifiedName() + "/" + relativePath;
 	}
@@ -210,7 +210,7 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public JComponent createEditor()
 	{
 		myModulesModel = new DefaultComboBoxModel();

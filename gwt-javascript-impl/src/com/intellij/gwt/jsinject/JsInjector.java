@@ -16,8 +16,9 @@
 
 package com.intellij.gwt.jsinject;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import consulo.gwt.javascript.lang.GwtJavaScriptVersion;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
@@ -32,7 +33,7 @@ import com.intellij.psi.PsiParameter;
 public class JsInjector implements MultiHostInjector
 {
 	@Override
-	public void injectLanguages(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement host)
+	public void injectLanguages(@Nonnull MultiHostRegistrar registrar, @Nonnull PsiElement host)
 	{
 		if(((PsiComment) host).getTokenType() == JavaTokenType.C_STYLE_COMMENT)
 		{

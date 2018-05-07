@@ -16,8 +16,9 @@
 
 package com.intellij.gwt.inspections;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.gwt.GwtBundle;
@@ -34,8 +35,8 @@ import com.intellij.psi.PsiReferenceExpression;
 public class GwtToHtmlTagReferencesInspection extends BaseGwtInspection
 {
 	@Override
-	@NotNull
-	public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly)
+	@Nonnull
+	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly)
 	{
 		return new JavaElementVisitor()
 		{
@@ -61,14 +62,14 @@ public class GwtToHtmlTagReferencesInspection extends BaseGwtInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.unresolved.references.to.html.tags");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	@NonNls
 	public String getShortName()
 	{

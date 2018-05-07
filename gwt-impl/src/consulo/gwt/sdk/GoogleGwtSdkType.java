@@ -3,10 +3,9 @@ package consulo.gwt.sdk;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.Icon;
+import javax.annotation.Nonnull;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
@@ -36,7 +35,7 @@ public class GoogleGwtSdkType extends GwtSdkBaseType
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public GwtVersion getVersion(Sdk sdk)
 	{
 		return GwtSdkUtil.detectVersion(sdk);
@@ -152,7 +151,7 @@ public class GoogleGwtSdkType extends GwtSdkBaseType
 		return getPresentableName() + " " + getVersionString(sdkHome);
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public String getPresentableName()
 	{

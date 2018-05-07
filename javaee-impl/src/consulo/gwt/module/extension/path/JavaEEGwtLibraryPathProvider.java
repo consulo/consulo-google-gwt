@@ -21,9 +21,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.idea.maven.model.MavenArtifact;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
@@ -47,7 +48,7 @@ public class JavaEEGwtLibraryPathProvider implements GwtLibraryPathProvider
 {
 	@Nullable
 	@Override
-	public Info resolveInfo(@NotNull GoogleGwtModuleExtension<?> extension)
+	public Info resolveInfo(@Nonnull GoogleGwtModuleExtension<?> extension)
 	{
 		if(!(extension instanceof JavaEEGoogleGwtModuleExtension))
 		{
@@ -98,7 +99,7 @@ public class JavaEEGwtLibraryPathProvider implements GwtLibraryPathProvider
 			 * gwt from maven central not contains asm library inside - but have dependency to last asm library
 			 * we need found it and add to compilation classpath
 			 */
-			@NotNull
+			@Nonnull
 			@Override
 			public List<String> getAdditionalClasspath()
 			{
@@ -146,7 +147,7 @@ public class JavaEEGwtLibraryPathProvider implements GwtLibraryPathProvider
 	}
 
 	@CompositeExtensionPointName.BooleanBreakResult(breakValue = false)
-	public boolean canChooseBundle(@NotNull ModuleRootLayer layer)
+	public boolean canChooseBundle(@Nonnull ModuleRootLayer layer)
 	{
 		ModuleExtension mavenExtension = layer.getExtension("maven");
 		return mavenExtension == null;

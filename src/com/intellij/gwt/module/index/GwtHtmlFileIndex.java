@@ -7,7 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -30,7 +31,7 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 	private static final ID<String, Void> NAME = ID.create("GwtHtmlFile");
 	private static final FileBasedIndex.InputFilter INPUT_FILTER = new FileBasedIndex.InputFilter()
 	{
-		public boolean acceptInput(Project project, @NotNull VirtualFile file)
+		public boolean acceptInput(Project project, @Nonnull VirtualFile file)
 		{
 			return file.getFileType() == HtmlFileType.INSTANCE;
 		}
@@ -44,28 +45,28 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 		myKeyDescriptor = new EnumeratorStringDescriptor();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public ID<String, Void> getName()
 	{
 		return NAME;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public DataIndexer<String, Void, FileContent> getIndexer()
 	{
 		return myIndexer;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public KeyDescriptor<String> getKeyDescriptor()
 	{
 		return myKeyDescriptor;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public FileBasedIndex.InputFilter getInputFilter()
 	{
@@ -84,7 +85,7 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 		return 0;
 	}
 
-	public static Collection<VirtualFile> getHtmlFilesByModule(@NotNull Project project, @NotNull String moduleName)
+	public static Collection<VirtualFile> getHtmlFilesByModule(@Nonnull Project project, @Nonnull String moduleName)
 	{
 		final Collection<VirtualFile> files = FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, GlobalSearchScope.allScope(project));
 		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
@@ -119,7 +120,7 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 	private static class GwtHtmlFileIndexer implements DataIndexer<String, Void, FileContent>
 	{
 		@Override
-		@NotNull
+		@Nonnull
 		public Map<String, Void> map(FileContent inputData)
 		{
 			final THashMap<String, Void> gwtModules = new THashMap<String, Void>();

@@ -19,10 +19,12 @@ package com.intellij.gwt.inspections;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -57,7 +59,7 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 
 	@Override
 	@Nls
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.method.with.parameters.in.interface.extending.constants");
@@ -65,7 +67,7 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 
 	@Override
 	@NonNls
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "GwtMethodWithParametersInConstantsInterface";
@@ -74,7 +76,7 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		if(!shouldCheck(aClass))
 		{
@@ -110,7 +112,7 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 	}
 
 	@Override
-	public ProblemDescriptor[] checkFile(@NotNull final PsiFile file, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		if(!shouldCheck(file) || !(file instanceof PropertiesFile))
 		{
@@ -178,7 +180,7 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			if(ReadonlyStatusHandler.getInstance(project).ensureFilesWritable(myInterface.getContainingFile().getVirtualFile()).hasReadonlyFiles())
 			{

@@ -16,7 +16,8 @@
 
 package com.intellij.gwt.references;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
@@ -31,8 +32,8 @@ public class GwtModuleReferencesProvider extends PsiReferenceProviderBase
 {
 
 	@Override
-	@NotNull
-	public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull final ProcessingContext context)
+	@Nonnull
+	public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context)
 	{
 		if(element instanceof XmlAttributeValue)
 		{

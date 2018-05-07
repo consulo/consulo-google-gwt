@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import consulo.annotations.RequiredReadAction;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.InspectionManager;
@@ -41,7 +41,7 @@ public class GwtObsoleteTypeArgsJavadocTagInspection extends BaseGwtInspection
 
 	@Override
 	@RequiredReadAction
-	public ProblemDescriptor[] checkClassImpl(@NotNull GoogleGwtModuleExtension extension, @NotNull GwtVersion version, @NotNull final PsiClass aClass, @NotNull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
 	{
 		if(!version.isGenericsSupported())
 		{
@@ -76,21 +76,21 @@ public class GwtObsoleteTypeArgsJavadocTagInspection extends BaseGwtInspection
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.obsolete.gwt.typeargs.tag.in.javadoc.comments");
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public HighlightDisplayLevel getDefaultLevel()
 	{
 		return HighlightDisplayLevel.WARNING;
 	}
 
 	@Override
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "GwtObsoleteTypeArgsJavadocTag";
@@ -110,7 +110,7 @@ public class GwtObsoleteTypeArgsJavadocTagInspection extends BaseGwtInspection
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			try
 			{
@@ -240,8 +240,8 @@ public class GwtObsoleteTypeArgsJavadocTagInspection extends BaseGwtInspection
 			return methods;
 		}
 
-		private static PsiType appendTypeParameters(final @NotNull PsiType type, final @NotNull String typeParametersString,
-				final @NotNull PsiElement context) throws IncorrectOperationException
+		private static PsiType appendTypeParameters(final @Nonnull PsiType type, final @Nonnull String typeParametersString,
+				final @Nonnull PsiElement context) throws IncorrectOperationException
 		{
 			if(type instanceof PsiClassType)
 			{

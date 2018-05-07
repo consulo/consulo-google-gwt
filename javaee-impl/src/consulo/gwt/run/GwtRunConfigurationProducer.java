@@ -16,8 +16,9 @@
 
 package consulo.gwt.run;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.execution.Location;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
@@ -120,7 +121,7 @@ public class GwtRunConfigurationProducer extends RunConfigurationProducer<GwtRun
 	}
 
 	@Nullable
-	private static Pair<GwtModule, String> getModuleWithFile(@NotNull GwtModulesManager gwtModulesManager, @NotNull GwtModule gwtModule)
+	private static Pair<GwtModule, String> getModuleWithFile(@Nonnull GwtModulesManager gwtModulesManager, @Nonnull GwtModule gwtModule)
 	{
 		XmlFile psiHtmlFile = gwtModulesManager.findHtmlFileByModule(gwtModule);
 		if(psiHtmlFile != null)

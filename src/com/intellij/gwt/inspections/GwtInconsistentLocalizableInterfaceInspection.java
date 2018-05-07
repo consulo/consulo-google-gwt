@@ -19,13 +19,14 @@ package com.intellij.gwt.inspections;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -64,7 +65,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 
 	@Override
 	@Nls
-	@NotNull
+	@Nonnull
 	public String getDisplayName()
 	{
 		return GwtBundle.message("inspection.name.inconsistent.gwt.localizable.interface");
@@ -72,7 +73,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 
 	@Override
 	@NonNls
-	@NotNull
+	@Nonnull
 	public String getShortName()
 	{
 		return "GwtInconsistentI18nInterface";
@@ -81,7 +82,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly)
 	{
 		GoogleGwtModuleExtension extension = getExtension(file);
 		if(extension == null)
@@ -242,7 +243,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 		}
 
 		@Override
-		public void applyFix(final @NotNull Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(final @Nonnull Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			if(!ensureWritable(myInterface))
 			{
@@ -267,7 +268,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 		}
 
 		@Override
-		public void applyFix(final @NotNull Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(final @Nonnull Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			if(!ensureWritable(myInterface))
 			{
@@ -294,7 +295,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 		}
 
 		@Override
-		public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor)
+		public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor)
 		{
 			if(myPropertiesFiles.length == 1)
 			{
