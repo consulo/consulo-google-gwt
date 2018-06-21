@@ -1,7 +1,13 @@
 <component name="libraryTable">
   <library name="consulo-plugin: consulo.javaee">
     <binaries>
-      <root url="jar://$PROJECT_DIR$/dep/consulo.javaee/lib/javaee.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dep/consulo.javaee/lib/consulo.javaee-2-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dep/consulo.javaee/lib/consulo.javaee-jsp.impl-2-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dep/consulo.javaee/lib/consulo.javaee-javaee.api-2-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dep/consulo.javaee/lib/consulo.javaee-jsp.psi.api-2-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dep/consulo.javaee/lib/consulo.javaee-java.web.maven-2-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dep/consulo.javaee/lib/consulo.javaee-web.server.api-2-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dep/consulo.javaee/lib/consulo.javaee-web.server.impl-2-SNAPSHOT.jar!/" />
     </binaries>
   </library>
 </component>
