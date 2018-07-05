@@ -20,15 +20,14 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.text.MessageFormat;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.Icon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-
 import com.intellij.gwt.GwtBundle;
+import com.intellij.icons.AllIcons;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -43,6 +42,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.ui.awt.RelativePoint;
+import consulo.ui.image.Image;
 
 /**
  * @author nik
@@ -156,9 +156,9 @@ public class PropertiesInterfaceAnnotator implements Annotator
 
 		@Override
 		@Nonnull
-		public Icon getIcon()
+		public Image getIcon()
 		{
-			return GwtI18nUtil.IMPLEMENTED_PROPERTY_METHOD_ICON;
+			return AllIcons.Gutter.ImplementedMethod;
 		}
 
 		@Override

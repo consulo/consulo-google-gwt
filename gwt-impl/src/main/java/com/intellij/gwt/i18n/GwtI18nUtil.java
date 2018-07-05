@@ -21,14 +21,12 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.Icon;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.*;
@@ -45,7 +43,7 @@ import com.intellij.util.IncorrectOperationException;
 public class GwtI18nUtil
 {
 	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.i18n.GwtI18nUtil");
-	public static final Icon IMPLEMENTED_PROPERTY_METHOD_ICON = IconLoader.getIcon("/gutter/implementedMethod.png");
+
 	@NonNls
 	public static final String CONSTANTS_INTERFACE_NAME = "com.google.gwt.i18n.client.Constants";
 	@NonNls
