@@ -1,7 +1,0 @@
-<component name="libraryTable">
-  <library name="consulo-plugin: consulo.play">
-    <binaries>
-      <root url="jar://$PROJECT_DIR$/dep/consulo.play/lib/consulo.play-2-SNAPSHOT.jar!/" />
-    </binaries>
-  </library>
-</component>
