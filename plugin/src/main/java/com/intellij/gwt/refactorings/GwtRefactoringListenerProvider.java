@@ -21,13 +21,13 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
+
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
-import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.PsiClass;
@@ -39,14 +39,13 @@ import com.intellij.refactoring.RefactoringFactory;
 import com.intellij.refactoring.RenameRefactoring;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
 import com.intellij.refactoring.listeners.RefactoringElementListenerProvider;
-import com.intellij.refactoring.listeners.RefactoringListenerManager;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Function;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 
-public class GwtRefactoringListenerProvider implements ProjectComponent, RefactoringElementListenerProvider
+@Singleton
+public class GwtRefactoringListenerProvider implements RefactoringElementListenerProvider
 {
-	private Project myProject;
 	private static final Function<String, String> STRING2STRING_ID = s -> s;
 	private ThreadLocal<Boolean> myInsideGwtListener = new ThreadLocal<Boolean>()
 	{
@@ -56,40 +55,6 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 			return Boolean.FALSE;
 		}
 	};
-
-	public GwtRefactoringListenerProvider(final Project project)
-	{
-		myProject = project;
-	}
-
-	@Override
-	public void initComponent()
-	{
-	}
-
-	@Override
-	public void disposeComponent()
-	{
-	}
-
-	@Override
-	@Nonnull
-	public String getComponentName()
-	{
-		return "GwtRefactoringListenerProvider";
-	}
-
-	@Override
-	public void projectOpened()
-	{
-		RefactoringListenerManager.getInstance(myProject).addListenerProvider(this);
-	}
-
-	@Override
-	public void projectClosed()
-	{
-		RefactoringListenerManager.getInstance(myProject).removeListenerProvider(this);
-	}
 
 	@Override
 	@Nullable
@@ -165,7 +130,7 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 	@Nullable
 	private RefactoringElementListener getPropertiesClassListener(PsiElement element)
 	{
-		final GwtI18nManager i18nManager = GwtI18nManager.getInstance(myProject);
+		final GwtI18nManager i18nManager = GwtI18nManager.getInstance(element.getProject());
 		final Map<PsiNamedElement, Function<String, String>> elementsToRename = new HashMap<PsiNamedElement, Function<String, String>>(1);
 
 		if(element instanceof Property)
@@ -242,7 +207,7 @@ public class GwtRefactoringListenerProvider implements ProjectComponent, Refacto
 		try
 		{
 			myInsideGwtListener.set(true);
-			RenameRefactoring rename = RefactoringFactory.getInstance(myProject).createRename(element, newName);
+			RenameRefactoring rename = RefactoringFactory.getInstance(element.getProject()).createRename(element, newName);
 			rename.setSearchInComments(false);
 			rename.setSearchInNonJavaFiles(false);
 			rename.setPreviewUsages(false);

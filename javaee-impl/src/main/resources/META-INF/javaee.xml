@@ -29,13 +29,9 @@
 								 icon="/icons/gwt.png"
 								 immutableClass="consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension"
 								 mutableClass="consulo.gwt.module.extension.JavaEEGoogleGwtMutableModuleExtension" />
-	</extensions>
 
-	<application-components>
-		<component>
-			<implementation-class>com.intellij.gwt.GwtApplicationComponent</implementation-class>
-		</component>
-	</application-components>
+		<applicationService serviceImplementation="com.intellij.gwt.GwtApplicationComponent" lazy="false" />
+	</extensions>
 
 	<actions>
 		<action id="GWT.NewRemoteService"

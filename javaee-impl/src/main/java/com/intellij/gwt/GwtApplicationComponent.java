@@ -16,40 +16,31 @@
 
 package com.intellij.gwt;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.gwt.make.GwtCompilerPaths;
-import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFileManager;
 
 /**
  * @author nik
  */
-public class GwtApplicationComponent implements ApplicationComponent
+public class GwtApplicationComponent implements Disposable
 {
-	private LocalFileSystem.WatchRequest myWatchRequest;
+	private final LocalFileSystem myLocalFileSystem;
+	private final LocalFileSystem.WatchRequest myWatchRequest;
 
-	@Override
-	@NonNls
-	@Nonnull
-	public String getComponentName()
+	public GwtApplicationComponent(VirtualFileManager virtualFileManager)
 	{
-		return "GwtApplicationComponent";
+		myLocalFileSystem = LocalFileSystem.get(virtualFileManager);
+		myWatchRequest = myLocalFileSystem.addRootToWatch(GwtCompilerPaths.getOutputRoot().getAbsolutePath(), true);
 	}
 
 	@Override
-	public void initComponent()
-	{
-		myWatchRequest = LocalFileSystem.getInstance().addRootToWatch(GwtCompilerPaths.getOutputRoot().getAbsolutePath(), true);
-	}
-
-	@Override
-	public void disposeComponent()
+	public void dispose()
 	{
 		if(myWatchRequest != null)
 		{
-			LocalFileSystem.getInstance().removeWatchedRoot(myWatchRequest);
+			myLocalFileSystem.removeWatchedRoot(myWatchRequest);
 		}
 	}
 }

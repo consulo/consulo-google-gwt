@@ -62,13 +62,9 @@
 
 		<fileTemplateGroup implementation="com.intellij.gwt.GwtFileTemplateGroupDescriptorFactory"/>
 		<inspectionToolProvider implementation="com.intellij.gwt.GwtInspectionToolProvider"/>
-	</extensions>
 
-	<project-components>
-		<component>
-			<implementation-class>com.intellij.gwt.refactorings.GwtRefactoringListenerProvider</implementation-class>
-		</component>
-	</project-components>
+		<refactoring.elementListenerProvider implementation="com.intellij.gwt.refactorings.GwtRefactoringListenerProvider" />
+	</extensions>
 
 	<actions>
 		<group id="GWT" class="com.intellij.gwt.actions.GwtCreateActionGroup" text="Google Web Toolkit">
