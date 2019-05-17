@@ -22,7 +22,6 @@ import com.intellij.gwt.references.GwtToHtmlTagReference;
 import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.lang.xhtml.XHTMLLanguage;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -46,14 +45,7 @@ public class GwtToHtmlTagIdReferencesSearcher implements QueryExecutor<PsiRefere
 	@Override
 	public boolean execute(final ReferencesSearch.SearchParameters queryParameters, final Processor<PsiReference> consumer)
 	{
-		return new ReadAction<Boolean>()
-		{
-			@Override
-			protected void run(final Result<Boolean> result)
-			{
-				result.setResult(doExecute(queryParameters, consumer));
-			}
-		}.execute().getResultObject();
+		return ReadAction.compute(() -> doExecute(queryParameters, consumer));
 	}
 
 	private static boolean doExecute(final ReferencesSearch.SearchParameters queryParameters, final Processor<PsiReference> consumer)

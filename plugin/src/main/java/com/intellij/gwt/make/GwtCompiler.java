@@ -16,16 +16,6 @@
 
 package com.intellij.gwt.make;
 
-import java.io.DataInput;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.compiler.impl.CompilerUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
@@ -35,13 +25,7 @@ import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.compiler.ClassInstrumentingCompiler;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.compiler.ValidityState;
+import com.intellij.openapi.compiler.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -61,6 +45,15 @@ import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.module.extension.JavaModuleExtension;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.io.DataInput;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class GwtCompiler implements ClassInstrumentingCompiler
 {
@@ -178,17 +171,13 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 		final Ref<VirtualFile> gwtModuleFile = Ref.create(null);
 		final Ref<File> outputDirRef = Ref.create(null);
 		final Ref<String> gwtModuleName = Ref.create(null);
-		final Module module = new ReadAction<Module>()
+		final Module module = ReadAction.compute(() ->
 		{
-			@Override
-			protected void run(final Result<Module> result)
-			{
-				gwtModuleName.set(gwtModule.getQualifiedName());
-				gwtModuleFile.set(gwtModule.getModuleFile());
-				outputDirRef.set(GwtCompilerPaths.getOutputDirectory(extension));
-				result.setResult(gwtModule.getModule());
-			}
-		}.execute().getResultObject();
+			gwtModuleName.set(gwtModule.getQualifiedName());
+			gwtModuleFile.set(gwtModule.getModuleFile());
+			outputDirRef.set(GwtCompilerPaths.getOutputDirectory(extension));
+			return gwtModule.getModule();
+		});
 
 		final File generatedDir = GwtCompilerPaths.getDirectoryForGenerated(module);
 		generatedDir.mkdirs();
@@ -253,11 +242,11 @@ public class GwtCompiler implements ClassInstrumentingCompiler
 
 	@Nonnull
 	private static OwnJavaParameters createCommand(GoogleGwtModuleExtension extension,
-			GwtLibraryPathProvider.Info pathInfo,
-			final GwtModule module,
-			final File outputDir,
-			final File generatedDir,
-			final String gwtModuleName)
+												   GwtLibraryPathProvider.Info pathInfo,
+												   final GwtModule module,
+												   final File outputDir,
+												   final File generatedDir,
+												   final String gwtModuleName)
 	{
 		final OwnJavaParameters javaParameters = new OwnJavaParameters();
 		javaParameters.setJdk(ModuleUtilCore.getSdk(extension.getModule(), JavaModuleExtension.class));

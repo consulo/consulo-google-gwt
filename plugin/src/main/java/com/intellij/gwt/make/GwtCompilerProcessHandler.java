@@ -16,19 +16,12 @@
 
 package com.intellij.gwt.make;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.diagnostic.Logger;
@@ -45,6 +38,12 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.FactoryMap;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author nik
@@ -310,27 +309,23 @@ public class GwtCompilerProcessHandler extends OSProcessHandler
 
 		private void setClassName(final String className)
 		{
-			new ReadAction()
+			ReadAction.run(() ->
 			{
-				@Override
-				protected void run(final Result result)
+				GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule);
+				PsiClass psiClass = JavaPsiFacade.getInstance(myModule.getProject()).findClass(className, scope);
+				if(psiClass != null)
 				{
-					GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule);
-					PsiClass psiClass = JavaPsiFacade.getInstance(myModule.getProject()).findClass(className, scope);
-					if(psiClass != null)
+					PsiFile psiFile = psiClass.getContainingFile();
+					if(psiFile != null)
 					{
-						PsiFile psiFile = psiClass.getContainingFile();
-						if(psiFile != null)
+						VirtualFile file = psiFile.getVirtualFile();
+						if(file != null)
 						{
-							VirtualFile file = psiFile.getVirtualFile();
-							if(file != null)
-							{
-								myCurrentFileUrl = file.getUrl();
-							}
+							myCurrentFileUrl = file.getUrl();
 						}
 					}
 				}
-			}.execute();
+			});
 		}
 
 		private void setCurrentFileUrl(final String url)

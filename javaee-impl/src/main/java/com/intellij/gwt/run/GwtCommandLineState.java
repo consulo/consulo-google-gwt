@@ -16,22 +16,6 @@
 
 package com.intellij.gwt.run;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
-import javax.annotation.Nonnull;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
@@ -45,7 +29,6 @@ import com.intellij.gwt.make.GwtCompilerPaths;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -62,6 +45,21 @@ import com.intellij.util.SystemProperties;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * @author nik
@@ -215,14 +213,7 @@ public class GwtCommandLineState extends JavaCommandLineState
 
 			Document target = JDOMUtil.loadDocument(webXml);
 			final Element targetRoot = target.getRootElement();
-			new ReadAction()
-			{
-				@Override
-				protected void run(final Result result)
-				{
-					deleteGwtServlets(targetRoot);
-				}
-			}.execute();
+			ReadAction.run(() -> deleteGwtServlets(targetRoot));
 
 			//noinspection unchecked
 			for(Element child : (List<Element>) document.getRootElement().getChildren())
