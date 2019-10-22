@@ -86,7 +86,7 @@ public class GwtCompilerProcessHandler extends OSProcessHandler
 			"Parameter: "
 	};
 
-	private final Map<Key, GwtCompilerOutputParser> myParsers = FactoryMap.createMap(key -> new GwtCompilerOutputParser(ProcessOutputTypes.STDERR.equals(key)));
+	private final Map<Key, GwtCompilerOutputParser> myParsers = FactoryMap.create(key -> new GwtCompilerOutputParser(ProcessOutputTypes.STDERR.equals(key)));
 
 	private final CompileContext myContext;
 	private final String myModuleFileUrl;

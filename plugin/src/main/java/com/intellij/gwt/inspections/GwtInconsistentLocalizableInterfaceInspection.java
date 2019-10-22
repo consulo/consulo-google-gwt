@@ -16,16 +16,6 @@
 
 package com.intellij.gwt.inspections;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -46,14 +36,19 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
+import com.intellij.ui.components.JBList;
 import com.intellij.util.IncorrectOperationException;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author nik
@@ -310,12 +305,14 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 				return;
 			}
 
-			final JList list = new JList(myPropertiesFiles);
+			final JList list = new JBList(myPropertiesFiles);
 			final PropertiesFilesListCellRenderer renderer = new PropertiesFilesListCellRenderer();
 			list.setCellRenderer(renderer);
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			renderer.installSpeedSearch(list);
-			new PopupChooserBuilder(list).setTitle(GwtBundle.message("quickfix.popup.title.choose.properties.file")).setItemChoosenCallback(new Runnable()
+
+			PopupChooserBuilder builder = new PopupChooserBuilder(list);
+			renderer.installSpeedSearch(builder);
+			builder.setTitle(GwtBundle.message("quickfix.popup.title.choose.properties.file")).setItemChoosenCallback(new Runnable()
 			{
 				@Override
 				public void run()
