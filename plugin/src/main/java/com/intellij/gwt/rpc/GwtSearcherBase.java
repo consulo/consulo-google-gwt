@@ -14,7 +14,7 @@ import com.intellij.util.QueryExecutor;
 public abstract class GwtSearcherBase<Result, Param> implements QueryExecutor<Result, Param>
 {
 	@Override
-	public boolean execute(final Param queryParameters, final Processor<Result> consumer)
+	public boolean execute(final Param queryParameters, final Processor<? super Result> consumer)
 	{
 		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()
 		{
@@ -37,5 +37,5 @@ public abstract class GwtSearcherBase<Result, Param> implements QueryExecutor<Re
 
 	protected abstract PsiFile getContainingFile(Param parameters);
 
-	protected abstract boolean doExecute(final Param queryParameters, final Processor<Result> consumer);
+	protected abstract boolean doExecute(final Param queryParameters, final Processor<? super Result> consumer);
 }

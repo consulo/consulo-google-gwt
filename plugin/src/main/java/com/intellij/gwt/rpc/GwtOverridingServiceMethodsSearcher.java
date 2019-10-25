@@ -18,7 +18,7 @@ public class GwtOverridingServiceMethodsSearcher extends GwtSearcherBase<PsiMeth
 	}
 
 	@Override
-	public boolean doExecute(final OverridingMethodsSearch.SearchParameters queryParameters, final Processor<PsiMethod> consumer)
+	public boolean doExecute(final OverridingMethodsSearch.SearchParameters queryParameters, final Processor<? super PsiMethod> consumer)
 	{
 		PsiMethod method = queryParameters.getMethod();
 		PsiClass async = method.getContainingClass();

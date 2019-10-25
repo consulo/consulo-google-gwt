@@ -19,7 +19,7 @@ public class GwtAllOverridingServiceMethodsSearcher extends GwtSearcherBase<Pair
 	}
 
 	@Override
-	public boolean doExecute(final AllOverridingMethodsSearch.SearchParameters queryParameters, final Processor<Pair<PsiMethod, PsiMethod>> consumer)
+	public boolean doExecute(final AllOverridingMethodsSearch.SearchParameters queryParameters, final Processor<? super Pair<PsiMethod, PsiMethod>> consumer)
 	{
 		PsiClass async = queryParameters.getPsiClass();
 		PsiClass sync = RemoteServiceUtil.findSynchronousInterface(async);

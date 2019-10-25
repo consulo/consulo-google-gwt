@@ -15,8 +15,6 @@
  */
 package com.intellij.gwt.i18n;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.application.ApplicationManager;
@@ -28,13 +26,15 @@ import com.intellij.psi.search.searches.DefinitionsScopedSearch;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author peter
  */
 public class PropertiesSearcher implements QueryExecutor<PsiElement, DefinitionsScopedSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<PsiElement> consumer)
+	public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiElement> consumer)
 	{
 		final PsiElement sourceElement = queryParameters.getElement();
 		if(sourceElement instanceof PsiMethod)

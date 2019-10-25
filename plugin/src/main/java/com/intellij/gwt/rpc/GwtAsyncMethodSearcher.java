@@ -20,7 +20,7 @@ public class GwtAsyncMethodSearcher extends GwtSearcherBase<MethodSignatureBacke
 	}
 
 	@Override
-	public boolean doExecute(final SuperMethodsSearch.SearchParameters queryParameters, final Processor<MethodSignatureBackedByPsiMethod> consumer)
+	public boolean doExecute(final SuperMethodsSearch.SearchParameters queryParameters, final Processor<? super MethodSignatureBackedByPsiMethod> consumer)
 	{
 		PsiMethod method = queryParameters.getMethod();
 		PsiClass sync = method.getContainingClass();

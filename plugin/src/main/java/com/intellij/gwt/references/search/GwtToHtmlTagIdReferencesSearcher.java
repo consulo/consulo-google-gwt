@@ -43,12 +43,12 @@ import com.intellij.util.QueryExecutor;
 public class GwtToHtmlTagIdReferencesSearcher implements QueryExecutor<PsiReference, ReferencesSearch.SearchParameters>
 {
 	@Override
-	public boolean execute(final ReferencesSearch.SearchParameters queryParameters, final Processor<PsiReference> consumer)
+	public boolean execute(final ReferencesSearch.SearchParameters queryParameters, final Processor<? super PsiReference> consumer)
 	{
 		return ReadAction.compute(() -> doExecute(queryParameters, consumer));
 	}
 
-	private static boolean doExecute(final ReferencesSearch.SearchParameters queryParameters, final Processor<PsiReference> consumer)
+	private static boolean doExecute(final ReferencesSearch.SearchParameters queryParameters, final Processor<? super PsiReference> consumer)
 	{
 		final PsiElement element = queryParameters.getElementToSearch();
 		if(!(element instanceof XmlAttributeValue))
