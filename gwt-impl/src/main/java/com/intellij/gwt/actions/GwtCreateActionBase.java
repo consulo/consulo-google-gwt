@@ -19,6 +19,7 @@ package com.intellij.gwt.actions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,19 +74,18 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 	}
 
 	@Override
-	@Nonnull
-	protected final PsiElement[] invokeDialog(final Project project, final PsiDirectory directory)
+	protected final void invokeDialog(final Project project, final PsiDirectory directory, Consumer<PsiElement[]> elementsConsumer)
 	{
 		Module module = ModuleUtil.findModuleForFile(directory.getVirtualFile(), project);
 		if(module == null)
 		{
-			return PsiElement.EMPTY_ARRAY;
+			return;
 		}
 
 		GoogleGwtModuleExtension facet = ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class);
 		if(facet == null)
 		{
-			return PsiElement.EMPTY_ARRAY;
+			return;
 		}
 
 		if(requireGwtModule())
@@ -95,14 +95,14 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 			{
 				final String message = GwtBundle.message("error.message.this.action.is.allowed.only.for.client.side.packages.of.a.gwt.module");
 				Messages.showErrorDialog(project, message, CommonBundle.getErrorTitle());
-				return PsiElement.EMPTY_ARRAY;
+				return;
 			}
 		}
 
 		MyInputValidator validator = new MyInputValidator(project, directory);
 		Messages.showInputDialog(project, getDialogPrompt(), getDialogTitle(), Messages.getQuestionIcon(), "", validator);
 
-		return validator.getCreatedElements();
+		elementsConsumer.accept(validator.getCreatedElements());
 	}
 
 	protected PsiFile[] getAffectedFiles(final GwtModule gwtModule)
@@ -203,9 +203,9 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 	protected static PsiFile createFromTemplateInternal(final PsiDirectory directory, final String name, String fileName, String templateName,
 			@NonNls String... parameters) throws IncorrectOperationException
 	{
-		final FileTemplate template = FileTemplateManager.getInstance().getJ2eeTemplate(templateName);
+		final FileTemplate template = FileTemplateManager.getInstance(directory.getProject()).getJ2eeTemplate(templateName);
 
-		Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
+		Properties properties = new Properties(FileTemplateManager.getInstance(directory.getProject()).getDefaultProperties());
 		JavaTemplateUtil.setPackageNameAttribute(properties, directory);
 		properties.setProperty(NAME_TEMPLATE_PROPERTY, name);
 		LOG.assertTrue(parameters.length % 2 == 0);
@@ -220,7 +220,7 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance().internalTemplateToSubject(templateName), e);
+			throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance(directory.getProject()).internalTemplateToSubject(templateName), e);
 		}
 
 		final PsiManager psiManager = PsiManager.getInstance(directory.getProject());
