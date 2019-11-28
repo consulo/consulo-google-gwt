@@ -16,25 +16,19 @@
 
 package com.intellij.gwt.i18n;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.annotations.RequiredReadAction;
-import consulo.gwt.module.extension.GwtModuleExtensionUtil;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesFileType;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.gwt.module.extension.GwtModuleExtensionUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author nik

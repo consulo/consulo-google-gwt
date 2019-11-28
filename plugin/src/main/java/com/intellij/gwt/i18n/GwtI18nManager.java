@@ -16,15 +16,16 @@
 
 package com.intellij.gwt.i18n;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.annotations.RequiredReadAction;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import consulo.annotation.access.RequiredReadAction;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author nik

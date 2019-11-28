@@ -16,13 +16,6 @@
 
 package com.intellij.gwt.inspections;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.annotations.RequiredReadAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.gwt.GwtBundle;
@@ -30,7 +23,13 @@ import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.SmartList;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author nik

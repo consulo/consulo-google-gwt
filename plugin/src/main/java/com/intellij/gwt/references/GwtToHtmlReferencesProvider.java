@@ -16,15 +16,16 @@
 
 package com.intellij.gwt.references;
 
-import javax.annotation.Nonnull;
-import consulo.annotations.RequiredReadAction;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author nik

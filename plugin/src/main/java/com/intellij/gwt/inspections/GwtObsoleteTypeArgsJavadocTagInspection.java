@@ -1,16 +1,5 @@
 package com.intellij.gwt.inspections;
 
-import gnu.trove.TIntObjectHashMap;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.annotations.RequiredReadAction;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -30,7 +19,13 @@ import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.search.searches.DefinitionsScopedSearch;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import gnu.trove.TIntObjectHashMap;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author nik

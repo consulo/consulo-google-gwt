@@ -16,21 +16,20 @@
 
 package consulo.vaadin.module.extension;
 
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import javax.annotation.Nullable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.Comparing;
-import consulo.annotations.RequiredDispatchThread;
 import consulo.extension.ui.ModuleExtensionSdkBoxBuilder;
 import consulo.gwt.module.extension.GoogleGwtMutableModuleExtension;
 import consulo.gwt.module.extension.GwtModuleExtensionPanel;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
 import consulo.roots.ModuleRootLayer;
+import consulo.ui.annotation.RequiredUIAccess;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 /**
  * @author VISTALL
@@ -52,7 +51,7 @@ public class JavaEEVaadinMutableModuleExtension extends JavaEEVaadinModuleExtens
 
 	@Nullable
 	@Override
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public JComponent createConfigurablePanel(@Nonnull Runnable runnable)
 	{
 		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));

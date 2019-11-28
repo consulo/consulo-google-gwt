@@ -16,16 +16,6 @@
 
 package com.intellij.gwt.inspections;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.annotations.RequiredReadAction;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -38,16 +28,17 @@ import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author nik

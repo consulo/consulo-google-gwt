@@ -16,35 +16,21 @@
 
 package com.intellij.gwt.rpc;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.annotations.RequiredReadAction;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.sdk.GwtVersion;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiArrayType;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author nik

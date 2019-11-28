@@ -16,19 +16,18 @@
 
 package consulo.gwt.play1.module.extension;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.VerticalFlowLayout;
-import consulo.annotations.RequiredDispatchThread;
 import consulo.extension.ui.ModuleExtensionSdkBoxBuilder;
 import consulo.gwt.module.extension.GoogleGwtMutableModuleExtension;
 import consulo.gwt.module.extension.GwtModuleExtensionPanel;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
 import consulo.roots.ModuleRootLayer;
+import consulo.ui.annotation.RequiredUIAccess;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 /**
  * @author VISTALL
@@ -43,7 +42,7 @@ public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension impl
 
 	@Nullable
 	@Override
-	@RequiredDispatchThread
+	@RequiredUIAccess
 	public JComponent createConfigurablePanel(@Nonnull Runnable runnable)
 	{
 		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));

@@ -16,24 +16,6 @@
 
 package com.intellij.gwt.inspections;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.annotations.RequiredReadAction;
-import com.intellij.gwt.sdk.GwtVersion;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.codeInsight.intention.QuickFixFactory;
 import com.intellij.codeInspection.InspectionManager;
@@ -44,6 +26,7 @@ import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.rpc.GwtGenericsUtil;
 import com.intellij.gwt.rpc.GwtSerializableUtil;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
+import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -56,6 +39,19 @@ import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.util.xmlb.SkipDefaultValuesSerializationFilters;
 import com.intellij.util.xmlb.XmlSerializer;
 import com.intellij.util.xmlb.annotations.Tag;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author nik

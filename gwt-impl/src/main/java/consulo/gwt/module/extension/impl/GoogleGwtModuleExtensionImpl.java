@@ -16,11 +16,6 @@
 
 package consulo.gwt.module.extension.impl;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jdom.Element;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.make.GwtModuleFileProcessingItem;
 import com.intellij.gwt.module.model.GwtModule;
@@ -31,11 +26,15 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.sdk.GoogleGwtSdkType;
 import consulo.roots.ModuleRootLayer;
+import org.jdom.Element;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author VISTALL

@@ -1,7 +1,5 @@
 package consulo.gwt.module.extension;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.sdk.impl.GwtVersionImpl;
 import com.intellij.openapi.module.Module;
@@ -10,8 +8,11 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import consulo.annotations.RequiredReadAction;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author VISTALL

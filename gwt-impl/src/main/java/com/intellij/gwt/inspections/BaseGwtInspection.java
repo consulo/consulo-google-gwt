@@ -16,9 +16,6 @@
 
 package com.intellij.gwt.inspections;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.annotations.RequiredReadAction;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.InspectionManager;
@@ -30,8 +27,12 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.module.extension.GwtModuleExtensionUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author nik
