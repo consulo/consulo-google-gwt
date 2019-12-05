@@ -16,19 +16,6 @@
 
 package com.intellij.gwt.module;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.psi.PsiPackage;
 import com.intellij.gwt.module.index.GwtHtmlFileIndex;
 import com.intellij.gwt.module.model.GwtEntryPoint;
 import com.intellij.gwt.module.model.GwtModule;
@@ -41,7 +28,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -56,6 +42,12 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.xml.DomFileElement;
 import com.intellij.util.xml.DomManager;
 import com.intellij.util.xml.DomService;
+import consulo.psi.PsiPackage;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author nik
