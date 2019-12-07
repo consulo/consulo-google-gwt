@@ -16,18 +16,17 @@
 
 package com.intellij.gwt.make;
 
-import java.io.File;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import consulo.container.boot.ContainerPathManager;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.io.File;
 
 /**
  * @author nik
@@ -76,7 +75,7 @@ public class GwtCompilerPaths
 
 	public static File getOutputRoot()
 	{
-		return new File(PathManager.getSystemPath() + File.separator + "gwt");
+		return new File(ContainerPathManager.get().getSystemPath() + File.separator + "gwt");
 	}
 
 	private static String getOutputDirectoryName(@Nonnull Module module)

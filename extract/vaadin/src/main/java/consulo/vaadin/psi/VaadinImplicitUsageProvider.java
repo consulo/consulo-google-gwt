@@ -32,7 +32,7 @@ public class VaadinImplicitUsageProvider implements ImplicitUsageProvider
 	@Override
 	public boolean isImplicitUsage(PsiElement psiElement)
 	{
-		return psiElement instanceof PsiClass && AnnotationUtil.isAnnotated((PsiClass)psiElement, COM_VAADIN_SHARED_UI_CONNECT, false);
+		return psiElement instanceof PsiClass && AnnotationUtil.isAnnotated((PsiClass)psiElement, COM_VAADIN_SHARED_UI_CONNECT, 0);
 	}
 
 	@Override
