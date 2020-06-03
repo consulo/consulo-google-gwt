@@ -18,11 +18,14 @@ package consulo.gwt.play1.module.extension;
 
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.VerticalFlowLayout;
+import consulo.disposer.Disposable;
 import consulo.extension.ui.ModuleExtensionSdkBoxBuilder;
 import consulo.gwt.module.extension.GoogleGwtMutableModuleExtension;
 import consulo.gwt.module.extension.GwtModuleExtensionPanel;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
+import consulo.module.extension.swing.SwingMutableModuleExtension;
 import consulo.roots.ModuleRootLayer;
+import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 
 import javax.annotation.Nonnull;
@@ -33,17 +36,25 @@ import javax.swing.*;
  * @author VISTALL
  * @since 15.07.14
  */
-public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension implements GoogleGwtMutableModuleExtension<Play1GwtModuleExtension>
+public class Play1GwtMutableModuleExtension extends Play1GwtModuleExtension implements GoogleGwtMutableModuleExtension<Play1GwtModuleExtension>, SwingMutableModuleExtension
 {
 	public Play1GwtMutableModuleExtension(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
 		super(id, rootModel);
 	}
 
+	@RequiredUIAccess
 	@Nullable
 	@Override
+	public Component createConfigurationComponent(@Nonnull Disposable disposable, @Nonnull Runnable runnable)
+	{
+		return null;
+	}
+
 	@RequiredUIAccess
-	public JComponent createConfigurablePanel(@Nonnull Runnable runnable)
+	@Nullable
+	@Override
+	public JComponent createConfigurablePanel(@Nonnull Disposable disposable, @Nonnull Runnable runnable)
 	{
 		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));
 		panel.add(ModuleExtensionSdkBoxBuilder.createAndDefine(this, runnable).build());
