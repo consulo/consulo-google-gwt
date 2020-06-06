@@ -33,6 +33,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
@@ -531,7 +532,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 					if(psiPackage != null)
 					{
 						List<VirtualFile> directories = new ArrayList<VirtualFile>();
-						PsiDirectory[] psiDirectories = psiPackage.getDirectories(module.getModuleWithDependentsScope());
+						PsiDirectory[] psiDirectories = psiPackage.getDirectories(GlobalSearchScope.moduleWithDependentsScope(module));
 						for(PsiDirectory dir : psiDirectories)
 						{
 							directories.add(dir.getVirtualFile());
