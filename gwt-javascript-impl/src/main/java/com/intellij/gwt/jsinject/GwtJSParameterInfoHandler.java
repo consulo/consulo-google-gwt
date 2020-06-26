@@ -1,11 +1,5 @@
 package com.intellij.gwt.jsinject;
 
-import java.util.Collections;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.hint.api.impls.MethodParameterInfoHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -14,19 +8,15 @@ import com.intellij.lang.javascript.JSTokenTypes;
 import com.intellij.lang.javascript.psi.JSArgumentList;
 import com.intellij.lang.javascript.psi.JSCallExpression;
 import com.intellij.lang.javascript.psi.JSExpression;
-import com.intellij.lang.parameterInfo.CreateParameterInfoContext;
-import com.intellij.lang.parameterInfo.ParameterInfoContext;
-import com.intellij.lang.parameterInfo.ParameterInfoHandlerWithTabActionSupport;
-import com.intellij.lang.parameterInfo.ParameterInfoUIContext;
-import com.intellij.lang.parameterInfo.ParameterInfoUtils;
-import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.lang.parameterInfo.*;
+import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ArrayUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author nik
@@ -173,14 +163,14 @@ public class GwtJSParameterInfoHandler implements ParameterInfoHandlerWithTabAct
 
 	@Override
 	@Nonnull
-	public Set<Class> getArgumentListAllowedParentClasses()
+	public Set<Class<?>> getArgumentListAllowedParentClasses()
 	{
-		return Collections.singleton((Class) JSCallExpression.class);
+		return Collections.singleton(JSCallExpression.class);
 	}
 
 	@Nonnull
 	@Override
-	public Set<? extends Class> getArgListStopSearchClasses()
+	public Set<? extends Class<?>> getArgListStopSearchClasses()
 	{
 		return Collections.emptySet();
 	}
