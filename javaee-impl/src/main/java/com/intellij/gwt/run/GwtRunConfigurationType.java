@@ -18,11 +18,11 @@ package com.intellij.gwt.run;
 
 import javax.annotation.Nonnull;
 
+import consulo.google.gwt.icon.GwtIconGroup;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.gwt.GwtBundle;
-import consulo.gwt.GwtIcons;
 import consulo.ui.image.Image;
 
 public class GwtRunConfigurationType implements ConfigurationType
@@ -55,7 +55,7 @@ public class GwtRunConfigurationType implements ConfigurationType
 	@Override
 	public Image getIcon()
 	{
-		return GwtIcons.Gwt;
+		return GwtIconGroup.gwt();
 	}
 
 	@Override

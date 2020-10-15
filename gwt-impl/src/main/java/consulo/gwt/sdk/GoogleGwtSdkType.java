@@ -1,24 +1,23 @@
 package consulo.gwt.sdk;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.annotation.Nonnull;
-
-import javax.annotation.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import consulo.gwt.GwtIcons;
+import consulo.google.gwt.icon.GwtIconGroup;
 import consulo.gwt.module.extension.path.GwtSdkUtil;
 import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.DocumentationOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
 import consulo.ui.image.Image;
 import consulo.vfs.util.ArchiveVfsUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author VISTALL
@@ -57,7 +56,7 @@ public class GoogleGwtSdkType extends GwtSdkBaseType
 	@Override
 	public Image getIcon()
 	{
-		return GwtIcons.Gwt;
+		return GwtIconGroup.gwt();
 	}
 
 	@Override

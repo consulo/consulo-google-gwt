@@ -14,13 +14,13 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="com.intellij">
 		<moduleExtensionProvider key="play1-google-gwt"
 								 parentKey="play1"
 								 name="GWT"
-								 icon="/icons/gwt.png"
+								 icon="consulo.google.gwt.GwtIconGroup@gwt"
 								 immutableClass="consulo.gwt.play1.module.extension.Play1GwtModuleExtension"
 								 mutableClass="consulo.gwt.play1.module.extension.Play1GwtMutableModuleExtension"/>
 	</extensions>
-</idea-plugin>
+</consulo-plugin>

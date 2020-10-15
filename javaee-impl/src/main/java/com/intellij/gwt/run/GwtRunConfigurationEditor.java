@@ -55,6 +55,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.ComboboxWithBrowseButton;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.RawCommandLineEditor;
@@ -231,16 +232,16 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
 		});
 		myWebXmlField.addBrowseFolderListener(null, null, myProject, createWebXmlChooserDescriptor());
 
-		myModulesBox.setRenderer(new ListCellRendererWrapper()
+		myModulesBox.setRenderer(new ColoredListCellRenderer()
 		{
 			@Override
-			public void customize(JList jList, Object value, int i, boolean b, boolean b2)
+			protected void customizeCellRenderer(@Nonnull JList list, Object value, int index, boolean selected, boolean hasFocus)
 			{
 				final Module module = (Module) value;
 				if(module != null)
 				{
 					setIcon(AllIcons.Nodes.Module);
-					setText(module.getName());
+					append(module.getName());
 				}
 			}
 		});

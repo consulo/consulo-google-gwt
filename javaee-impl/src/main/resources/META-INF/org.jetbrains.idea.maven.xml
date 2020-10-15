@@ -14,7 +14,7 @@
   - limitations under the License.
   -->
 
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="com.intellij.gwt">
 		<libraryPathProvider implementation="consulo.gwt.module.extension.path.JavaEEGwtLibraryPathProvider" id="mavenJavaEE" order="before defaultGwt"/>
 	</extensions>
@@ -23,4 +23,4 @@
 		<importer implementation="consulo.gwt.maven.JavaEEMojoGwtMavenImporter" />
 		<importer implementation="consulo.gwt.maven.JavaEELtGtGwtMavenImporter" />
 	</extensions>
-</idea-plugin>
+</consulo-plugin>

@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin>
+<consulo-plugin>
 	<extensions defaultExtensionNs="consulo.java">
 		<testPatcher implementation="com.intellij.gwt.junit.GwtJUnitPatcher"/>
 	</extensions>
@@ -26,7 +26,7 @@
 		<moduleExtensionProvider key="javaee-google-gwt"
 								 parentKey="java-web"
 								 name="GWT"
-								 icon="/icons/gwt.png"
+								 icon="consulo.google.gwt.GwtIconGroup@gwt"
 								 immutableClass="consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension"
 								 mutableClass="consulo.gwt.module.extension.JavaEEGoogleGwtMutableModuleExtension" />
 
@@ -41,4 +41,4 @@
 			<add-to-group group-id="GWT" anchor="last"/>
 		</action>
 	</actions>
-</idea-plugin>
+</consulo-plugin>

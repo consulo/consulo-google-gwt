@@ -24,7 +24,7 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomFileDescription;
-import consulo.gwt.GwtIcons;
+import consulo.google.gwt.icon.GwtIconGroup;
 import consulo.gwt.module.extension.impl.GoogleGwtModuleExtensionImpl;
 import consulo.ui.image.Image;
 
@@ -42,7 +42,7 @@ public class GwtDomFileDescription extends DomFileDescription<GwtModule>
 	@Override
 	public Image getFileIcon(@Iconable.IconFlags int flags)
 	{
-		return GwtIcons.Gwt;
+		return GwtIconGroup.gwt();
 	}
 
 	@Override

@@ -14,7 +14,7 @@
   - limitations under the License.
   -->
 
-<idea-plugin>
+<consulo-plugin>
 	<id>consulo.vaadin</id>
 	<name>Vaadin</name>
 	<version>SNAPSHOT</version>
@@ -24,7 +24,7 @@
 		<moduleExtensionProvider key="javaee-vaadin"
 								 parentKey="java-web"
 								 name="Vaadin"
-								 icon="/icons/vaadin.png"
+								 icon="consulo.vaadin.VaadinIconGroup@vaadin"
 								 immutableClass="consulo.vaadin.module.extension.JavaEEVaadinModuleExtension"
 								 mutableClass="consulo.vaadin.module.extension.JavaEEVaadinMutableModuleExtension" />
 
@@ -32,4 +32,4 @@
 
 		<implicitUsageProvider implementation="consulo.vaadin.psi.VaadinImplicitUsageProvider"/>
 	</extensions>
-</idea-plugin>
+</consulo-plugin>
