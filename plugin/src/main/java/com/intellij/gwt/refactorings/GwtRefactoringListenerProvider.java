@@ -21,7 +21,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.intellij.gwt.i18n.GwtI18nManager;
 import com.intellij.gwt.rpc.RemoteServiceUtil;
