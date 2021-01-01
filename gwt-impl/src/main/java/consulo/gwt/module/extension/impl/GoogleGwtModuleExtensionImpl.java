@@ -27,9 +27,9 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathsList;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.sdk.GoogleGwtSdkType;
+import consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
 import consulo.roots.ModuleRootLayer;
 import org.jdom.Element;
 
@@ -206,6 +206,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		element.setAttribute("compiler-vm-parameters", myAdditionalCompilerVmParameters);
 	}
 
+	@RequiredReadAction
 	@Override
 	public void commit(@Nonnull T mutableModuleExtension)
 	{

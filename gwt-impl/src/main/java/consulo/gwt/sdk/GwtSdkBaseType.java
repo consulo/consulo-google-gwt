@@ -16,9 +16,6 @@
 
 package consulo.gwt.sdk;
 
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.ide.highlighter.JarArchiveFileType;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -32,13 +29,16 @@ import consulo.roots.types.BinariesOrderRootType;
 import consulo.roots.types.SourcesOrderRootType;
 import consulo.vfs.util.ArchiveVfsUtil;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * @author VISTALL
  * @since 25-May-16
  */
 public abstract class GwtSdkBaseType extends SdkType
 {
-	protected GwtSdkBaseType(@NonNls String name)
+	protected GwtSdkBaseType(String name)
 	{
 		super(name);
 	}
