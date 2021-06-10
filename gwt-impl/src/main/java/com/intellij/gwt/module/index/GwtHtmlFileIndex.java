@@ -1,27 +1,17 @@
 package com.intellij.gwt.module.index;
 
-import gnu.trove.THashMap;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.indexing.DataIndexer;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.intellij.util.indexing.FileContent;
-import com.intellij.util.indexing.ID;
-import com.intellij.util.indexing.ScalarIndexExtension;
+import com.intellij.util.indexing.*;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author nik
@@ -123,7 +113,7 @@ public class GwtHtmlFileIndex extends ScalarIndexExtension<String>
 		@Nonnull
 		public Map<String, Void> map(FileContent inputData)
 		{
-			final THashMap<String, Void> gwtModules = new THashMap<String, Void>();
+			final Map<String, Void> gwtModules = new HashMap<String, Void>();
 			GwtHtmlUtil.collectGwtModules(inputData.getContentAsText(), gwtModules);
 			return gwtModules;
 		}

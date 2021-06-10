@@ -1,13 +1,12 @@
 package com.intellij.gwt.module.index;
 
-import gnu.trove.THashMap;
-
-import java.util.Map;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.lexer.HtmlLexer;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.XmlTokenType;
+import org.jetbrains.annotations.NonNls;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author nik
@@ -37,7 +36,7 @@ public class GwtHtmlUtil
 		lexer.start(fileText, 0, fileText.length(), 0);
 		IElementType tokenType;
 		String currentTag = null;
-		Map<String, String> attributes = new THashMap<String, String>();
+		Map<String, String> attributes = new HashMap<String, String>();
 		while((tokenType = lexer.getTokenType()) != null)
 		{
 			//System.out.println(tokenType + ":" + lexer.getTokenStart() + "-" + lexer.getTokenEnd() + "='" + getTokenText(lexer) + "'");

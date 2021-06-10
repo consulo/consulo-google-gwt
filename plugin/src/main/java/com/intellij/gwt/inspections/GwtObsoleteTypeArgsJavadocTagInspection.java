@@ -21,7 +21,8 @@ import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
-import gnu.trove.TIntObjectHashMap;
+import consulo.util.collection.primitive.ints.IntMaps;
+import consulo.util.collection.primitive.ints.IntObjectMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -120,7 +121,7 @@ public class GwtObsoleteTypeArgsJavadocTagInspection extends BaseGwtInspection
 					newReturnType = null;
 				}
 
-				TIntObjectHashMap<PsiType> newParameterTypes = new TIntObjectHashMap<PsiType>();
+				IntObjectMap<PsiType> newParameterTypes = IntMaps.newIntObjectHashMap();
 				PsiParameter[] parameters = myMethod.getParameterList().getParameters();
 				for(int i = 0; i < parameters.length; i++)
 				{
@@ -188,7 +189,7 @@ public class GwtObsoleteTypeArgsJavadocTagInspection extends BaseGwtInspection
 			}
 		}
 
-		private static void updateSignature(final PsiMethod method, final PsiType newReturnType, final TIntObjectHashMap<PsiType> newParameterTypes)
+		private static void updateSignature(final PsiMethod method, final PsiType newReturnType, final IntObjectMap<PsiType> newParameterTypes)
 				throws IncorrectOperationException
 		{
 			PsiElementFactory elementFactory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();

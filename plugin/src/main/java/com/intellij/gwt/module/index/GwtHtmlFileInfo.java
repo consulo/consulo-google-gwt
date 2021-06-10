@@ -16,14 +16,12 @@
 
 package com.intellij.gwt.module.index;
 
-import gnu.trove.THashSet;
-
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
-
-import javax.annotation.Nullable;
 
 /**
  * @author nik
@@ -52,7 +50,7 @@ class GwtHtmlFileInfo
 	{
 		if(myGwtModules == null)
 		{
-			myGwtModules = new THashSet<String>();
+			myGwtModules = new HashSet<String>();
 		}
 		myGwtModules.add(moduleName);
 	}
