@@ -19,6 +19,9 @@
 	<name>Vaadin</name>
 	<version>SNAPSHOT</version>
 	<depends>com.intellij.gwt</depends>
+	<tags>
+		<tag>web.framework</tag>
+	</tags>
 
 	<extensions defaultExtensionNs="com.intellij">
 		<moduleExtensionProvider key="javaee-vaadin"

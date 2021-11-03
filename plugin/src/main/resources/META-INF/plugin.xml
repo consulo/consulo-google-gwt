@@ -18,6 +18,9 @@
 
 	<vendor>JetBrains</vendor>
 	<category>Web/JavaEE Technologies</category>
+	<tags>
+		<tag>web.framework</tag>
+	</tags>
 
 	<extensionPoints>
 		<extensionPoint name="libraryPathProvider" interface="consulo.gwt.module.extension.path.GwtLibraryPathProvider"/>
