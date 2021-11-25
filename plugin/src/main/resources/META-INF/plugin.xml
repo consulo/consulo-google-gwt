@@ -14,7 +14,7 @@
 	<depends>com.intellij.xml</depends>
 
 	<depends config-file="javaee.xml" optional="true">consulo.javaee</depends>
-	<depends config-file="play1.xml" optional="true">consulo.play</depends>
+	<!--<depends config-file="play1.xml" optional="true">consulo.play</depends>-->
 
 	<vendor>JetBrains</vendor>
 	<category>Web/JavaEE Technologies</category>

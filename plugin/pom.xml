@@ -56,7 +56,7 @@
 						<dependency>org.jetbrains.idea.maven</dependency>
 						<dependency>consulo.java</dependency>
 						<dependency>consulo.javaee</dependency>
-						<dependency>consulo.play</dependency>
+						<!--<dependency>consulo.play</dependency>-->
 						<dependency>org.intellij.groovy</dependency>
 					</dependencies>
 					<packaging>
@@ -97,11 +97,11 @@
 			<artifactId>com.intellij.gwt-javaee.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>com.intellij.gwt-play1.impl</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>com.intellij.gwt-gwt.javascript.impl</artifactId>
