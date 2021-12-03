@@ -1,7 +1,7 @@
 <!--
   ~ Copyright (c) 2000-2006 JetBrains s.r.o. All Rights Reserved.
   -->
-<consulo-plugin>
+<consulo-plugin url="https://github.com/consulo/consulo-google-gwt">
 	<name>GWT</name>
 	<id>com.intellij.gwt</id>
 	<description>Significantly simplifies development of AJAX applications based on Google Web Toolkit</description>
