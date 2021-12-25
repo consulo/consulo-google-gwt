@@ -24,6 +24,7 @@ import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -74,6 +75,11 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 
 	private GwtModule[] getGwtModules(@Nonnull GlobalSearchScope scope)
 	{
+		if(!DumbService.isDumb(myProject))
+		{
+			return new GwtModule[0];
+		}
+
 		final GwtModulesFinder finder = new GwtModulesFinder(myProject);
 		final Collection<VirtualFile> candidates = DomService.getInstance().getDomFileCandidates(GwtModule.class, myProject, scope);
 		for(VirtualFile file : candidates)
