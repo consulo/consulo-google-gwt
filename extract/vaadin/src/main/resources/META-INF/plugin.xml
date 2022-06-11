@@ -19,13 +19,18 @@
 	<name>Vaadin</name>
 	<version>SNAPSHOT</version>
 	<depends>com.intellij.gwt</depends>
+	<depends optional="true">org.jetbrains.idea.maven</depends>
 	<tags>
 		<tag>web.framework</tag>
 	</tags>
 
+	<extensions defaultExtensionNs="org.jetbrains.idea.maven">
+		<importer implementation="consulo.vaadin.maven.ConsuloInternalVaadinImporter"/>
+	</extensions>
+
 	<extensions defaultExtensionNs="com.intellij">
 		<moduleExtensionProvider key="javaee-vaadin"
-								 parentKey="java-web"
+								 parentKey="java"
 								 name="Vaadin"
 								 icon="consulo.vaadin.VaadinIconGroup@vaadin"
 								 immutableClass="consulo.vaadin.module.extension.JavaEEVaadinModuleExtension"

@@ -16,20 +16,20 @@
 
 package consulo.gwt.maven;
 
-import java.util.List;
-import java.util.Map;
-
+import com.intellij.openapi.module.Module;
+import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.maven.importing.MavenImporterFromBuildPlugin;
+import consulo.module.extension.ModuleExtensionProviderEP;
+import consulo.module.extension.impl.ModuleExtensionProviders;
 import org.jetbrains.idea.maven.importing.MavenModifiableModelsProvider;
 import org.jetbrains.idea.maven.importing.MavenRootModelAdapter;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectChanges;
 import org.jetbrains.idea.maven.project.MavenProjectsProcessorTask;
 import org.jetbrains.idea.maven.project.MavenProjectsTree;
-import com.intellij.openapi.module.Module;
-import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
-import consulo.maven.importing.MavenImporterFromBuildPlugin;
-import consulo.module.extension.ModuleExtensionProviderEP;
-import consulo.module.extension.impl.ModuleExtensionProviders;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author VISTALL
