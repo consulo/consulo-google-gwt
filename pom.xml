@@ -45,9 +45,7 @@
 		<module>gwt-api</module>
 		<module>gwt-impl</module>
 		<module>javaee-impl</module>
-		<!--<module>play1-impl</module>-->
 		<module>gwt-javascript-impl</module>
 		<module>plugin</module>
-		<module>extract/vaadin</module>
 	</modules>
 </project>

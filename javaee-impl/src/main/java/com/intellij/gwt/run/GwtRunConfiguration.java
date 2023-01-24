@@ -16,22 +16,10 @@
 
 package com.intellij.gwt.run;
 
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.JavaCommandLineState;
-import com.intellij.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.gwt.GwtBundle;
@@ -46,6 +34,12 @@ import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import consulo.gwt.module.extension.JavaEEGoogleGwtModuleExtension;
 import consulo.java.module.extension.JavaModuleExtension;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule>
 {
@@ -127,7 +121,6 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	public void readExternal(Element element) throws InvalidDataException
 	{
 		DefaultJDOMExternalizer.readExternal(this, element);
-		readModule(element);
 		Element module = element.getChild(MODULE);
 		if(module != null)
 		{
@@ -149,7 +142,6 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	@Override
 	public void writeExternal(Element element) throws WriteExternalException
 	{
-		writeModule(element);
 		DefaultJDOMExternalizer.writeExternal(this, element);
 		super.writeExternal(element);
 	}
