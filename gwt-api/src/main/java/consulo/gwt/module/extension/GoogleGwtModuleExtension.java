@@ -16,16 +16,15 @@
 
 package consulo.gwt.module.extension;
 
-import java.util.List;
+import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
+import com.intellij.gwt.module.model.GwtModule;
+import consulo.compiler.FileProcessingCompiler;
+import consulo.module.extension.ModuleExtensionWithSdk;
+import consulo.virtualFileSystem.util.PathsList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
-import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.openapi.compiler.FileProcessingCompiler;
-import com.intellij.util.PathsList;
-import consulo.module.extension.ModuleExtensionWithSdk;
+import java.util.List;
 
 /**
  * @author VISTALL

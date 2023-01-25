@@ -16,17 +16,16 @@
 
 package consulo.gwt.javascript.ide.highlight;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.ide.highlighter.JavaHighlightingColors;
+import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.lang.javascript.DialectOptionHolder;
 import com.intellij.lang.javascript.JSTokenTypes;
 import com.intellij.lang.javascript.highlighting.JSHighlighter;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.psi.tree.IElementType;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.language.ast.IElementType;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author nik

@@ -16,8 +16,8 @@
 
 package com.intellij.gwt;
 
+import consulo.component.util.localize.AbstractBundle;
 import org.jetbrains.annotations.PropertyKey;
-import com.intellij.AbstractBundle;
 
 public class GwtBundle extends AbstractBundle
 {

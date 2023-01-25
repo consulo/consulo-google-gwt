@@ -19,14 +19,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>consulo</groupId>
-		<artifactId>arch.ide-provided</artifactId>
-		<version>2-SNAPSHOT</version>
+		<artifactId>arch.ide-api-provided</artifactId>
+		<version>3-SNAPSHOT</version>
 		<relativePath/>
 	</parent>
 
 	<groupId>consulo.plugin</groupId>
 	<artifactId>com.intellij.gwt</artifactId>
-	<version>2-SNAPSHOT</version>
+	<version>3-SNAPSHOT</version>
 	<packaging>consulo-plugin</packaging>
 
 	<repositories>
@@ -45,10 +45,8 @@
 			<plugin>
 				<groupId>consulo.maven</groupId>
 				<artifactId>maven-consulo-plugin</artifactId>
-				<version>2-SNAPSHOT</version>
 				<extensions>true</extensions>
 				<configuration>
-					<repositoryChannel>nightly</repositoryChannel>
 					<dependencies>
 						<dependency>com.intellij.xml</dependency>
 						<dependency>com.intellij.properties</dependency>
@@ -56,18 +54,11 @@
 						<dependency>org.jetbrains.idea.maven</dependency>
 						<dependency>consulo.java</dependency>
 						<dependency>consulo.javaee</dependency>
-						<!--<dependency>consulo.play</dependency>-->
-						<dependency>org.intellij.groovy</dependency>
 					</dependencies>
 					<packaging>
 						<skip>${dev.mode}</skip>
 						<version>${build.number}</version>
 					</packaging>
-					<execution>
-						<pluginDirectories>
-							<pluginDirectory>${project.basedir}/../extract/vaadin/target/consulo-plugin-extracted</pluginDirectory>
-						</pluginDirectories>
-					</execution>
 				</configuration>
 				<executions>
 					<execution>
@@ -97,14 +88,14 @@
 			<artifactId>com.intellij.gwt-javaee.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!--<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>com.intellij.gwt-play1.impl</artifactId>
-			<version>${project.version}</version>
-		</dependency>-->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>com.intellij.gwt-gwt.javascript.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>com.intellij.gwt-jakartaee.maven.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -128,11 +119,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>consulo</groupId>
-			<artifactId>consulo-compiler-impl</artifactId>
-			<version>${project.version}</version>
+			<groupId>consulo.internal</groupId>
+			<artifactId>forms_rt</artifactId>
 			<scope>provided</scope>
-			<optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>

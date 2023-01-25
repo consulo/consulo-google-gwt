@@ -16,14 +16,14 @@
 
 package com.intellij.gwt.module.model;
 
-import java.util.List;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.xml.psi.xml.XmlFile;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.HyphenNameStrategy;
+import consulo.xml.util.xml.NameStrategyForAttributes;
 
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.xml.XmlFile;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.HyphenNameStrategy;
-import com.intellij.util.xml.NameStrategyForAttributes;
+import java.util.List;
 
 /**
  * @author nik

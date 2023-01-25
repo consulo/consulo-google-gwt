@@ -17,9 +17,9 @@
 package consulo.gwt.javascript.lang;
 
 import com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl;
-import com.intellij.psi.tree.IElementType;
-import consulo.javascript.lang.JavaScriptLanguage;
-import consulo.psi.tree.ElementTypeAsPsiFactory;
+import consulo.javascript.language.JavaScriptLanguage;
+import consulo.language.ast.ElementTypeAsPsiFactory;
+import consulo.language.ast.IElementType;
 
 /**
  * @author VISTALL
@@ -27,5 +27,5 @@ import consulo.psi.tree.ElementTypeAsPsiFactory;
  */
 public interface GwtJavaScriptElements
 {
-	IElementType GWT_REFERENCE_EXPRESSION = new ElementTypeAsPsiFactory("GWT_REFERENCE_EXPRESSION", JavaScriptLanguage.INSTANCE, JSGwtReferenceExpressionImpl.class);
+	IElementType GWT_REFERENCE_EXPRESSION = new ElementTypeAsPsiFactory("GWT_REFERENCE_EXPRESSION", JavaScriptLanguage.INSTANCE, JSGwtReferenceExpressionImpl::new);
 }

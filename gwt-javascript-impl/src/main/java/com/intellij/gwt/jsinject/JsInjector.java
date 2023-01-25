@@ -16,22 +16,31 @@
 
 package com.intellij.gwt.jsinject;
 
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.document.util.TextRange;
+import consulo.gwt.javascript.lang.GwtJavaScriptVersion;
+import consulo.language.inject.MultiHostInjector;
+import consulo.language.inject.MultiHostRegistrar;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiLanguageInjectionHost;
+import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
-import consulo.gwt.javascript.lang.GwtJavaScriptVersion;
-import com.intellij.lang.injection.MultiHostInjector;
-import com.intellij.lang.injection.MultiHostRegistrar;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLanguageInjectionHost;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
-
+@ExtensionImpl
 public class JsInjector implements MultiHostInjector
 {
+	@Nonnull
+	@Override
+	public Class<? extends PsiElement> getElementClass()
+	{
+		return PsiComment.class;
+	}
+
 	@Override
 	public void injectLanguages(@Nonnull MultiHostRegistrar registrar, @Nonnull PsiElement host)
 	{

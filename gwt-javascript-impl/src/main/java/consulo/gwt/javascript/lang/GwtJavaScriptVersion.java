@@ -1,21 +1,23 @@
 package consulo.gwt.javascript.lang;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.lang.PsiParser;
 import com.intellij.lang.javascript.DialectOptionHolder;
 import com.intellij.lang.javascript.JavaScriptParsingFlexLexer;
 import com.intellij.lang.javascript.highlighting.JSHighlighter;
-import com.intellij.lexer.Lexer;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.gwt.javascript.ide.highlight.GwtSyntaxHighlighter;
 import consulo.gwt.javascript.lang.parsing.GwtJavaScriptParser;
 import consulo.javascript.lang.BaseJavaScriptLanguageVersion;
-import consulo.javascript.lang.JavaScriptLanguage;
+import consulo.javascript.language.JavaScriptLanguage;
+import consulo.language.lexer.Lexer;
+import consulo.language.parser.PsiParser;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 05.03.2015
  */
+@ExtensionImpl
 public class GwtJavaScriptVersion extends BaseJavaScriptLanguageVersion
 {
 	@Nonnull

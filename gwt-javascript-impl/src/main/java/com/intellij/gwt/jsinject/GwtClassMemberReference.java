@@ -16,19 +16,26 @@
 
 package com.intellij.gwt.jsinject;
 
-import com.intellij.codeInsight.completion.util.MethodParenthesesHandler;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.gwt.sdk.GwtVersion;
+import com.intellij.java.impl.codeInsight.completion.util.MethodParenthesesHandler;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.javascript.psi.JSExpression;
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.psi.util.*;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
-import consulo.gwt.module.extension.GwtModuleExtensionUtil;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.document.util.TextRange;
+import consulo.gwt.base.module.extension.GwtModuleExtensionUtil;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.ParenthesesInsertHandler;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiReferenceBase;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
 

@@ -1,17 +1,24 @@
 package com.intellij.gwt.jsinject;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.hint.api.impls.MethodParameterInfoHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.java.impl.codeInsight.hint.api.impls.MethodParameterInfoHandler;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.javascript.JSParameterInfoHandler;
 import com.intellij.lang.javascript.JSTokenTypes;
 import com.intellij.lang.javascript.psi.JSArgumentList;
 import com.intellij.lang.javascript.psi.JSCallExpression;
 import com.intellij.lang.javascript.psi.JSExpression;
-import com.intellij.lang.parameterInfo.*;
-import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.ArrayUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.javascript.language.JavaScriptLanguage;
+import consulo.language.Language;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.parameterInfo.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,6 +28,7 @@ import java.util.Set;
 /**
  * @author nik
  */
+@ExtensionImpl
 public class GwtJSParameterInfoHandler implements ParameterInfoHandlerWithTabActionSupport<JSArgumentList, PsiMember, JSExpression>
 {
 	@Override
@@ -180,5 +188,12 @@ public class GwtJSParameterInfoHandler implements ParameterInfoHandlerWithTabAct
 	public Class<JSArgumentList> getArgumentListClass()
 	{
 		return JSArgumentList.class;
+	}
+
+	@Nonnull
+	@Override
+	public Language getLanguage()
+	{
+		return JavaScriptLanguage.INSTANCE;
 	}
 }

@@ -6,13 +6,17 @@ package com.intellij.gwt.jsinject;
 
 import com.intellij.lang.javascript.psi.JSExpression;
 import com.intellij.lang.javascript.psi.impl.JSChangeUtil;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.AbstractElementManipulator;
-import com.intellij.util.IncorrectOperationException;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.document.util.TextRange;
+import consulo.language.psi.AbstractElementManipulator;
+import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author peter
  */
+@ExtensionImpl
 public class JsGwtReferenceExpressionManipulator extends AbstractElementManipulator<JSGwtReferenceExpressionImpl>
 {
 	@Override
@@ -39,5 +43,12 @@ public class JsGwtReferenceExpressionManipulator extends AbstractElementManipula
 			end = text.length();
 		}
 		return new TextRange(start, end);
+	}
+
+	@Nonnull
+	@Override
+	public Class<JSGwtReferenceExpressionImpl> getElementClass()
+	{
+		return JSGwtReferenceExpressionImpl.class;
 	}
 }

@@ -15,15 +15,16 @@
  */
 package com.intellij.gwt.jsinject;
 
-import javax.annotation.Nonnull;
-import com.intellij.lang.ASTNode;
+import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.lang.javascript.JSTokenTypes;
 import com.intellij.lang.javascript.psi.impl.JSReferenceExpressionImpl;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
-import com.intellij.util.ArrayUtil;
+import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.util.collection.ArrayUtil;
+
+import javax.annotation.Nonnull;
 
 public class JSGwtReferenceExpressionImpl extends JSReferenceExpressionImpl
 {

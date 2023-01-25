@@ -16,16 +16,14 @@
 
 package com.intellij.gwt.module.model;
 
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericAttributeValue;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.GenericAttributeValue;
 
 /**
  * @author nik
  */
 public interface GwtStylesheetRef extends DomElement
 {
-
 	//@Convert(CssFileConverter.class)
 	GenericAttributeValue<String> getSrc();
-
 }

@@ -16,8 +16,8 @@
 
 package com.intellij.gwt.module.model;
 
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericAttributeValue;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.GenericAttributeValue;
 
 /**
  * @author nik

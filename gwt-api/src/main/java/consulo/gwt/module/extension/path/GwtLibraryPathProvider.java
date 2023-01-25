@@ -16,24 +16,26 @@
 
 package consulo.gwt.module.extension.path;
 
-import java.util.Collections;
-import java.util.List;
+import com.intellij.gwt.sdk.GwtVersion;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import consulo.module.content.layer.ModuleRootLayer;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.gwt.sdk.GwtVersion;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import consulo.extensions.CompositeExtensionPointName;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
-import consulo.roots.ModuleRootLayer;
-import consulo.vfs.util.ArchiveVfsUtil;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author VISTALL
  * @since 24-May-16
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface GwtLibraryPathProvider
 {
 	public static class Info
@@ -89,11 +91,10 @@ public interface GwtLibraryPathProvider
 		}
 	}
 
-	CompositeExtensionPointName<GwtLibraryPathProvider> EP_NAME = CompositeExtensionPointName.applicationPoint("com.intellij.gwt.libraryPathProvider", GwtLibraryPathProvider.class);
+	ExtensionPointName<GwtLibraryPathProvider> EP_NAME = ExtensionPointName.create(GwtLibraryPathProvider.class);
 
 	@Nullable
 	Info resolveInfo(@Nonnull GoogleGwtModuleExtension<?> extension);
 
-	@CompositeExtensionPointName.BooleanBreakResult(breakValue = false)
 	boolean canChooseBundle(@Nonnull ModuleRootLayer layer);
 }
