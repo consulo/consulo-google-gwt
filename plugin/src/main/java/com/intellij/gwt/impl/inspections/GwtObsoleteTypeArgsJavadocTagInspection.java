@@ -43,7 +43,12 @@ public class GwtObsoleteTypeArgsJavadocTagInspection extends BaseGwtInspection
 
 	@Override
 	@RequiredReadAction
-	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension,
+											  @Nonnull GwtVersion version,
+											  @Nonnull final PsiClass aClass,
+											  @Nonnull final InspectionManager manager,
+											  final boolean isOnTheFly,
+											  Object state)
 	{
 		if(!version.isGenericsSupported())
 		{

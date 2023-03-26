@@ -1,0 +1,332 @@
+make.interface_comment:
+  text: "/*\n\tATTENTION: Don't edit!\n\tThis async-interface is automatically generated during make\n*/"
+google.web.toolkit.title:
+  text: |-
+    Google
+    Web Toolkit
+module.descriptor:
+  text: Templates for GWT application
+dialog.title.google.web.toolkit:
+  text: Google Web Toolkit
+error.title.gwt.configuration:
+  text: GWT Configuration Error
+error.class.not.found.in.jar:
+  text: class ''{0}'' not found in ''{1}''
+error.file.not.found.message:
+  text: file ''{0}'' not found
+error.invalid.gwt.installation.message:
+  text: '''''{0}'''' is not valid GWT installation: {1}'
+error.message.path.to.gwt.sdk.must.not.contain.character:
+  text: Path to GWT Sdk must not contain '!' character
+fix.download.gwt:
+  text: Download GWT...
+newservice.menu.action.text:
+  text: GWT RemoteService
+newservice.menu.action.description:
+  text: Creates new GWT RemoteService
+newservice.dlg.prompt:
+  text: Enter name for new GWT RemoteService
+newservice.dlg.title:
+  text: New GWT RemoteService
+newservice.progress.text:
+  text: Creating GWT remote service ''{0}''
+newservice.command.name:
+  text: Create GWT remote service
+newapp.menu.action.text:
+  text: GWT Sample Application
+newapp.menu.action.description:
+  text: Creates new GWT Sample Application
+newapp.dlg.prompt:
+  text: Enter name for new GWT Sample Application
+newapp.dlg.title:
+  text: New GWT Sample Application
+newapp.progress.text:
+  text: Creating sample GWT application ''{0}''
+newapp.command.name:
+  text: Create sample GWT application
+error.message.sample.application.requires.gwt.1.5.or.later:
+  text: Sample application requires GWT 1.5 or later
+newserial.dlg.prompt:
+  text: Enter name for new GWT-serializable class
+newserial.dlg.title:
+  text: New GWT-serializable class
+newserial.menu.action.text:
+  text: New GWT-serializable class
+newserial.menu.action.description:
+  text: Creates new GWT-serializable class
+newserial.command.name:
+  text: Create GWT-serializable class
+newserial.progress.text:
+  text: Creating GWT-serializable class ''{0}''
+newmodule.dlg.prompt:
+  text: Enter name for new GWT Module
+newmodule.dlg.title:
+  text: New GWT Module
+newmodule.menu.action.text:
+  text: GWT Module
+newmodule.menu.action.description:
+  text: Creates new GWT Module
+newmodule.command.name:
+  text: Create GWT module
+newmodule.progress.text:
+  text: Creating GWT module ''{0}''
+newentrypoint.dlg.prompt:
+  text: Enter name for new GWT EntryPoint
+newentrypoint.dlg.title:
+  text: New GWT EntryPoint
+newentrypoint.menu.action.text:
+  text: GWT EntryPoint
+newentrypoint.menu.action.description:
+  text: Creates new GWT EntryPoint
+newentrypoint.command.name:
+  text: Create GWT entry point
+newentrypoint.progress.text:
+  text: Creating GWT entry point ''{0}''
+problem.description.unknown.css.class:
+  text: Unknown CSS class ''{0}''
+quick.fix.create.css.class.name:
+  text: Create CSS class ''{0}''
+quick.fixes.gwt.family.name:
+  text: Google Web Toolkit
+inspection.unresolved.references.to.css.classes.display.name:
+  text: Unresolved references to CSS classes
+group.gwt.inspections.name:
+  text: Google Web Toolkit issues
+problem.description.methods.of.async.remote.service.0.isn.t.synchronized.with.1:
+  text: Methods of asyncronous remote service ''{0}'' isn''t consistent with ''{1}''
+problem.description.remote.service.0.doesn.t.have.corresponding.async.variant:
+  text: Remote service ''{0}'' doesn''t have corresponding asyncronous variant
+problem.description.async.remote.service.0.doesn.t.define.corresponding.method:
+  text: Asyncronous remote service ''{0}'' doesn''t define corresponding method
+inspection.name.inconsistent.gwt.remoteservice:
+  text: Inconsistent GWT Remote Service
+quick.fix.name.synchronize.all.methods.of.0.with.1:
+  text: Synchronize all methods of ''{0}'' with ''{1}''
+quick.fix.name.copy.method.to.asynch:
+  text: Create asynchronous variant for method ''{0}''
+problem.description.async.method.doesn.t.have.sync.variant:
+  text: Method ''{0}'' doesn''t have corresponding synchronous variant
+quick.fix.name.create.sync.method.for.async:
+  text: Create synchronous variant for method ''{0}''
+problem.description.type.is.not.serializable:
+  text: Type ''{0}'' isn''t serializable
+problem.description.type.of.collection.elements.is.not.specified:
+  text: Type of ''{0}'' elements isn''t specified
+problem.description.gwt.serializable.type.0.should.implements.marker.interface.1:
+  text: Type ''{0}'' doesn''t implement marker interface {1}
+text.0.or.1:
+  text: '''''{0}'''' or ''''{1}'''''
+problem.description.0.is.not.a.checked.exception:
+  text: '''''{0}'''' is not a checked exception'
+quickfix.name.make.0.public:
+  text: Make ''{0}()'' public
+quick.fix.name.inherit.0.from.1:
+  text: Inherit ''{0}'' from ''{1}''
+quick.fix.name.create.interface.0:
+  text: Create interface ''{0}''
+inspection.name.non.serializable.service.method.parameters:
+  text: Non-serializable parameter type or return type of service method
+problem.description.generics.isnt.supported.in.gwt.before.1.5.version:
+  text: Generics isn''t supported in GWT before 1.5 version
+checkbox.text.report.interfaces:
+  text: Report interfaces
+label.choose.module.text:
+  text: '&Module:'
+run.gwt.configuration.display.name:
+  text: GWT Configuration
+run.gwt.configuration.description:
+  text: GWT Configuration
+default.gwt.run.configuration.name:
+  text: Unnamed
+error.text.gwt.facet.not.configured.in.module.0:
+  text: GWT extension is not configured for module ''{0}''
+question.text.gwt.facet.is.not.configured.for.module.0.do.you.want.to.create.it:
+  text: GWT Facet is not configured for module ''{0}''. Do you want to create it?
+inspection.name.unresolved.references.to.html.tags:
+  text: Unresolved references to html tags
+problem.description.html.tag.with.id.0.is.not.found:
+  text: Html tag with id ''{0}'' is not found
+inspection.name.classes.not.from.jre.emulation.library.in.client.code:
+  text: Classes not from JRE Emulation Library in client code
+problem.description.class.0.is.not.presented.in.jre.emulation.library:
+  text: Class ''{0}'' is not presented in JRE Emulation Library so it cannot be used in client code
+problem.description.class.0.is.defined.in.module.1.which.is.not.inherited.in.module.2:
+  text: Class ''{0}'' is defined in module ''{1}'' which is not inherited in module ''{2}''
+quick.fix.name.inherit.module.0.from.1:
+  text: Inherit module ''{0}'' from ''{1}''
+inspection.name.gwt.remote.service.is.not.registered.in.web.xml:
+  text: GWT Remote Service is not registered in web.xml
+problem.description.remote.service.is.not.registered.as.a.servlet.in.web.xml:
+  text: Remote service ''{0}'' is not registered as a servlet in web.xml
+quickfix.name.register.remote.service.0.in.web.xml:
+  text: Register remote service ''{0}'' in web.xml
+problem.description.correct.servlet.mapping.is.not.specified.for.remote.service.0:
+  text: Correct servlet mapping is not specified for remote service ''{0}''
+quickfix.name.add.servlet.mapping.for.remote.service.0:
+  text: Add servlet mapping for remote service ''{0}''
+problem.description.incorrect.servlet.mapping.for.remote.service.0:
+  text: Incorrect url pattern for remote service ''{0}''
+quickfix.name.set.correct.servlet.mapping.for.remote.service.0:
+  text: Set correct url pattern for remote service ''{0}''
+compiler.description.google.compiler:
+  text: GWT compiler
+progress.text.compiling.gwt.module.0:
+  text: Compiling GWT module ''{0}''...
+progress.text.analyzing.sources:
+  text: Analyzing sources...
+progress.text.copying.files.from.public.paths:
+  text: Copying files from public paths...
+progress.text.loading.inherited.modules:
+  text: Loading inherited modules...
+progress.text.compiling.sources:
+  text: Compiling sources...
+file.template.group.titile.gwt:
+  text: Google Web Toolkit
+action.group.gwt.title:
+  text: GWT
+action.group.gwt.description:
+  text: GWT
+label.text.path.to.gwt.installation:
+  text: '&Path to GWT installation directory:'
+gwt.installation.chooser.title:
+  text: Path to GWT installation directory
+gwt.installation.chooser.description:
+  text: Please specify path to GWT installation directory
+error.message.gwt.user.jar.library.not.found.in.dependencies.of.module:
+  text: gwt-user.jar library not found in dependencies of module
+error.message.gwt.user.jar.in.library.0.doesn.t.correspond.to.selected.gwt.installation:
+  text: gwt-user.jar in library ''{0}'' doesn''t correspond to selected GWT installation
+script.output.style.obfuscated:
+  text: Obfuscated
+script.output.style.pretty:
+  text: Pretty
+script.output.style.detailed:
+  text: Detailed
+label.select.script.output.style.text:
+  text: 'JavaScript &output style:'
+label.select.web.facet.text:
+  text: 'Package generated files into &Web Facet:'
+checkbox.run.gwt.compiler.on.make:
+  text: Run &GWT Compiler on make
+label.text.gwt.compiler.heap.size:
+  text: 'Compiler maximum &heap size (Mb):'
+table.column.name.gwt.module:
+  text: GWT Module
+table.column.name.output.relative.path:
+  text: Output Relative Path
+gwt.package.web.facet.none:
+  text: <none>
+label.text.additional.compiler.parameters:
+  text: 'Additional compiler parameters:'
+label.text.additional.vm.compiler.parameters:
+  text: 'Additional compiler VM parameters:'
+file.chooser.description.select.output.directory.for.files.generated.by.gwt.compiler:
+  text: Select output directory for files generated by GWT compiler
+progress.text.building.gwt.indices:
+  text: Building GWT indices...
+progress.title.building.gwt.indices:
+  text: Building GWT Indices
+label.html.to.open.text:
+  text: '&Html to open:'
+dialog.caption.vm.parameters:
+  text: VM Parameters
+label.text.vm.parameters:
+  text: '&VM parameters:'
+label.text.gwt.shell.parameters:
+  text: '&Shell parameters:'
+dialog.caption.gwt.shell.parameters:
+  text: GWT Shell Parameters
+checkbox.text.use.custom.web.xml:
+  text: 'Use content from custom ''''&web.xml'''' descriptor '
+choose.text.select.gwt.module:
+  text: 'Select GWT module:'
+dialog.title.choose.gwt.module:
+  text: GWT Module
+i18n.interface.method.gutter.tooltip:
+  text: <html><body>Method has associated properties in <br> {0}</body></html>
+i18n.goto.property.popup.title:
+  text: <html><body>Choose Localization of <b>{0}</b> ({1} files found)</body></html>
+i18n.class.gutter.tooltip.text:
+  text: <html><body>Class has associated property files<br>{0}</body></html>
+inspection.name.inconsistent.gwt.localizable.interface:
+  text: Inconsistent GWT localizable interface
+problem.description.property.0.doesn.t.have.corresponding.method.in.1:
+  text: Property ''{0}'' doesn''t have corresponding method in ''{1}''
+quickfix.name.create.method.0.in.1:
+  text: Create method for property ''{0}'' in ''{1}''
+quickfix.name.synchronize.all.methods.in.0:
+  text: Add all missing methods to ''{0}''
+problem.description.method.0.doesn.t.have.corresponding.property:
+  text: Method ''{0}'' doesn''t have corresponding property
+quickfix.name.create.property.0:
+  text: Create property ''{0}''
+quickfix.popup.title.choose.properties.file:
+  text: Choose Properties File
+inspection.name.incorrect.serializable.class:
+  text: Incorrect serializable class
+problem.description.field.0.is.not.serializable:
+  text: Type ''{0}'' is not serializable
+problem.description.serializable.class.should.provide.public.no.args.constructor:
+  text: Serializable class should provide public no-args constructor
+quickfix.name.create.public.no.args.constructor.in.0:
+  text: Create Public No-args Constructor in ''{0}''
+inspection.name.method.with.parameters.in.interface.extending.constants:
+  text: Method with parameters in interface extending Constants
+problem.description.methods.with.parameters.are.not.allowed.in.an.interface.extending.constants:
+  text: Methods with parameters are not allowed in an interface extending Constants
+problem.description.properties.with.parameters.are.not.allowed.if.the.associated.interface.extends.constants:
+  text: Properties with parameters are not allowed if the associated interface extends Constants
+quickfix.name.inherit.0.from.messages.instead.of.constants:
+  text: Inherit ''{0}'' from Messages instead of Constants
+inspection.name.unresolved.references.in.jsni.methods:
+  text: Unresolved references in JSNI methods
+problem.description.cannot.resolve.0:
+  text: Cannot resolve ''{0}''
+problem.description.cannot.resolve.symbol.0.in.1:
+  text: Cannot resolve symbol ''{0}'' in ''{1}''
+inspection.name.obsolete.gwt.typeargs.tag.in.javadoc.comments:
+  text: Deprecated @gwt.typeArgs tag in JavaDoc comments
+problem.description.gwt.typeargs.tag.is.obsolete.in.gwt.1.5:
+  text: '@gwt.typeArgs tag is deprecated in GWT 1.5'
+quickfix.name.generify.types.in.method.0.instead.of.using.gwt.typeargs.tags:
+  text: Use parametrized types instead of ''@gwt.typeArgs'' tags in method ''{0}''
+gwt.searching.for.implementations:
+  text: Searching For Implementations...
+inspection.name.raw.use.of.asynccallback.in.asynchronous.service.interfaces:
+  text: Raw use of AsyncCallback in asynchronous service interfaces
+problem.description.raw.use.of.asynccallback.interface:
+  text: Raw use of AsyncCallback interface in method ''{0}''
+quickfix.name.replace.asynccallback.by.asynccallback.0:
+  text: Replace ''AsyncCallback'' with ''AsyncCallback<{0}>''
+error.message.this.action.is.allowed.only.for.client.side.packages.of.a.gwt.module:
+  text: This action is allowed only for client-side packages of a GWT module
+facet.type.name.gwt:
+  text: GWT
+border.title.gwt.compilation:
+  text: GWT Compilation
+framework.title.google.web.toolkit:
+  text: '&Google Web Toolkit'
+inspection.name.deprecated.gwt.key.tag.in.javadoc.comments:
+  text: Deprecated @gwt.key tag in JavaDoc comments
+problem.description.gwt.key.tag.is.deprecated.in.gwt.1.5:
+  text: '@gwt.key tag is deprecated in GWT 1.5'
+quickfix.name.replace.gwt.key.tag.with.key.annotation.in.method.0:
+  text: Replace @gwt.key tag with @Key annotation in method ''{0}''
+action.name.create.gwt.test.case:
+  text: GWT Test Case
+action.description.creates.new.gwt.test.case:
+  text: Creates New GWT Test Case
+dialog.promt.enter.name.for.gwt.test.case:
+  text: 'Enter name for GWT test case:'
+dialog.title.new.gwt.test.case:
+  text: New GWT Test Case
+command.name.create.gwt.test.case:
+  text: Create GWT test case
+action.progress.creating.gwt.test.case.0:
+  text: Creating GWT test case ''{0}''
+ant.target.description.compile.gwt.modules.in.module.0:
+  text: Compile all GWT modules in module {0}
+ant.target.name.run.gwt.compiler:
+  text: Run GWT compiler
+ant.target.comment.run.gwt.compiler.for.gwt.module.0:
+  text: Run GWT compiler for GWT module {0}

@@ -82,7 +82,7 @@ public class GwtInconsistentLocalizableInterfaceInspection extends BaseGwtInspec
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state)
 	{
 		GoogleGwtModuleExtension extension = getExtension(file);
 		if(extension == null)

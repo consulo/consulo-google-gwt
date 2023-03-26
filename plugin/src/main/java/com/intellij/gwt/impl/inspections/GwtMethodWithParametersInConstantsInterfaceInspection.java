@@ -71,7 +71,12 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension,
+											  @Nonnull GwtVersion version,
+											  @Nonnull final PsiClass aClass,
+											  @Nonnull final InspectionManager manager,
+											  final boolean isOnTheFly,
+											  Object state)
 	{
 		if(!shouldCheck(aClass))
 		{
@@ -107,7 +112,7 @@ public class GwtMethodWithParametersInConstantsInterfaceInspection extends BaseG
 	}
 
 	@Override
-	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state)
 	{
 		if(!shouldCheck(file) || !(file instanceof PropertiesFile))
 		{

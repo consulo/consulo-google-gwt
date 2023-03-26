@@ -76,7 +76,7 @@ public class GwtInconsistentSerializableClassInspection extends BaseGwtInspectio
 											  @Nonnull GwtVersion version,
 											  @Nonnull PsiClass aClass,
 											  @Nonnull InspectionManager manager,
-											  boolean isOnTheFly)
+											  boolean isOnTheFly, Object state)
 	{
 		PsiFile containingFile = aClass.getContainingFile();
 		if(containingFile == null)

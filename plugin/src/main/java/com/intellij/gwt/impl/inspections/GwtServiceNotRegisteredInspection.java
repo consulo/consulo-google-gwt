@@ -56,7 +56,7 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state)
 	{
 		/*if(!DeploymentDescriptorsConstants.WEB_XML_META_DATA.getFileName().equals(file.getName()))
 		{
@@ -190,7 +190,12 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension,
+											  @Nonnull GwtVersion version,
+											  @Nonnull PsiClass aClass,
+											  @Nonnull InspectionManager manager,
+											  boolean isOnTheFly,
+											  Object state)
 	{
 	/*	if(!shouldCheck(aClass))
 		{

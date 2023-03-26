@@ -19,8 +19,8 @@ package com.intellij.gwt.impl.inspections;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.inspections.BaseGwtInspection;
 import com.intellij.gwt.base.rpc.GwtGenericsUtil;
-import com.intellij.gwt.impl.rpc.GwtSerializableUtil;
 import com.intellij.gwt.base.rpc.RemoteServiceUtil;
+import com.intellij.gwt.impl.rpc.GwtSerializableUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.language.psi.*;
@@ -38,14 +38,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.util.xml.serializer.XmlSerializer;
-import consulo.util.xml.serializer.annotation.Tag;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,16 +53,17 @@ import java.util.List;
  * @author nik
  */
 @ExtensionImpl
-public class GwtNonSerializableRemoteServiceMethodParametersInspection extends BaseGwtInspection
+public class GwtNonSerializableRemoteServiceMethodParametersInspection extends BaseGwtInspection<GwtSerializableInspectionState>
 {
-	private final GwtSerializableInspectionState myGwtSerializableInspectionState = new GwtSerializableInspectionState();
-	@NonNls
-	private static final String SETTINGS_ELEMENT = "settings";
-
 	@RequiredReadAction
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension,
+											  @Nonnull GwtVersion version,
+											  @Nonnull PsiClass aClass,
+											  @Nonnull InspectionManager manager,
+											  boolean isOnTheFly,
+											  GwtSerializableInspectionState state)
 	{
 		GoogleGwtModuleExtension gwtFacet = getExtension(aClass);
 		if(gwtFacet == null)
@@ -79,56 +73,16 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 
 		if(RemoteServiceUtil.isRemoteServiceInterface(aClass))
 		{
-			return checkRemoteService(gwtFacet, aClass, manager);
+			return checkRemoteService(gwtFacet, aClass, manager, state);
 		}
 		return null;
 	}
 
-	@Override
-	public void readSettings(final Element node) throws InvalidDataException
-	{
-		final Element settings = node.getChild(SETTINGS_ELEMENT);
-		if(settings != null)
-		{
-			XmlSerializer.deserializeInto(myGwtSerializableInspectionState, settings);
-		}
-	}
-
-	@Override
-	public void writeSettings(final Element node) throws WriteExternalException
-	{
-		final Element settings = new Element(SETTINGS_ELEMENT);
-		XmlSerializer.serializeInto(myGwtSerializableInspectionState, settings, new SkipDefaultValuesSerializationFilters());
-		if(!settings.getContent().isEmpty())
-		{
-			node.addContent(settings);
-		}
-	}
-
-	@Override
-	public JComponent createOptionsPanel()
-	{
-		final JPanel panel = new JPanel(new BorderLayout());
-		final JCheckBox reportInterfacesCheckbox = new JCheckBox(GwtBundle.message("checkbox.text.report.interfaces"));
-		reportInterfacesCheckbox.setSelected(myGwtSerializableInspectionState.isReportInterfaces());
-		reportInterfacesCheckbox.addChangeListener(new ChangeListener()
-		{
-			@Override
-			public void stateChanged(final ChangeEvent e)
-			{
-				myGwtSerializableInspectionState.setReportInterfaces(reportInterfacesCheckbox.isSelected());
-			}
-		});
-		panel.add(reportInterfacesCheckbox, BorderLayout.NORTH);
-		return panel;
-	}
-
-	private ProblemDescriptor[] checkRemoteService(final GoogleGwtModuleExtension gwtFacet, final PsiClass aClass, final InspectionManager manager)
+	private ProblemDescriptor[] checkRemoteService(final GoogleGwtModuleExtension gwtFacet, final PsiClass aClass, final InspectionManager manager, GwtSerializableInspectionState state)
 	{
 		ArrayList<ProblemDescriptor> result = new ArrayList<ProblemDescriptor>(0);
 
-		GwtSerializableUtil.SerializableChecker serializableChecker = GwtSerializableUtil.createSerializableChecker(gwtFacet,
-				myGwtSerializableInspectionState.isReportInterfaces());
+		GwtSerializableUtil.SerializableChecker serializableChecker = GwtSerializableUtil.createSerializableChecker(gwtFacet, state.isReportInterfaces());
 
 		GlobalSearchScope scope = aClass.getResolveScope();
 		JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(manager.getProject());
@@ -171,7 +125,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 	}
 
 	private static void checkTypeSerial(PsiTypeElement typeElement, final @Nullable String typeParameterStrings,
-			final GwtSerializableUtil.SerializableChecker serializableChecker, InspectionManager manager, List<ProblemDescriptor> result)
+										final GwtSerializableUtil.SerializableChecker serializableChecker, InspectionManager manager, List<ProblemDescriptor> result)
 	{
 		PsiType type = typeElement.getType();
 		checkTypeSerial(type, typeElement, typeParameterStrings, serializableChecker, manager, result);
@@ -271,25 +225,8 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 
 	@Override
 	@Nonnull
-	@NonNls
 	public String getShortName()
 	{
 		return "NonSerializableServiceParameters";
-	}
-
-	public static class GwtSerializableInspectionState
-	{
-		private boolean myReportInterfaces = true;
-
-		@Tag("report-interfaces")
-		public boolean isReportInterfaces()
-		{
-			return myReportInterfaces;
-		}
-
-		public void setReportInterfaces(final boolean reportInterfaces)
-		{
-			myReportInterfaces = reportInterfaces;
-		}
 	}
 }

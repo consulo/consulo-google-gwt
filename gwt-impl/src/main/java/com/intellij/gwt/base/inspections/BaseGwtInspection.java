@@ -23,8 +23,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.gwt.base.module.extension.GwtModuleExtensionUtil;
+import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
@@ -37,11 +37,11 @@ import javax.annotation.Nullable;
 /**
  * @author nik
  */
-public abstract class BaseGwtInspection extends BaseJavaLocalInspectionTool
+public abstract class BaseGwtInspection<State> extends BaseJavaLocalInspectionTool<State>
 {
 	@Override
 	@RequiredReadAction
-	public final ProblemDescriptor[] checkClass(@Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
+	public final ProblemDescriptor[] checkClass(@Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager, final boolean isOnTheFly, State state)
 	{
 		GoogleGwtModuleExtension extension = getExtension(aClass);
 		if(extension == null)
@@ -50,12 +50,16 @@ public abstract class BaseGwtInspection extends BaseJavaLocalInspectionTool
 		}
 
 		GwtVersion version = GwtModuleExtensionUtil.getVersion(extension);
-		return checkClassImpl(extension, version, aClass, manager, isOnTheFly);
+		return checkClassImpl(extension, version, aClass, manager, isOnTheFly, state);
 	}
 
 	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension, @Nonnull GwtVersion version, @Nonnull final PsiClass aClass, @Nonnull final InspectionManager manager,
-			final boolean isOnTheFly)
+	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension,
+											  @Nonnull GwtVersion version,
+											  @Nonnull final PsiClass aClass,
+											  @Nonnull final InspectionManager manager,
+											  final boolean isOnTheFly,
+											  State state)
 	{
 		return ProblemDescriptor.EMPTY_ARRAY;
 	}

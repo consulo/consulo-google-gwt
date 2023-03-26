@@ -62,7 +62,7 @@ public class GwtJavaScriptReferencesInspection extends BaseGwtInspection
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state)
 	{
 		if(!(file.getLanguageVersion() instanceof GwtJavaScriptVersion))
 		{

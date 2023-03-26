@@ -69,7 +69,7 @@ public class NonJREEmulationClassesInClientCodeInspection extends BaseGwtInspect
 
 	@Override
 	@Nullable
-	public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, boolean isOnTheFly)
+	public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, boolean isOnTheFly, Object state)
 	{
 		if(!shouldCheck(file))
 		{
