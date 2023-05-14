@@ -2,16 +2,16 @@ package com.intellij.gwt.impl.actions;
 
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.actions.GwtCreateActionBase;
-import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.base.templates.GwtTemplates;
+import com.intellij.gwt.module.model.GwtModule;
 import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.IdeView;
+import consulo.language.content.ProjectRootsUtil;
 import consulo.language.editor.PlatformDataKeys;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import consulo.project.ui.view.tree.ProjectRootsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
