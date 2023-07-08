@@ -16,7 +16,6 @@
 
 package com.intellij.gwt.jakartaee.run;
 
-import com.intellij.gwt.GwtBundle;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationType;
@@ -25,7 +24,6 @@ import consulo.google.gwt.localize.GwtLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 import jakarta.inject.Inject;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
