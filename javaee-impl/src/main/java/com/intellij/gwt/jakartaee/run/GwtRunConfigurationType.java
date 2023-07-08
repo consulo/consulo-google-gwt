@@ -21,6 +21,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.google.gwt.base.icon.GwtIconGroup;
+import consulo.google.gwt.localize.GwtLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 import jakarta.inject.Inject;
 import org.jetbrains.annotations.NonNls;
@@ -45,15 +47,15 @@ public class GwtRunConfigurationType implements ConfigurationType
 	}
 
 	@Override
-	public String getDisplayName()
+	public LocalizeValue getDisplayName()
 	{
-		return GwtBundle.message("run.gwt.configuration.display.name");
+		return GwtLocalize.runGwtConfigurationDisplayName();
 	}
 
 	@Override
-	public String getConfigurationTypeDescription()
+	public LocalizeValue getConfigurationTypeDescription()
 	{
-		return GwtBundle.message("run.gwt.configuration.description");
+		return GwtLocalize.runGwtConfigurationDescription();
 	}
 
 	@Override
@@ -69,12 +71,10 @@ public class GwtRunConfigurationType implements ConfigurationType
 	}
 
 	@Override
-	@NonNls
 	@Nonnull
 	public String getId()
 	{
 		return "GWT.ConfigurationType";
 	}
-
 }
 

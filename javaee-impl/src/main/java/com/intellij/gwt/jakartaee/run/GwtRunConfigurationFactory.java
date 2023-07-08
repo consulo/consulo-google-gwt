@@ -31,6 +31,13 @@ public class GwtRunConfigurationFactory extends ConfigurationFactory
 		super(gwtConfigurationType);
 	}
 
+	@Nonnull
+	@Override
+	public String getId()
+	{
+		return "GWT Configuration";
+	}
+
 	@Override
 	public boolean isApplicable(@Nonnull Project project)
 	{
