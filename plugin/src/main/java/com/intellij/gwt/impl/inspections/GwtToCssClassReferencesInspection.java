@@ -19,6 +19,7 @@ package com.intellij.gwt.impl.inspections;
 import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.inspections.BaseGwtInspection;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
@@ -27,20 +28,20 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
 @ExtensionImpl
-public class GwtToCssClassReferencesInspection extends BaseGwtInspection
+public class GwtToCssClassReferencesInspection extends BaseGwtInspection<Object>
 {
-	private static final Logger LOG = Logger.getInstance("#com.intellij.gwt.inspections.GwtToCssClassReferencesInspection");
+	private static final Logger LOG = Logger.getInstance(GwtToCssClassReferencesInspection.class);
 
-	@Override
 	@Nonnull
-	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly)
+	@Override
+	public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder, boolean isOnTheFly, LocalInspectionToolSession session, Object o)
 	{
 		/*Project project = holder.getManager().getProject();
 		if(hasGwtFacets(project))
 		{
 			return new CssReferencesProblemsCollectingVisitor(holder);
 		}                                           */
-		return super.buildVisitor(holder, isOnTheFly);
+		return super.buildVisitorImpl(holder, isOnTheFly, session, o);
 	}
 
 	@Override

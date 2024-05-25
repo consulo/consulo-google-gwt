@@ -23,11 +23,11 @@ import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
@@ -37,9 +37,9 @@ import javax.annotation.Nonnull;
 @ExtensionImpl
 public class GwtToHtmlTagReferencesInspection extends BaseGwtInspection
 {
-	@Override
 	@Nonnull
-	public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly)
+	@Override
+	public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder, boolean isOnTheFly, LocalInspectionToolSession session, Object o)
 	{
 		return new JavaElementVisitor()
 		{
@@ -73,7 +73,6 @@ public class GwtToHtmlTagReferencesInspection extends BaseGwtInspection
 
 	@Override
 	@Nonnull
-	@NonNls
 	public String getShortName()
 	{
 		return "GwtToHtmlReferences";
