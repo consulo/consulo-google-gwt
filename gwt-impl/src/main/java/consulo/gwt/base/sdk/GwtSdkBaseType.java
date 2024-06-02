@@ -18,7 +18,7 @@ package consulo.gwt.base.sdk;
 
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.java.language.impl.JarArchiveFileType;
-import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.content.OrderRootType;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.base.SourcesOrderRootType;
@@ -106,7 +106,7 @@ public abstract class GwtSdkBaseType extends SdkType
 	@Override
 	public boolean isRootTypeApplicable(OrderRootType type)
 	{
-		return JavaSdk.getInstance().isRootTypeApplicable(type);
+		return JavaSdkType.getDefaultJavaSdkType().isRootTypeApplicable(type);
 	}
 
 	@Nonnull
