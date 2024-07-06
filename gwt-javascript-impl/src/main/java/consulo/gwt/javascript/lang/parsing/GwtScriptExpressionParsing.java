@@ -5,8 +5,8 @@ import com.intellij.lang.javascript.JSTokenTypes;
 import consulo.gwt.javascript.lang.GwtJavaScriptElements;
 import consulo.javascript.lang.parsing.ExpressionParsing;
 import consulo.javascript.lang.parsing.JavaScriptParsingContext;
-import consulo.javascript.language.JavaScriptBundle;
-import consulo.javascript.localize.JavaScriptLocalize;import consulo.language.ast.IElementType;
+import consulo.javascript.localize.JavaScriptLocalize;
+import consulo.language.ast.IElementType;
 import consulo.language.parser.PsiBuilder;
 
 /**
