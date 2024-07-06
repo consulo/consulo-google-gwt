@@ -5,7 +5,7 @@ import com.intellij.lang.javascript.JSTokenTypes;
 import consulo.gwt.javascript.lang.GwtJavaScriptElements;
 import consulo.javascript.lang.parsing.ExpressionParsing;
 import consulo.javascript.lang.parsing.JavaScriptParsingContext;
-import consulo.javascript.language.JavaScriptBundle;
+import consulo.javascript.localize.JavaScriptLocalize;
 import consulo.language.ast.IElementType;
 import consulo.language.parser.PsiBuilder;
 
@@ -103,7 +103,7 @@ public class GwtScriptExpressionParsing extends ExpressionParsing
 					}
 					else
 					{
-						builder.error(JavaScriptBundle.message("javascript.parser.message.expected.name"));
+						builder.error(JavaScriptLocalize.javascriptParserMessageExpectedName());
 					}
 
 					if(gwtExprMark == null)
@@ -123,7 +123,7 @@ public class GwtScriptExpressionParsing extends ExpressionParsing
 				{
 					builder.advanceLexer();
 					parseExpression(builder);
-					checkMatches(builder, JSTokenTypes.RBRACKET, JavaScriptBundle.message("javascript.parser.message.expected.rbracket"));
+					checkMatches(builder, JSTokenTypes.RBRACKET, JavaScriptLocalize.javascriptParserMessageExpectedRbracket());
 					expr.done(JSElementTypes.INDEXED_PROPERTY_ACCESS_EXPRESSION);
 					expr = expr.precede();
 				}
