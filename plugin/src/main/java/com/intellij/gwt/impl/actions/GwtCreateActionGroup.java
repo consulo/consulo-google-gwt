@@ -16,12 +16,13 @@
 
 package com.intellij.gwt.impl.actions;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.actions.GwtCreateActionBase;
 import consulo.annotation.component.ActionImpl;
 import consulo.annotation.component.ActionParentRef;
 import consulo.annotation.component.ActionRef;
 import consulo.google.gwt.base.icon.GwtIconGroup;
+import consulo.google.gwt.localize.GwtLocalize;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.AnSeparator;
 import consulo.ui.ex.action.DefaultActionGroup;
@@ -30,27 +31,23 @@ import consulo.ui.ex.action.DefaultActionGroup;
  * @author nik
  */
 @ActionImpl(id = "GWT", children = {
-	@ActionRef(type = CreateGwtTestCaseAction.class),
-	@ActionRef(type = CreateGwtModuleAction.class),
-	@ActionRef(type = CreateGwtEntryPointAction.class),
-	@ActionRef(type = CreateGwtSerializableClassAction.class),
-	@ActionRef(type = AnSeparator.class),
-	@ActionRef(type = CreateGwtSampleAppAction.class),
+    @ActionRef(type = CreateGwtTestCaseAction.class),
+    @ActionRef(type = CreateGwtModuleAction.class),
+    @ActionRef(type = CreateGwtEntryPointAction.class),
+    @ActionRef(type = CreateGwtSerializableClassAction.class),
+    @ActionRef(type = AnSeparator.class),
+    @ActionRef(type = CreateGwtSampleAppAction.class),
 }, parents = @ActionParentRef(@ActionRef(id = "NewGroup")))
-public class GwtCreateActionGroup extends DefaultActionGroup
-{
-	public GwtCreateActionGroup()
-	{
-		super(GwtBundle.message("action.group.gwt.title"), true);
-		getTemplatePresentation().setDescription(GwtBundle.message("action.group.gwt.description"));
-		getTemplatePresentation().setIcon(GwtIconGroup.gwt());
-	}
+public class GwtCreateActionGroup extends DefaultActionGroup {
+    public GwtCreateActionGroup() {
+        super(GwtLocalize.actionGroupGwtTitle(), true);
+        getTemplatePresentation().setDescriptionValue(GwtLocalize.actionGroupGwtDescription());
+        getTemplatePresentation().setIcon(GwtIconGroup.gwt());
+    }
 
-
-	@Override
-	public void update(AnActionEvent e)
-	{
-		e.getPresentation().setVisible(GwtCreateActionBase.isUnderSourceRootsOfModuleWithGwtFacet(e));
-	}
-
+    @RequiredUIAccess
+    @Override
+    public void update(AnActionEvent e) {
+        e.getPresentation().setVisible(GwtCreateActionBase.isUnderSourceRootsOfModuleWithGwtFacet(e));
+    }
 }
