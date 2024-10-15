@@ -31,6 +31,7 @@ import consulo.jakartaee.web.module.extension.JavaWebModuleExtension;
 import consulo.language.file.FileTypeManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
@@ -339,7 +340,7 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
 	{
 		public HtmlPageActionListener()
 		{
-			super(null, null, myHtmlPageBox, myProject, createHtmlFileChooserDescriptor(), new RunPageComponentAccessor());
+			super(LocalizeValue.of(), LocalizeValue.of(), myHtmlPageBox, myProject, createHtmlFileChooserDescriptor(), new RunPageComponentAccessor());
 		}
 
 		@Override
