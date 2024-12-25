@@ -4,14 +4,16 @@
  */
 module com.intellij.gwt
 {
-	requires com.intellij.gwt.api;
-	requires com.intellij.gwt.base;
+    requires com.intellij.gwt.api;
+    requires com.intellij.gwt.base;
 
-	requires consulo.java;
-	requires com.intellij.properties;
-	requires consulo.java.properties.impl;
+    requires consulo.java;
+    requires com.intellij.properties;
+    requires consulo.java.properties.impl;
 
-	// TODO remove in future
-	requires java.desktop;
-	requires forms.rt;
+    opens com.intellij.gwt.impl.inspections to consulo.util.xml.serializer;
+
+    // TODO remove in future
+    requires java.desktop;
+    requires forms.rt;
 }
