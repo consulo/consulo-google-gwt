@@ -2,7 +2,7 @@ package com.intellij.gwt.impl.references;
 
 import com.intellij.java.language.psi.PsiLiteralExpression;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * @author nik

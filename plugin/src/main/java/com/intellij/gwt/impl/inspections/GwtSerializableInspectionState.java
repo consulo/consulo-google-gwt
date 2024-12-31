@@ -8,7 +8,7 @@ import consulo.language.editor.inspection.InspectionToolState;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 import consulo.util.xml.serializer.annotation.Tag;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class GwtSerializableInspectionState implements InspectionToolState<GwtSerializableInspectionState>
 {

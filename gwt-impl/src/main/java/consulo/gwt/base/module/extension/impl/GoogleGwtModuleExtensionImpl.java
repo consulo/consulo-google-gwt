@@ -33,7 +33,7 @@ import consulo.virtualFileSystem.util.PathsList;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jdom.Element;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**

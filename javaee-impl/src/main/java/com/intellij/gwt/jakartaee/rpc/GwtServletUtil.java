@@ -9,8 +9,8 @@ import com.intellij.javaee.model.xml.web.WebApp;
 import consulo.gwt.jakartaee.module.extension.JavaEEGoogleGwtModuleExtension;
 import consulo.language.psi.PsiManager;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**

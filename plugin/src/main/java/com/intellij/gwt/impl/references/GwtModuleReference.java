@@ -9,7 +9,7 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 

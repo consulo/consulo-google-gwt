@@ -35,7 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
 import consulo.xml.ide.highlighter.HtmlFileType;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 
 @ActionImpl(id = "GWT.NewModule")

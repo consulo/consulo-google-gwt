@@ -16,7 +16,7 @@
 
 package consulo.gwt.javascript.lang.parsing;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import consulo.javascript.lang.parsing.JavaScriptParser;
 import consulo.javascript.lang.parsing.JavaScriptParsingContext;
 

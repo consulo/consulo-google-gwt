@@ -3,7 +3,7 @@ package com.intellij.gwt.impl.inspections;
 import com.intellij.gwt.GwtBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik

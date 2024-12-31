@@ -22,7 +22,7 @@ import consulo.gwt.jakartaee.module.extension.JavaEEGoogleGwtModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class GwtRunConfigurationFactory extends ConfigurationFactory
 {

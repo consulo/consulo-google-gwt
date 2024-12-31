@@ -5,7 +5,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ExtensionImpl;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class GwtKeyJavadocTagInfo extends GwtJavadocTagInfo

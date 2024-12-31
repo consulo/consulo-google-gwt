@@ -24,7 +24,7 @@ import consulo.annotation.component.ActionImpl;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ActionImpl(id = "GWT.NewSerialClass")
 public class CreateGwtSerializableClassAction extends GwtCreateActionBase

@@ -21,7 +21,7 @@ import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
 import consulo.xml.psi.xml.XmlFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 /**
  * @author nik
  */

@@ -4,7 +4,7 @@ import com.intellij.gwt.base.templates.GwtTemplates;
 import com.intellij.gwt.sdk.GwtVersion;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik

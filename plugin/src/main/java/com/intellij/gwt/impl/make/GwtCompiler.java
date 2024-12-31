@@ -53,7 +53,7 @@ import consulo.virtualFileSystem.util.PathsList;
 import jakarta.inject.Inject;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;

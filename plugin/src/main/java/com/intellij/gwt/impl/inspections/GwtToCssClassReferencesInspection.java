@@ -25,7 +25,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class GwtToCssClassReferencesInspection extends BaseGwtInspection<Object>

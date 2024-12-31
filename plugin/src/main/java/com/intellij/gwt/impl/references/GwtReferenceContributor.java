@@ -19,7 +19,7 @@ import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ArrayUtil;
 import consulo.xml.patterns.XmlAttributeValuePattern;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.string;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;

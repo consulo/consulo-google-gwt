@@ -5,7 +5,7 @@ import com.intellij.gwt.impl.module.model.impl.GwtModuleImpl;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.xml.dom.DomElementImplementationProvider;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL

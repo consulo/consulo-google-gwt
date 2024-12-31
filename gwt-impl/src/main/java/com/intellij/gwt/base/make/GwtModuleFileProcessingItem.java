@@ -21,8 +21,8 @@ import consulo.compiler.FileProcessingCompiler;
 import consulo.compiler.ValidityState;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.io.File;
 
 /**

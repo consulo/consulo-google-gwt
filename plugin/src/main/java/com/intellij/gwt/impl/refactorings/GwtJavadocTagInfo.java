@@ -6,7 +6,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author nik

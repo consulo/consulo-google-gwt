@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.util.collection.ArrayUtil;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class JSGwtReferenceExpressionImpl extends JSReferenceExpressionImpl
 {

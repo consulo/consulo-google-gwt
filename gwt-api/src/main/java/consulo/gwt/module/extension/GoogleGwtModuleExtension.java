@@ -22,8 +22,8 @@ import consulo.compiler.FileProcessingCompiler;
 import consulo.module.extension.ModuleExtensionWithSdk;
 import consulo.virtualFileSystem.util.PathsList;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**
