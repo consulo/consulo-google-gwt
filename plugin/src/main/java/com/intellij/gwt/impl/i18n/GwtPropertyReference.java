@@ -25,7 +25,7 @@ public class GwtPropertyReference extends PropertyReferenceBase
 	}
 
 	@Override
-	protected List<PropertiesFile> getPropertiesFiles()
+    public List<PropertiesFile> getPropertiesFiles()
 	{
 		return Arrays.asList(myGwtI18nManager.getPropertiesFiles(myPropertiesInterface));
 	}
