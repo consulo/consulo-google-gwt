@@ -45,99 +45,86 @@ import jakarta.annotation.Nullable;
  * @since 02-Jun-16
  */
 @ExtensionImpl
-public class GwtRunConfigurationProducer extends RunConfigurationProducer<GwtRunConfiguration>
-{
-	public GwtRunConfigurationProducer()
-	{
-		super(GwtRunConfigurationType.getInstance());
-	}
+public class GwtRunConfigurationProducer extends RunConfigurationProducer<GwtRunConfiguration> {
+    public GwtRunConfigurationProducer() {
+        super(GwtRunConfigurationType.getInstance());
+    }
 
-	@Override
-	protected boolean setupConfigurationFromContext(GwtRunConfiguration runConfiguration, ConfigurationContext configurationContext, Ref<PsiElement> ref)
-	{
-		Pair<GwtModule, String> pair = findGwtModule(configurationContext.getLocation());
-		if(pair != null)
-		{
-			GwtModule gwtModule = pair.getFirst();
-			String path = GwtRunConfigurationEditor.getPath(gwtModule, pair.getSecond());
-			runConfiguration.setModule(gwtModule.getModule());
-			runConfiguration.setPage(path);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    protected boolean setupConfigurationFromContext(
+        GwtRunConfiguration runConfiguration,
+        ConfigurationContext configurationContext,
+        Ref<PsiElement> ref
+    ) {
+        Pair<GwtModule, String> pair = findGwtModule(configurationContext.getLocation());
+        if (pair != null) {
+            GwtModule gwtModule = pair.getFirst();
+            String path = GwtRunConfigurationEditor.getPath(gwtModule, pair.getSecond());
+            runConfiguration.setModule(gwtModule.getModule());
+            runConfiguration.setPage(path);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean isConfigurationFromContext(GwtRunConfiguration runConfiguration, ConfigurationContext configurationContext)
-	{
-		Pair<GwtModule, String> pair = findGwtModule(configurationContext.getLocation());
-		if(pair != null)
-		{
-			String pagePath1 = runConfiguration.getPage();
-			Module module1 = runConfiguration.getModule();
+    @Override
+    public boolean isConfigurationFromContext(GwtRunConfiguration runConfiguration, ConfigurationContext configurationContext) {
+        Pair<GwtModule, String> pair = findGwtModule(configurationContext.getLocation());
+        if (pair != null) {
+            String pagePath1 = runConfiguration.getPage();
+            Module module1 = runConfiguration.getModule();
 
-			GwtModule gwtModule = pair.getFirst();
-			String pagePath2 = GwtRunConfigurationEditor.getPath(gwtModule, pair.getSecond());
-			Module module2 = gwtModule.getModule();
-			return pagePath2.equals(pagePath1) && Comparing.equal(module1, module2);
-		}
-		return false;
-	}
+            GwtModule gwtModule = pair.getFirst();
+            String pagePath2 = GwtRunConfigurationEditor.getPath(gwtModule, pair.getSecond());
+            Module module2 = gwtModule.getModule();
+            return pagePath2.equals(pagePath1) && Comparing.equal(module1, module2);
+        }
+        return false;
+    }
 
-	@Nullable
-	private static Pair<GwtModule, String> findGwtModule(Location<?> location)
-	{
-		PsiFile psiFile = location.getPsiElement().getContainingFile();
-		if(psiFile == null)
-		{
-			return null;
-		}
+    @Nullable
+    private static Pair<GwtModule, String> findGwtModule(Location<?> location) {
+        PsiFile psiFile = location.getPsiElement().getContainingFile();
+        if (psiFile == null) {
+            return null;
+        }
 
-		VirtualFile file = psiFile.getVirtualFile();
-		if(file == null || !GwtModuleExtensionUtil.hasModuleExtension(location.getProject(), file))
-		{
-			return null;
-		}
+        VirtualFile file = psiFile.getVirtualFile();
+        if (file == null || !GwtModuleExtensionUtil.hasModuleExtension(location.getProject(), file)) {
+            return null;
+        }
 
-		GwtModulesManager gwtModulesManager = GwtModulesManager.getInstance(location.getProject());
-		GwtModule gwtModule = gwtModulesManager.getGwtModuleByXmlFile(psiFile);
-		if(gwtModule != null)
-		{
-			return getModuleWithFile(gwtModulesManager, gwtModule);
-		}
+        GwtModulesManager gwtModulesManager = GwtModulesManager.getInstance(location.getProject());
+        GwtModule gwtModule = gwtModulesManager.getGwtModuleByXmlFile(psiFile);
+        if (gwtModule != null) {
+            return getModuleWithFile(gwtModulesManager, gwtModule);
+        }
 
-		if(psiFile instanceof PsiJavaFile)
-		{
-			PsiClass[] classes = ((PsiJavaFile) psiFile).getClasses();
-			if(classes.length == 1)
-			{
-				PsiClass psiClass = classes[0];
-				GwtModule module = gwtModulesManager.findGwtModuleByEntryPoint(psiClass);
-				if(module != null)
-				{
-					return getModuleWithFile(gwtModulesManager, module);
-				}
-			}
-		}
-		return null;
-	}
+        if (psiFile instanceof PsiJavaFile) {
+            PsiClass[] classes = ((PsiJavaFile)psiFile).getClasses();
+            if (classes.length == 1) {
+                PsiClass psiClass = classes[0];
+                GwtModule module = gwtModulesManager.findGwtModuleByEntryPoint(psiClass);
+                if (module != null) {
+                    return getModuleWithFile(gwtModulesManager, module);
+                }
+            }
+        }
+        return null;
+    }
 
-	@Nullable
-	private static Pair<GwtModule, String> getModuleWithFile(@Nonnull GwtModulesManager gwtModulesManager, @Nonnull GwtModule gwtModule)
-	{
-		XmlFile psiHtmlFile = gwtModulesManager.findHtmlFileByModule(gwtModule);
-		if(psiHtmlFile != null)
-		{
-			VirtualFile htmlFile = psiHtmlFile.getVirtualFile();
-			if(htmlFile != null)
-			{
-				String path = gwtModulesManager.getPathFromPublicRoot(gwtModule, htmlFile);
-				if(path != null)
-				{
-					return Pair.create(gwtModule, path);
-				}
-			}
-		}
-		return null;
-	}
+    @Nullable
+    private static Pair<GwtModule, String> getModuleWithFile(@Nonnull GwtModulesManager gwtModulesManager, @Nonnull GwtModule gwtModule) {
+        XmlFile psiHtmlFile = gwtModulesManager.findHtmlFileByModule(gwtModule);
+        if (psiHtmlFile != null) {
+            VirtualFile htmlFile = psiHtmlFile.getVirtualFile();
+            if (htmlFile != null) {
+                String path = gwtModulesManager.getPathFromPublicRoot(gwtModule, htmlFile);
+                if (path != null) {
+                    return Pair.create(gwtModule, path);
+                }
+            }
+        }
+        return null;
+    }
 }
