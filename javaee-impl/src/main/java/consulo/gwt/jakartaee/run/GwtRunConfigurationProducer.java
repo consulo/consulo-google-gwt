@@ -16,11 +16,11 @@
 
 package consulo.gwt.jakartaee.run;
 
-import com.intellij.gwt.module.GwtModulesManager;
-import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.jakartaee.run.GwtRunConfiguration;
 import com.intellij.gwt.jakartaee.run.GwtRunConfigurationEditor;
 import com.intellij.gwt.jakartaee.run.GwtRunConfigurationType;
+import com.intellij.gwt.module.GwtModulesManager;
+import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.annotation.component.ExtensionImpl;
@@ -33,16 +33,15 @@ import consulo.language.psi.PsiFile;
 import consulo.module.Module;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
-import consulo.util.lang.ref.Ref;
+import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.psi.xml.XmlFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
  * @author VISTALL
- * @since 02-Jun-16
+ * @since 2016-06-02
  */
 @ExtensionImpl
 public class GwtRunConfigurationProducer extends RunConfigurationProducer<GwtRunConfiguration> {
@@ -54,7 +53,7 @@ public class GwtRunConfigurationProducer extends RunConfigurationProducer<GwtRun
     protected boolean setupConfigurationFromContext(
         GwtRunConfiguration runConfiguration,
         ConfigurationContext configurationContext,
-        Ref<PsiElement> ref
+        SimpleReference<PsiElement> ref
     ) {
         Pair<GwtModule, String> pair = findGwtModule(configurationContext.getLocation());
         if (pair != null) {
@@ -100,8 +99,8 @@ public class GwtRunConfigurationProducer extends RunConfigurationProducer<GwtRun
             return getModuleWithFile(gwtModulesManager, gwtModule);
         }
 
-        if (psiFile instanceof PsiJavaFile) {
-            PsiClass[] classes = ((PsiJavaFile)psiFile).getClasses();
+        if (psiFile instanceof PsiJavaFile javaFile) {
+            PsiClass[] classes = javaFile.getClasses();
             if (classes.length == 1) {
                 PsiClass psiClass = classes[0];
                 GwtModule module = gwtModulesManager.findGwtModuleByEntryPoint(psiClass);
