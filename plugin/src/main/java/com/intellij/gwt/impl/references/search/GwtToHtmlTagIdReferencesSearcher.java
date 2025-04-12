@@ -38,78 +38,66 @@ import consulo.xml.psi.xml.XmlTag;
  * @author nik
  */
 @ExtensionImpl
-public class GwtToHtmlTagIdReferencesSearcher implements ReferencesSearchQueryExecutor
-{
-	@Override
-	public boolean execute(final ReferencesSearch.SearchParameters queryParameters, final Processor<? super PsiReference> consumer)
-	{
-		return ReadAction.compute(() -> doExecute(queryParameters, consumer));
-	}
+public class GwtToHtmlTagIdReferencesSearcher implements ReferencesSearchQueryExecutor {
+    @Override
+    public boolean execute(final ReferencesSearch.SearchParameters queryParameters, final Processor<? super PsiReference> consumer) {
+        return ReadAction.compute(() -> doExecute(queryParameters, consumer));
+    }
 
-	private static boolean doExecute(final ReferencesSearch.SearchParameters queryParameters, final Processor<? super PsiReference> consumer)
-	{
-		final PsiElement element = queryParameters.getElementToSearch();
-		if(!(element instanceof XmlAttributeValue))
-		{
-			return true;
-		}
+    private static boolean doExecute(
+        final ReferencesSearch.SearchParameters queryParameters,
+        final Processor<? super PsiReference> consumer
+    ) {
+        final PsiElement element = queryParameters.getElementToSearch();
+        if (!(element instanceof XmlAttributeValue)) {
+            return true;
+        }
 
-		final PsiElement parent = element.getParent();
-		if(!(parent instanceof XmlAttribute) || !"id".equals(((XmlAttribute) parent).getLocalName()))
-		{
-			return true;
-		}
-		String id = ((XmlAttributeValue) element).getValue();
+        final PsiElement parent = element.getParent();
+        if (!(parent instanceof XmlAttribute) || !"id".equals(((XmlAttribute)parent).getLocalName())) {
+            return true;
+        }
+        String id = ((XmlAttributeValue)element).getValue();
 
-		final PsiElement tag = parent.getParent();
-		if(!(tag instanceof XmlTag))
-		{
-			return true;
-		}
+        final PsiElement tag = parent.getParent();
+        if (!(tag instanceof XmlTag)) {
+            return true;
+        }
 
-		final PsiFile file = parent.getContainingFile();
-		if(!file.getLanguage().equals(HTMLLanguage.INSTANCE) && !file.getLanguage().equals(XHTMLLanguage.INSTANCE))
-		{
-			return true;
-		}
+        final PsiFile file = parent.getContainingFile();
+        if (!file.getLanguage().equals(HTMLLanguage.INSTANCE) && !file.getLanguage().equals(XHTMLLanguage.INSTANCE)) {
+            return true;
+        }
 
-		final GwtModulesManager gwtModulesManager = GwtModulesManager.getInstance(file.getProject());
-		final VirtualFile virtualFile = file.getVirtualFile();
-		if(virtualFile == null)
-		{
-			return true;
-		}
+        final GwtModulesManager gwtModulesManager = GwtModulesManager.getInstance(file.getProject());
+        final VirtualFile virtualFile = file.getVirtualFile();
+        if (virtualFile == null) {
+            return true;
+        }
 
-		final GwtModule gwtModule = gwtModulesManager.findGwtModuleByClientOrPublicFile(virtualFile);
-		if(gwtModule == null)
-		{
-			return true;
-		}
+        final GwtModule gwtModule = gwtModulesManager.findGwtModuleByClientOrPublicFile(virtualFile);
+        if (gwtModule == null) {
+            return true;
+        }
 
-		final PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(element.getProject());
-		return searchHelper.processElementsWithWord(new TextOccurenceProcessor()
-		{
-			@Override
-			public boolean execute(PsiElement element, int offsetInElement)
-			{
-				if(!(element instanceof PsiLiteralExpression))
-				{
-					return true;
-				}
+        final PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(element.getProject());
+        return searchHelper.processElementsWithWord(new TextOccurenceProcessor() {
+            @Override
+            public boolean execute(PsiElement element, int offsetInElement) {
+                if (!(element instanceof PsiLiteralExpression)) {
+                    return true;
+                }
 
-				final PsiReference[] references = element.getReferences();
-				for(PsiReference reference : references)
-				{
-					if(reference instanceof GwtToHtmlTagReference && reference.isReferenceTo(tag))
-					{
-						if(!consumer.process(reference))
-						{
-							return false;
-						}
-					}
-				}
-				return true;
-			}
-		}, queryParameters.getScope(), id, UsageSearchContext.IN_STRINGS, true);
-	}
+                final PsiReference[] references = element.getReferences();
+                for (PsiReference reference : references) {
+                    if (reference instanceof GwtToHtmlTagReference && reference.isReferenceTo(tag)) {
+                        if (!consumer.process(reference)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }, queryParameters.getScope(), id, UsageSearchContext.IN_STRINGS, true);
+    }
 }

@@ -33,48 +33,39 @@ import jakarta.annotation.Nonnull;
  * @author peter
  */
 @ExtensionImpl
-public class PropertiesSearcher implements DefinitionsScopedSearchExecutor
-{
-	@Override
-	public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiElement> consumer)
-	{
-		final PsiElement sourceElement = queryParameters.getElement();
-		if(sourceElement instanceof PsiMethod)
-		{
-			final IProperty[] properties = ApplicationManager.getApplication().runReadAction(new Computable<IProperty[]>()
-			{
-				@Override
-				public IProperty[] compute()
-				{
-					return GwtI18nManager.getInstance(sourceElement.getProject()).getProperties((PsiMethod) sourceElement);
-				}
-			});
-			for(IProperty property : properties)
-			{
-				if(!consumer.process(property.getPsiElement()))
-				{
-					return false;
-				}
-			}
-		}
-		else if(sourceElement instanceof PsiClass)
-		{
-			final PropertiesFile[] files = ApplicationManager.getApplication().runReadAction(new Computable<PropertiesFile[]>()
-			{
-				@Override
-				public PropertiesFile[] compute()
-				{
-					return GwtI18nManager.getInstance(sourceElement.getProject()).getPropertiesFiles((PsiClass) sourceElement);
-				}
-			});
-			for(PropertiesFile file : files)
-			{
-				if(!consumer.process(file.getContainingFile()))
-				{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+public class PropertiesSearcher implements DefinitionsScopedSearchExecutor {
+    @Override
+    public boolean execute(
+        @Nonnull DefinitionsScopedSearch.SearchParameters queryParameters,
+        @Nonnull Processor<? super PsiElement> consumer
+    ) {
+        final PsiElement sourceElement = queryParameters.getElement();
+        if (sourceElement instanceof PsiMethod) {
+            final IProperty[] properties = ApplicationManager.getApplication().runReadAction(new Computable<IProperty[]>() {
+                @Override
+                public IProperty[] compute() {
+                    return GwtI18nManager.getInstance(sourceElement.getProject()).getProperties((PsiMethod)sourceElement);
+                }
+            });
+            for (IProperty property : properties) {
+                if (!consumer.process(property.getPsiElement())) {
+                    return false;
+                }
+            }
+        }
+        else if (sourceElement instanceof PsiClass) {
+            final PropertiesFile[] files = ApplicationManager.getApplication().runReadAction(new Computable<PropertiesFile[]>() {
+                @Override
+                public PropertiesFile[] compute() {
+                    return GwtI18nManager.getInstance(sourceElement.getProject()).getPropertiesFiles((PsiClass)sourceElement);
+                }
+            });
+            for (PropertiesFile file : files) {
+                if (!consumer.process(file.getContainingFile())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
