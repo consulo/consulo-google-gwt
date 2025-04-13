@@ -20,61 +20,46 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.util.function.Computable;
-import consulo.application.util.function.Processor;
+import consulo.application.Application;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.search.DefinitionsScopedSearch;
 import consulo.language.psi.search.DefinitionsScopedSearchExecutor;
-
 import jakarta.annotation.Nonnull;
+
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author peter
  */
 @ExtensionImpl
-public class PropertiesSearcher implements DefinitionsScopedSearchExecutor
-{
-	@Override
-	public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiElement> consumer)
-	{
-		final PsiElement sourceElement = queryParameters.getElement();
-		if(sourceElement instanceof PsiMethod)
-		{
-			final IProperty[] properties = ApplicationManager.getApplication().runReadAction(new Computable<IProperty[]>()
-			{
-				@Override
-				public IProperty[] compute()
-				{
-					return GwtI18nManager.getInstance(sourceElement.getProject()).getProperties((PsiMethod) sourceElement);
-				}
-			});
-			for(IProperty property : properties)
-			{
-				if(!consumer.process(property.getPsiElement()))
-				{
-					return false;
-				}
-			}
-		}
-		else if(sourceElement instanceof PsiClass)
-		{
-			final PropertiesFile[] files = ApplicationManager.getApplication().runReadAction(new Computable<PropertiesFile[]>()
-			{
-				@Override
-				public PropertiesFile[] compute()
-				{
-					return GwtI18nManager.getInstance(sourceElement.getProject()).getPropertiesFiles((PsiClass) sourceElement);
-				}
-			});
-			for(PropertiesFile file : files)
-			{
-				if(!consumer.process(file.getContainingFile()))
-				{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+public class PropertiesSearcher implements DefinitionsScopedSearchExecutor {
+    @Override
+    public boolean execute(
+        @Nonnull DefinitionsScopedSearch.SearchParameters queryParameters,
+        @Nonnull Predicate<? super PsiElement> consumer
+    ) {
+        final PsiElement sourceElement = queryParameters.getElement();
+        if (sourceElement instanceof PsiMethod method) {
+            IProperty[] properties = Application.get().runReadAction(
+                (Supplier<IProperty[]>)() -> GwtI18nManager.getInstance(method.getProject()).getProperties(method)
+            );
+            for (IProperty property : properties) {
+                if (!consumer.test(property.getPsiElement())) {
+                    return false;
+                }
+            }
+        }
+        else if (sourceElement instanceof PsiClass psiClass) {
+            final PropertiesFile[] files = Application.get().runReadAction(
+                (Supplier<PropertiesFile[]>)() -> GwtI18nManager.getInstance(psiClass.getProject()).getPropertiesFiles(psiClass)
+            );
+            for (PropertiesFile file : files) {
+                if (!consumer.test(file.getContainingFile())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
