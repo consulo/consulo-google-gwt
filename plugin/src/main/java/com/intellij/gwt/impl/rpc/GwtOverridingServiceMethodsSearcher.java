@@ -6,28 +6,30 @@ import com.intellij.java.indexing.search.searches.OverridingMethodsSearchExecuto
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Processor;
 import consulo.language.psi.PsiFile;
+
+import java.util.function.Predicate;
 
 /**
  * @author nik
  */
 @ExtensionImpl
-public class GwtOverridingServiceMethodsSearcher extends GwtSearcherBase<PsiMethod, OverridingMethodsSearch.SearchParameters> implements OverridingMethodsSearchExecutor {
+public class GwtOverridingServiceMethodsSearcher extends GwtSearcherBase<PsiMethod, OverridingMethodsSearch.SearchParameters>
+    implements OverridingMethodsSearchExecutor {
     @Override
     protected PsiFile getContainingFile(final OverridingMethodsSearch.SearchParameters parameters) {
         return parameters.getMethod().getContainingFile();
     }
 
     @Override
-    public boolean doExecute(final OverridingMethodsSearch.SearchParameters queryParameters, final Processor<? super PsiMethod> consumer) {
+    public boolean doExecute(OverridingMethodsSearch.SearchParameters queryParameters, Predicate<? super PsiMethod> consumer) {
         PsiMethod method = queryParameters.getMethod();
         PsiClass async = method.getContainingClass();
         PsiClass sync = RemoteServiceUtil.findSynchronousInterface(async);
         if (sync != null) {
             PsiMethod syncMethod = RemoteServiceUtil.findMethodInSync(method, sync);
             if (syncMethod != null) {
-                if (!consumer.process(syncMethod)) {
+                if (!consumer.test(syncMethod)) {
                     return false;
                 }
                 if (!OverridingMethodsSearch.search(syncMethod, queryParameters.getScope(), queryParameters.isCheckDeep())

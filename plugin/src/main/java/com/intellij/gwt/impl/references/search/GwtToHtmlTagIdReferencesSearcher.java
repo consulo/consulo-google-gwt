@@ -20,9 +20,10 @@ import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.impl.references.GwtToHtmlTagReference;
 import com.intellij.java.language.psi.PsiLiteralExpression;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ReadAction;
-import consulo.application.util.function.Processor;
+import consulo.application.AccessRule;
+import consulo.language.Language;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
@@ -33,6 +34,9 @@ import consulo.xml.lang.xhtml.XHTMLLanguage;
 import consulo.xml.psi.xml.XmlAttribute;
 import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
+import jakarta.annotation.Nonnull;
+
+import java.util.function.Predicate;
 
 /**
  * @author nik
@@ -40,64 +44,69 @@ import consulo.xml.psi.xml.XmlTag;
 @ExtensionImpl
 public class GwtToHtmlTagIdReferencesSearcher implements ReferencesSearchQueryExecutor {
     @Override
-    public boolean execute(final ReferencesSearch.SearchParameters queryParameters, final Processor<? super PsiReference> consumer) {
-        return ReadAction.compute(() -> doExecute(queryParameters, consumer));
+    public boolean execute(
+        @Nonnull ReferencesSearch.SearchParameters queryParameters,
+        @Nonnull Predicate<? super PsiReference> consumer
+    ) {
+        return AccessRule.read(() -> doExecute(queryParameters, consumer));
     }
 
+    @RequiredReadAction
     private static boolean doExecute(
-        final ReferencesSearch.SearchParameters queryParameters,
-        final Processor<? super PsiReference> consumer
+        ReferencesSearch.SearchParameters queryParameters,
+        Predicate<? super PsiReference> consumer
     ) {
-        final PsiElement element = queryParameters.getElementToSearch();
-        if (!(element instanceof XmlAttributeValue)) {
+        PsiElement element = queryParameters.getElementToSearch();
+        if (!(element instanceof XmlAttributeValue attrValue)) {
             return true;
         }
 
-        final PsiElement parent = element.getParent();
-        if (!(parent instanceof XmlAttribute) || !"id".equals(((XmlAttribute)parent).getLocalName())) {
+        PsiElement parent = element.getParent();
+        if (!(parent instanceof XmlAttribute attr && "id".equals(attr.getLocalName()))) {
             return true;
         }
-        String id = ((XmlAttributeValue)element).getValue();
+        String id = attrValue.getValue();
 
-        final PsiElement tag = parent.getParent();
+        PsiElement tag = parent.getParent();
         if (!(tag instanceof XmlTag)) {
             return true;
         }
 
-        final PsiFile file = parent.getContainingFile();
-        if (!file.getLanguage().equals(HTMLLanguage.INSTANCE) && !file.getLanguage().equals(XHTMLLanguage.INSTANCE)) {
+        PsiFile file = parent.getContainingFile();
+        Language language = file.getLanguage();
+        if (!language.equals(HTMLLanguage.INSTANCE) && !language.equals(XHTMLLanguage.INSTANCE)) {
             return true;
         }
 
-        final GwtModulesManager gwtModulesManager = GwtModulesManager.getInstance(file.getProject());
-        final VirtualFile virtualFile = file.getVirtualFile();
+        GwtModulesManager gwtModulesManager = GwtModulesManager.getInstance(file.getProject());
+        VirtualFile virtualFile = file.getVirtualFile();
         if (virtualFile == null) {
             return true;
         }
 
-        final GwtModule gwtModule = gwtModulesManager.findGwtModuleByClientOrPublicFile(virtualFile);
+        GwtModule gwtModule = gwtModulesManager.findGwtModuleByClientOrPublicFile(virtualFile);
         if (gwtModule == null) {
             return true;
         }
 
-        final PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(element.getProject());
-        return searchHelper.processElementsWithWord(new TextOccurenceProcessor() {
-            @Override
-            public boolean execute(PsiElement element, int offsetInElement) {
-                if (!(element instanceof PsiLiteralExpression)) {
+        PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(element.getProject());
+        return searchHelper.processElementsWithWord(
+            (element1, offsetInElement) -> {
+                if (!(element1 instanceof PsiLiteralExpression)) {
                     return true;
                 }
 
-                final PsiReference[] references = element.getReferences();
-                for (PsiReference reference : references) {
-                    if (reference instanceof GwtToHtmlTagReference && reference.isReferenceTo(tag)) {
-                        if (!consumer.process(reference)) {
-                            return false;
-                        }
+                for (PsiReference reference : element1.getReferences()) {
+                    if (reference instanceof GwtToHtmlTagReference && reference.isReferenceTo(tag) && !consumer.test(reference)) {
+                        return false;
                     }
                 }
                 return true;
-            }
-        }, queryParameters.getScope(), id, UsageSearchContext.IN_STRINGS, true);
+            },
+            queryParameters.getScope(),
+            id,
+            UsageSearchContext.IN_STRINGS,
+            true
+        );
     }
 }
