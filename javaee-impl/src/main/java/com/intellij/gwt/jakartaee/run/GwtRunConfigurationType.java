@@ -16,6 +16,7 @@
 package com.intellij.gwt.jakartaee.run;
 
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.google.gwt.base.icon.GwtIconGroup;
@@ -30,7 +31,8 @@ import jakarta.annotation.Nonnull;
 public class GwtRunConfigurationType implements ConfigurationType {
     @Nonnull
     public static GwtRunConfigurationType getInstance() {
-        return EP_NAME.findExtensionOrFail(GwtRunConfigurationType.class);
+        return Application.get().getExtensionPoint(ConfigurationType.class)
+            .findExtensionOrFail(GwtRunConfigurationType.class);
     }
 
     private GwtRunConfigurationFactory myConfigurationFactory;
@@ -40,11 +42,13 @@ public class GwtRunConfigurationType implements ConfigurationType {
         myConfigurationFactory = new GwtRunConfigurationFactory(this);
     }
 
+    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return GwtLocalize.runGwtConfigurationDisplayName();
     }
 
+    @Nonnull
     @Override
     public LocalizeValue getConfigurationTypeDescription() {
         return GwtLocalize.runGwtConfigurationDescription();
