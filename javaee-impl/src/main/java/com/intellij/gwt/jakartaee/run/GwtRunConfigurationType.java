@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.gwt.jakartaee.run;
 
 import consulo.annotation.component.ExtensionImpl;
@@ -28,51 +27,43 @@ import jakarta.inject.Inject;
 import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
-public class GwtRunConfigurationType implements ConfigurationType
-{
-	@Nonnull
-	public static GwtRunConfigurationType getInstance()
-	{
-		return EP_NAME.findExtensionOrFail(GwtRunConfigurationType.class);
-	}
+public class GwtRunConfigurationType implements ConfigurationType {
+    @Nonnull
+    public static GwtRunConfigurationType getInstance() {
+        return EP_NAME.findExtensionOrFail(GwtRunConfigurationType.class);
+    }
 
-	private GwtRunConfigurationFactory myConfigurationFactory;
+    private GwtRunConfigurationFactory myConfigurationFactory;
 
-	@Inject
-	GwtRunConfigurationType()
-	{
-		myConfigurationFactory = new GwtRunConfigurationFactory(this);
-	}
+    @Inject
+    GwtRunConfigurationType() {
+        myConfigurationFactory = new GwtRunConfigurationFactory(this);
+    }
 
-	@Override
-	public LocalizeValue getDisplayName()
-	{
-		return GwtLocalize.runGwtConfigurationDisplayName();
-	}
+    @Override
+    public LocalizeValue getDisplayName() {
+        return GwtLocalize.runGwtConfigurationDisplayName();
+    }
 
-	@Override
-	public LocalizeValue getConfigurationTypeDescription()
-	{
-		return GwtLocalize.runGwtConfigurationDescription();
-	}
+    @Override
+    public LocalizeValue getConfigurationTypeDescription() {
+        return GwtLocalize.runGwtConfigurationDescription();
+    }
 
-	@Override
-	public Image getIcon()
-	{
-		return GwtIconGroup.gwt();
-	}
+    @Override
+    public Image getIcon() {
+        return GwtIconGroup.gwt();
+    }
 
-	@Override
-	public ConfigurationFactory[] getConfigurationFactories()
-	{
-		return new ConfigurationFactory[]{myConfigurationFactory};
-	}
+    @Override
+    public ConfigurationFactory[] getConfigurationFactories() {
+        return new ConfigurationFactory[]{myConfigurationFactory};
+    }
 
-	@Override
-	@Nonnull
-	public String getId()
-	{
-		return "GWT.ConfigurationType";
-	}
+    @Override
+    @Nonnull
+    public String getId() {
+        return "GWT.ConfigurationType";
+    }
 }
 
