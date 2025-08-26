@@ -16,60 +16,52 @@
 
 package com.intellij.gwt.impl.actions;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.actions.GwtCreateActionBase;
-import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.base.templates.GwtTemplates;
+import com.intellij.gwt.module.model.GwtModule;
 import consulo.annotation.component.ActionImpl;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 @ActionImpl(id = "GWT.NewSerialClass")
-public class CreateGwtSerializableClassAction extends GwtCreateActionBase
-{
-	public CreateGwtSerializableClassAction()
-	{
-		super(GwtBundle.message("newserial.menu.action.text"), GwtBundle.message("newserial.menu.action.description"));
-	}
+public class CreateGwtSerializableClassAction extends GwtCreateActionBase {
+    public CreateGwtSerializableClassAction() {
+        super(GwtLocalize.newserialMenuActionText(), GwtLocalize.newserialMenuActionDescription());
+    }
 
-	@Override
-	protected boolean requireGwtModule()
-	{
-		return true;
-	}
+    @Override
+    protected boolean requireGwtModule() {
+        return true;
+    }
 
-	@Override
-	protected String getDialogPrompt()
-	{
-		return GwtBundle.message("newserial.dlg.prompt");
-	}
+    @Override
+    protected LocalizeValue getDialogPrompt() {
+        return GwtLocalize.newserialDlgPrompt();
+    }
 
-	@Override
-	protected String getDialogTitle()
-	{
-		return GwtBundle.message("newserial.dlg.title");
-	}
+    @Override
+    protected LocalizeValue getDialogTitle() {
+        return GwtLocalize.newserialDlgTitle();
+    }
 
-	@Override
-	protected String getCommandName()
-	{
-		return GwtBundle.message("newserial.command.name");
-	}
+    @Override
+    protected LocalizeValue getCommandName() {
+        return GwtLocalize.newserialCommandName();
+    }
 
-	@Override
-	protected String getActionName(PsiDirectory directory, String newName)
-	{
-		return GwtBundle.message("newserial.progress.text", newName);
-	}
+    @Override
+    protected LocalizeValue getActionName(PsiDirectory directory, String newName) {
+        return GwtLocalize.newserialProgressText(newName);
+    }
 
-	@Override
-	@Nonnull
-	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
-	{
-		return new PsiElement[]{
-				createClassFromTemplate(directory, name, GwtTemplates.GWT_SERIAL_CLASS_JAVA).getContainingFile()
-		};
-	}
+    @Override
+    @Nonnull
+    protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception {
+        return new PsiElement[]{
+            createClassFromTemplate(directory, name, GwtTemplates.GWT_SERIAL_CLASS_JAVA).getContainingFile()
+        };
+    }
 }

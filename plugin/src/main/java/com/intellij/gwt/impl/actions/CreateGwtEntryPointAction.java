@@ -16,78 +16,67 @@
 
 package com.intellij.gwt.impl.actions;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.actions.GwtCreateActionBase;
-import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.gwt.base.templates.GwtTemplates;
+import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ActionImpl;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.xml.psi.xml.XmlFile;
-
 import jakarta.annotation.Nonnull;
 
 @ActionImpl(id = "GWT.NewEntryPoint")
-public class CreateGwtEntryPointAction extends GwtCreateActionBase
-{
-	public CreateGwtEntryPointAction()
-	{
-		super(GwtBundle.message("newentrypoint.menu.action.text"), GwtBundle.message("newentrypoint.menu.action.description"));
-	}
+public class CreateGwtEntryPointAction extends GwtCreateActionBase {
+    public CreateGwtEntryPointAction() {
+        super(GwtLocalize.newentrypointMenuActionText(), GwtLocalize.newentrypointMenuActionDescription());
+    }
 
-	@Override
-	protected boolean requireGwtModule()
-	{
-		return true;
-	}
+    @Override
+    protected boolean requireGwtModule() {
+        return true;
+    }
 
-	@Override
-	protected String getDialogPrompt()
-	{
-		return GwtBundle.message("newentrypoint.dlg.prompt");
-	}
+    @Override
+    protected LocalizeValue getDialogPrompt() {
+        return GwtLocalize.newentrypointDlgPrompt();
+    }
 
-	@Override
-	protected String getDialogTitle()
-	{
-		return GwtBundle.message("newentrypoint.dlg.title");
-	}
+    @Override
+    protected LocalizeValue getDialogTitle() {
+        return GwtLocalize.newentrypointDlgTitle();
+    }
 
-	@Override
-	@Nonnull
-	protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception
-	{
-		final PsiClass entryPointClass = createClassFromTemplate(directory, name, GwtTemplates.GWT_ENTRY_POINT_JAVA);
+    @Override
+    @Nonnull
+    protected PsiElement[] doCreate(String name, PsiDirectory directory, final GwtModule gwtModule) throws Exception {
+        final PsiClass entryPointClass = createClassFromTemplate(directory, name, GwtTemplates.GWT_ENTRY_POINT_JAVA);
 
-		XmlFile xml = gwtModule.getModuleXmlFile();
-		if(xml == null)
-		{
-			return PsiElement.EMPTY_ARRAY;
-		}
+        XmlFile xml = gwtModule.getModuleXmlFile();
+        if (xml == null) {
+            return PsiElement.EMPTY_ARRAY;
+        }
 
-		gwtModule.addEntryPoint().getEntryClass().setValue(entryPointClass.getQualifiedName());
+        gwtModule.addEntryPoint().getEntryClass().setValue(entryPointClass.getQualifiedName());
 
-		return new PsiElement[]{entryPointClass.getContainingFile()};
-	}
+        return new PsiElement[]{entryPointClass.getContainingFile()};
+    }
 
+    @Override
+    protected PsiFile[] getAffectedFiles(final GwtModule gwtModule) {
+        return new PsiFile[]{gwtModule.getModuleXmlFile()};
+    }
 
-	@Override
-	protected PsiFile[] getAffectedFiles(final GwtModule gwtModule)
-	{
-		return new PsiFile[]{gwtModule.getModuleXmlFile()};
-	}
+    @Override
+    protected LocalizeValue getCommandName() {
+        return GwtLocalize.newentrypointCommandName();
+    }
 
-	@Override
-	protected String getCommandName()
-	{
-		return GwtBundle.message("newentrypoint.command.name");
-	}
-
-	@Override
-	protected String getActionName(PsiDirectory directory, String newName)
-	{
-		return GwtBundle.message("newentrypoint.progress.text", newName);
-	}
+    @Override
+    protected LocalizeValue getActionName(PsiDirectory directory, String newName) {
+        return GwtLocalize.newentrypointProgressText(newName);
+    }
 }

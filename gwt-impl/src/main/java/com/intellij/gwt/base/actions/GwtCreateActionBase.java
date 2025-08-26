@@ -16,7 +16,6 @@
 
 package com.intellij.gwt.base.actions;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.java.language.impl.JavaFileType;
@@ -27,6 +26,7 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.application.CommonBundle;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.ide.IdeView;
 import consulo.ide.action.CreateElementActionBase;
@@ -36,10 +36,12 @@ import consulo.language.editor.PlatformDataKeys;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
+import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.Presentation;
@@ -47,209 +49,179 @@ import consulo.ui.ex.awt.Messages;
 import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Consumer;
 
-public abstract class GwtCreateActionBase extends CreateElementActionBase
-{
-	private static final Logger LOG = Logger.getInstance(GwtCreateActionBase.class);
-	@NonNls
-	private static final String NAME_TEMPLATE_PROPERTY = "NAME";
+public abstract class GwtCreateActionBase extends CreateElementActionBase {
+    private static final Logger LOG = Logger.getInstance(GwtCreateActionBase.class);
 
-	public GwtCreateActionBase(String text, String description)
-	{
-		super(text, description, null);
-	}
+    private static final String NAME_TEMPLATE_PROPERTY = "NAME";
 
-	@Override
-	protected final void invokeDialog(final Project project, final PsiDirectory directory, Consumer<PsiElement[]> elementsConsumer)
-	{
-		Module module = ModuleUtilCore.findModuleForFile(directory.getVirtualFile(), project);
-		if(module == null)
-		{
-			return;
-		}
+    public GwtCreateActionBase(LocalizeValue text, LocalizeValue description) {
+        super(text, description, null);
+    }
 
-		GoogleGwtModuleExtension facet = module.getExtension(GoogleGwtModuleExtension.class);
-		if(facet == null)
-		{
-			return;
-		}
+    @Override
+    protected final void invokeDialog(final Project project, final PsiDirectory directory, Consumer<PsiElement[]> elementsConsumer) {
+        Module module = ModuleUtilCore.findModuleForFile(directory.getVirtualFile(), project);
+        if (module == null) {
+            return;
+        }
 
-		if(requireGwtModule())
-		{
-			final GwtModule gwtModule = findGwtModule(project, directory);
-			if(gwtModule == null)
-			{
-				final String message = GwtBundle.message("error.message.this.action.is.allowed.only.for.client.side.packages.of.a.gwt.module");
-				Messages.showErrorDialog(project, message, CommonBundle.getErrorTitle());
-				return;
-			}
-		}
+        GoogleGwtModuleExtension facet = module.getExtension(GoogleGwtModuleExtension.class);
+        if (facet == null) {
+            return;
+        }
 
-		MyInputValidator validator = new MyInputValidator(project, directory);
-		Messages.showInputDialog(project, getDialogPrompt(), getDialogTitle(), Messages.getQuestionIcon(), "", validator);
+        if (requireGwtModule()) {
+            final GwtModule gwtModule = findGwtModule(project, directory);
+            if (gwtModule == null) {
+                final String message = GwtLocalize.errorMessageThisActionIsAllowedOnlyForClientSidePackagesOfAGwtModule().get();
+                Messages.showErrorDialog(project, message, CommonBundle.getErrorTitle());
+                return;
+            }
+        }
 
-		elementsConsumer.accept(validator.getCreatedElements());
-	}
+        MyInputValidator validator = new MyInputValidator(project, directory);
+        Messages.showInputDialog(project, getDialogPrompt().get(), getDialogTitle().get(), Messages.getQuestionIcon(), "", validator);
 
-	protected PsiFile[] getAffectedFiles(final GwtModule gwtModule)
-	{
-		return PsiFile.EMPTY_ARRAY;
-	}
+        elementsConsumer.accept(validator.getCreatedElements());
+    }
 
-	protected abstract boolean requireGwtModule();
+    protected PsiFile[] getAffectedFiles(final GwtModule gwtModule) {
+        return PsiFile.EMPTY_ARRAY;
+    }
 
-	protected abstract String getDialogPrompt();
+    protected abstract boolean requireGwtModule();
 
-	protected abstract String getDialogTitle();
+    @Nonnull
+    protected abstract LocalizeValue getDialogPrompt();
 
-	private static
-	@Nullable
-	GwtModule findGwtModule(Project project, PsiDirectory directory)
-	{
-		return GwtModulesManager.getInstance(project).findGwtModuleByClientSourceFile(directory.getVirtualFile());
-	}
+    @Nonnull
+    protected abstract LocalizeValue getDialogTitle();
 
-	@Override
-	public final void update(final AnActionEvent e)
-	{
-		final Presentation presentation = e.getPresentation();
-		super.update(e);
+    @Nullable
+    private static GwtModule findGwtModule(Project project, PsiDirectory directory) {
+        return GwtModulesManager.getInstance(project).findGwtModuleByClientSourceFile(directory.getVirtualFile());
+    }
 
-		if(presentation.isEnabled() && !isUnderSourceRootsOfModuleWithGwtFacet(e))
-		{
-			presentation.setEnabled(false);
-			presentation.setVisible(false);
-		}
-	}
+    @Override
+    public final void update(final AnActionEvent e) {
+        final Presentation presentation = e.getPresentation();
+        super.update(e);
 
-	public static boolean isUnderSourceRootsOfModuleWithGwtFacet(final AnActionEvent e)
-	{
-		Module module = e.getData(LangDataKeys.MODULE);
-		if(module == null)
-		{
-			return false;
-		}
+        if (presentation.isEnabled() && !isUnderSourceRootsOfModuleWithGwtFacet(e)) {
+            presentation.setEnabled(false);
+            presentation.setVisible(false);
+        }
+    }
 
-		if(ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class) == null)
-		{
-			return false;
-		}
+    public static boolean isUnderSourceRootsOfModuleWithGwtFacet(final AnActionEvent e) {
+        Module module = e.getData(LangDataKeys.MODULE);
+        if (module == null) {
+            return false;
+        }
 
-		final IdeView view = e.getData(IdeView.KEY);
-		final Project project = e.getData(PlatformDataKeys.PROJECT);
-		if(view != null && project != null)
-		{
-			ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-			PsiDirectory[] dirs = view.getDirectories();
-			for(PsiDirectory dir : dirs)
-			{
-				if(projectFileIndex.isInSourceContent(dir.getVirtualFile()) && JavaDirectoryService.getInstance().getPackage(dir) != null)
-				{
-					return true;
-				}
-			}
-		}
+        if (ModuleUtilCore.getExtension(module, GoogleGwtModuleExtension.class) == null) {
+            return false;
+        }
 
-		return false;
-	}
+        final IdeView view = e.getData(IdeView.KEY);
+        final Project project = e.getData(PlatformDataKeys.PROJECT);
+        if (view != null && project != null) {
+            ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+            PsiDirectory[] dirs = view.getDirectories();
+            for (PsiDirectory dir : dirs) {
+                if (projectFileIndex.isInSourceContent(dir.getVirtualFile()) && JavaDirectoryService.getInstance().getPackage(dir) != null) {
+                    return true;
+                }
+            }
+        }
 
-	@Override
-	@Nonnull
-	protected PsiElement[] create(String newName, PsiDirectory directory) throws Exception
-	{
-		final GwtModule gwtModule;
-		if(requireGwtModule())
-		{
-			gwtModule = findGwtModule(directory.getProject(), directory);
-		}
-		else
-		{
-			gwtModule = null;
-		}
-		return doCreate(newName, directory, gwtModule);
-	}
+        return false;
+    }
 
-	@Nonnull
-	protected abstract PsiElement[] doCreate(String newName, PsiDirectory directory, final GwtModule gwtModule) throws Exception;
+    @Override
+    @Nonnull
+    protected PsiElement[] create(String newName, PsiDirectory directory) throws Exception {
+        final GwtModule gwtModule;
+        if (requireGwtModule()) {
+            gwtModule = findGwtModule(directory.getProject(), directory);
+        }
+        else {
+            gwtModule = null;
+        }
+        return doCreate(newName, directory, gwtModule);
+    }
 
-	protected static PsiClass createClassFromTemplate(final PsiDirectory directory, String className, String templateName,
-													  @NonNls String... parameters) throws IncorrectOperationException
-	{
-		final PsiFile file = createFromTemplateInternal(directory, className, className + JavaFileType.DOT_DEFAULT_EXTENSION, templateName,
-				parameters);
-		return ((PsiJavaFile) file).getClasses()[0];
-	}
+    @Nonnull
+    protected abstract PsiElement[] doCreate(String newName, PsiDirectory directory, final GwtModule gwtModule) throws Exception;
 
-	protected static PsiFile createFromTemplate(final PsiDirectory directory, String fileName, String templateName,
-			@NonNls String... parameters) throws IncorrectOperationException
-	{
-		return createFromTemplateInternal(directory, FileUtil.getNameWithoutExtension(fileName), fileName, templateName, parameters);
-	}
+    protected static PsiClass createClassFromTemplate(final PsiDirectory directory, String className, String templateName,
+                                                      @NonNls String... parameters) throws IncorrectOperationException {
+        final PsiFile file = createFromTemplateInternal(directory, className, className + JavaFileType.DOT_DEFAULT_EXTENSION, templateName,
+            parameters);
+        return ((PsiJavaFile) file).getClasses()[0];
+    }
 
-	protected static PsiFile createFromTemplateInternal(final PsiDirectory directory, final String name, String fileName, String templateName,
-			@NonNls String... parameters) throws IncorrectOperationException
-	{
-		final FileTemplate template = FileTemplateManager.getInstance(directory.getProject()).getJ2eeTemplate(templateName);
+    protected static PsiFile createFromTemplate(final PsiDirectory directory, String fileName, String templateName,
+                                                @NonNls String... parameters) throws IncorrectOperationException {
+        return createFromTemplateInternal(directory, FileUtil.getNameWithoutExtension(fileName), fileName, templateName, parameters);
+    }
 
-		Properties properties = new Properties(FileTemplateManager.getInstance(directory.getProject()).getDefaultProperties());
-		JavaTemplateUtil.setPackageNameAttribute(properties, directory);
-		properties.setProperty(NAME_TEMPLATE_PROPERTY, name);
-		LOG.assertTrue(parameters.length % 2 == 0);
-		for(int i = 0; i < parameters.length; i += 2)
-		{
-			properties.setProperty(parameters[i], parameters[i + 1]);
-		}
-		String text;
-		try
-		{
-			text = template.getText(properties);
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance(directory.getProject()).internalTemplateToSubject(templateName), e);
-		}
+    protected static PsiFile createFromTemplateInternal(final PsiDirectory directory, final String name, String fileName, String templateName,
+                                                        @NonNls String... parameters) throws IncorrectOperationException {
+        final FileTemplate template = FileTemplateManager.getInstance(directory.getProject()).getJ2eeTemplate(templateName);
 
-		final PsiManager psiManager = PsiManager.getInstance(directory.getProject());
-		final PsiFile file = PsiFileFactory.getInstance(directory.getProject()).createFileFromText(fileName, text);
+        Properties properties = new Properties(FileTemplateManager.getInstance(directory.getProject()).getDefaultProperties());
+        JavaTemplateUtil.setPackageNameAttribute(properties, directory);
+        properties.setProperty(NAME_TEMPLATE_PROPERTY, name);
+        LOG.assertTrue(parameters.length % 2 == 0);
+        for (int i = 0; i < parameters.length; i += 2) {
+            properties.setProperty(parameters[i], parameters[i + 1]);
+        }
+        String text;
+        try {
+            text = template.getText(properties);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance(directory.getProject()).internalTemplateToSubject(templateName), e);
+        }
 
-		CodeStyleManager.getInstance(psiManager).reformat(file);
+        final PsiManager psiManager = PsiManager.getInstance(directory.getProject());
+        final PsiFile file = PsiFileFactory.getInstance(directory.getProject()).createFileFromText(fileName, text);
 
-		return (PsiFile) directory.add(file);
-	}
+        CodeStyleManager.getInstance(psiManager).reformat(file);
+
+        return (PsiFile) directory.add(file);
+    }
 
 
-	@Override
-	protected String getErrorTitle()
-	{
-		return CommonBundle.getErrorTitle();
-	}
+    @Override
+    protected LocalizeValue getErrorTitle() {
+        return CommonLocalize.titleError();
+    }
 
-	protected final void checkBeforeCreate(String newName, PsiDirectory directory) throws IncorrectOperationException
-	{
-		doCheckBeforeCreate(newName, directory);
-		List<VirtualFile> files = new ArrayList<VirtualFile>();
-		for(PsiFile psiFile : getAffectedFiles(findGwtModule(directory.getProject(), directory)))
-		{
-			final VirtualFile virtualFile = psiFile.getVirtualFile();
-			if(virtualFile != null)
-			{
-				files.add(virtualFile);
-			}
-		}
-		ReadonlyStatusHandler.getInstance(directory.getProject()).ensureFilesWritable(files.toArray(new VirtualFile[files.size()]));
-	}
+    protected final void checkBeforeCreate(String newName, PsiDirectory directory) throws IncorrectOperationException {
+        doCheckBeforeCreate(newName, directory);
+        List<VirtualFile> files = new ArrayList<>();
+        for (PsiFile psiFile : getAffectedFiles(findGwtModule(directory.getProject(), directory))) {
+            final VirtualFile virtualFile = psiFile.getVirtualFile();
+            if (virtualFile != null) {
+                files.add(virtualFile);
+            }
+        }
+        ReadonlyStatusHandler.getInstance(directory.getProject()).ensureFilesWritable(files.toArray(new VirtualFile[files.size()]));
+    }
 
-	protected void doCheckBeforeCreate(String newName, PsiDirectory directory) throws IncorrectOperationException
-	{
-		JavaDirectoryService.getInstance().checkCreateClass(directory, newName);
-	}
+    protected void doCheckBeforeCreate(String newName, PsiDirectory directory) throws IncorrectOperationException {
+        JavaDirectoryService.getInstance().checkCreateClass(directory, newName);
+    }
 
 }
