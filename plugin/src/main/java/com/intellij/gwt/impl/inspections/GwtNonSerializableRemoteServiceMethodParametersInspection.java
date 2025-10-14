@@ -16,7 +16,6 @@
 
 package com.intellij.gwt.impl.inspections;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.inspections.BaseGwtInspection;
 import com.intellij.gwt.base.rpc.GwtGenericsUtil;
 import com.intellij.gwt.base.rpc.RemoteServiceUtil;
@@ -27,6 +26,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.language.editor.inspection.InspectionToolState;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -37,12 +37,13 @@ import consulo.language.editor.intention.IntentionManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
 import consulo.virtualFileSystem.VirtualFile;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
                 PsiClass psiClass = classType.resolve();
 
                 if (exceptionClass != null && psiClass != null && !InheritanceUtil.isInheritorOrSelf(psiClass, exceptionClass, true)) {
-                    String message = GwtBundle.message("problem.description.0.is.not.a.checked.exception", psiClass.getQualifiedName());
+                    String message = GwtLocalize.problemDescription0IsNotACheckedException(psiClass.getQualifiedName()).get();
                     result.add(manager.createProblemDescriptor(referenceElement, message, LocalQuickFix.EMPTY_ARRAY,
                         ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
                 }
@@ -146,7 +147,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
         PsiClassType classType = (PsiClassType) type;
 
         if (!serializableChecker.getVersion().isGenericsSupported() && classType.getParameters().length > 0) {
-            String description = GwtBundle.message("problem.description.generics.isnt.supported.in.gwt.before.1.5.version");
+            String description = GwtLocalize.problemDescriptionGenericsIsntSupportedInGwtBefore15Version().get();
             result.add(manager.createProblemDescriptor(typeElement, description, LocalQuickFix.EMPTY_ARRAY, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
             return;
         }
@@ -158,7 +159,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
             final LocalQuickFix[] quickFixes;
             String typeString = type.getCanonicalText();
             if (typeParameterStrings == null && !haveGenericParameters && GwtSerializableUtil.isCollection(type)) {
-                description = GwtBundle.message("problem.description.type.of.collection.elements.is.not.specified", typeString);
+                description = GwtLocalize.problemDescriptionTypeOfCollectionElementsIsNotSpecified(typeString).get();
                 quickFixes = new LocalQuickFix[]{};
             }
             else {
@@ -168,7 +169,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 
                 if (!isInSources(aClass)) {
                     quickFixes = LocalQuickFix.EMPTY_ARRAY;
-                    description = GwtBundle.message("problem.description.type.is.not.serializable", typeString);
+                    description = GwtLocalize.problemDescriptionTypeIsNotSerializable(typeString).get();
                 }
                 else {
                     final List<PsiClass> list = serializableChecker.getSerializableMarkerInterfaces();
@@ -178,8 +179,7 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
                         quickFixes[i] = IntentionManager.getInstance().convertToFix(QuickFixFactory.getInstance().createExtendsListFix(aClass,
                             psiFactory.createType(list.get(i)), true));
                     }
-                    description = GwtBundle.message("problem.description.gwt.serializable.type.0.should.implements.marker.interface.1", typeString,
-                        serializableChecker.getPresentableSerializableClassesString());
+                    description = GwtLocalize.problemDescriptionGwtSerializableType0ShouldImplementsMarkerInterface1(typeString, serializableChecker.getPresentableSerializableClassesString()).get();
                 }
             }
             result.add(manager.createProblemDescriptor(typeElement, description, quickFixes, ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
@@ -197,8 +197,8 @@ public class GwtNonSerializableRemoteServiceMethodParametersInspection extends B
 
     @Override
     @Nonnull
-    public String getDisplayName() {
-        return GwtBundle.message("inspection.name.non.serializable.service.method.parameters");
+    public LocalizeValue getDisplayName() {
+        return GwtLocalize.inspectionNameNonSerializableServiceMethodParameters();
     }
 
     @Override

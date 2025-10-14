@@ -16,49 +16,46 @@
 
 package com.intellij.gwt.impl.inspections;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.inspections.BaseGwtInspection;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.SmartList;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.List;
 
 /**
  * @author nik
  */
 @ExtensionImpl
-public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
-{
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return GwtBundle.message("inspection.name.gwt.remote.service.is.not.registered.in.web.xml");
-	}
+public class GwtServiceNotRegisteredInspection extends BaseGwtInspection {
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return GwtLocalize.inspectionNameGwtRemoteServiceIsNotRegisteredInWebXml();
+    }
 
-	@Override
-	@Nonnull
-	@NonNls
-	public String getShortName()
-	{
-		return "GwtServiceNotRegistered";
-	}
+    @Override
+    @Nonnull
+    @NonNls
+    public String getShortName() {
+        return "GwtServiceNotRegistered";
+    }
 
-	@Override
-	@Nullable
-	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state)
-	{
-		/*if(!DeploymentDescriptorsConstants.WEB_XML_META_DATA.getFileName().equals(file.getName()))
+    @Override
+    @Nullable
+    public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
+        /*if(!DeploymentDescriptorsConstants.WEB_XML_META_DATA.getFileName().equals(file.getName()))
 		{
 			return null;
 		}
@@ -148,7 +145,7 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 			return null;
 		}      */
 
-		List<ProblemDescriptor> problems = new SmartList<ProblemDescriptor>();
+        List<ProblemDescriptor> problems = new SmartList<ProblemDescriptor>();
 		/*
 		for(Servlet servlet : expectedUrlPatterns.keySet())
 		{
@@ -172,8 +169,8 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 			}
 		}
              */
-		return problems.toArray(new ProblemDescriptor[problems.size()]);
-	}
+        return problems.toArray(new ProblemDescriptor[problems.size()]);
+    }
    /*
 	private static boolean containsUrlPattern(final ServletMapping mapping, final String urlPattern)
 	{
@@ -187,16 +184,15 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 		return false;
 	}        */
 
-	@RequiredReadAction
-	@Override
-	@Nullable
-	public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension,
-											  @Nonnull GwtVersion version,
-											  @Nonnull PsiClass aClass,
-											  @Nonnull InspectionManager manager,
-											  boolean isOnTheFly,
-											  Object state)
-	{
+    @RequiredReadAction
+    @Override
+    @Nullable
+    public ProblemDescriptor[] checkClassImpl(@Nonnull GoogleGwtModuleExtension extension,
+                                              @Nonnull GwtVersion version,
+                                              @Nonnull PsiClass aClass,
+                                              @Nonnull InspectionManager manager,
+                                              boolean isOnTheFly,
+                                              Object state) {
 	/*	if(!shouldCheck(aClass))
 		{
 			return null;
@@ -265,8 +261,8 @@ public class GwtServiceNotRegisteredInspection extends BaseGwtInspection
 			return new ProblemDescriptor[]{manager.createProblemDescriptor(place, message, quickFix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING)};
 		}
 		   */
-		return null;
-	}
+        return null;
+    }
 
 	/*private static class RegisterServiceQuickFix extends BaseGwtLocalQuickFix
 	{

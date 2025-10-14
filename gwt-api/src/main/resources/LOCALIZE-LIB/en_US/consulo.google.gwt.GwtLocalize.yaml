@@ -87,11 +87,11 @@ problem.description.unknown.css.class:
 quick.fix.create.css.class.name:
   text: Create CSS class ''{0}''
 quick.fixes.gwt.family.name:
-  text: Google Web Toolkit
+  text: GWT
 inspection.unresolved.references.to.css.classes.display.name:
   text: Unresolved references to CSS classes
 group.gwt.inspections.name:
-  text: Google Web Toolkit issues
+  text: GWT
 problem.description.methods.of.async.remote.service.0.isn.t.synchronized.with.1:
   text: Methods of asyncronous remote service ''{0}'' isn''t consistent with ''{1}''
 problem.description.remote.service.0.doesn.t.have.corresponding.async.variant:

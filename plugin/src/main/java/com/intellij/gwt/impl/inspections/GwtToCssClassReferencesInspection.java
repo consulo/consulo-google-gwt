@@ -16,48 +16,44 @@
 
 package com.intellij.gwt.impl.inspections;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.inspections.BaseGwtInspection;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-
 @ExtensionImpl
-public class GwtToCssClassReferencesInspection extends BaseGwtInspection<Object>
-{
-	private static final Logger LOG = Logger.getInstance(GwtToCssClassReferencesInspection.class);
+public class GwtToCssClassReferencesInspection extends BaseGwtInspection<Object> {
+    private static final Logger LOG = Logger.getInstance(GwtToCssClassReferencesInspection.class);
 
-	@Nonnull
-	@Override
-	public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder, boolean isOnTheFly, LocalInspectionToolSession session, Object o)
-	{
-		/*Project project = holder.getManager().getProject();
-		if(hasGwtFacets(project))
+    @Nonnull
+    @Override
+    public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder, boolean isOnTheFly, LocalInspectionToolSession session, Object o) {
+        /*Project project = holder.getManager().getProject();
+        if(hasGwtFacets(project))
 		{
 			return new CssReferencesProblemsCollectingVisitor(holder);
 		}                                           */
-		return super.buildVisitorImpl(holder, isOnTheFly, session, o);
-	}
+        return super.buildVisitorImpl(holder, isOnTheFly, session, o);
+    }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return GwtBundle.message("inspection.unresolved.references.to.css.classes.display.name");
-	}
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return GwtLocalize.inspectionUnresolvedReferencesToCssClassesDisplayName();
+    }
 
-	@Override
-	@Nonnull
-	@NonNls
-	public String getShortName()
-	{
-		return "GWTStyleCheck";
-	}
+    @Override
+    @Nonnull
+    @NonNls
+    public String getShortName() {
+        return "GWTStyleCheck";
+    }
 
 	/*private static class MyLocalQuickFix extends BaseGwtLocalQuickFix
 	{

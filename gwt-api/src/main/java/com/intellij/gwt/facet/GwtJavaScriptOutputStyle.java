@@ -16,73 +16,60 @@
 
 package com.intellij.gwt.facet;
 
+import consulo.google.gwt.localize.GwtLocalize;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-
 import org.jetbrains.annotations.NonNls;
-import com.intellij.gwt.GwtBundle;
 
 /**
  * @author nik
  */
-public enum GwtJavaScriptOutputStyle
-{
-	OBFUSCATED("OBF", GwtBundle.message("script.output.style.obfuscated"), 1),
-	PRETTY("PRETTY", GwtBundle.message("script.output.style.pretty"), 2),
-	DETAILED("DETAILED", GwtBundle.message("script.output.style.detailed"), 3);
-	private
-	@NonNls
-	String myId;
-	private int myNumericId;
-	private String myPresentableName;
+public enum GwtJavaScriptOutputStyle {
+    OBFUSCATED("OBF", GwtLocalize.scriptOutputStyleObfuscated(), 1),
+    PRETTY("PRETTY", GwtLocalize.scriptOutputStylePretty(), 2),
+    DETAILED("DETAILED", GwtLocalize.scriptOutputStyleDetailed(), 3);
+    private
+    String myId;
+    private int myNumericId;
+    private LocalizeValue myPresentableName;
 
-	GwtJavaScriptOutputStyle(final @NonNls String id, final String presentableName, int numericId)
-	{
-		myPresentableName = presentableName;
-		myId = id;
-		myNumericId = numericId;
-	}
+    GwtJavaScriptOutputStyle(final @NonNls String id, final LocalizeValue presentableName, int numericId) {
+        myPresentableName = presentableName;
+        myId = id;
+        myNumericId = numericId;
+    }
 
-	public String getId()
-	{
-		return myId;
-	}
+    public String getId() {
+        return myId;
+    }
 
-	public int getNumericId()
-	{
-		return myNumericId;
-	}
+    public int getNumericId() {
+        return myNumericId;
+    }
 
-	public static
-	@Nullable
-	GwtJavaScriptOutputStyle byId(@Nullable String id)
-	{
-		for(GwtJavaScriptOutputStyle style : values())
-		{
-			if(style.getId().equals(id))
-			{
-				return style;
-			}
-		}
-		return null;
-	}
+    @Nonnull
+    public LocalizeValue getPresentableName() {
+        return myPresentableName;
+    }
 
-	@Override
-	public String toString()
-	{
-		return myPresentableName;
-	}
+    @Nullable
+    public static GwtJavaScriptOutputStyle byId(@Nullable String id) {
+        for (GwtJavaScriptOutputStyle style : values()) {
+            if (style.getId().equals(id)) {
+                return style;
+            }
+        }
+        return null;
+    }
 
-	public static
-	@Nullable
-	GwtJavaScriptOutputStyle byId(final int id)
-	{
-		for(GwtJavaScriptOutputStyle style : values())
-		{
-			if(style.getNumericId() == id)
-			{
-				return style;
-			}
-		}
-		return null;
-	}
+    @Nullable
+    public static GwtJavaScriptOutputStyle byId(final int id) {
+        for (GwtJavaScriptOutputStyle style : values()) {
+            if (style.getNumericId() == id) {
+                return style;
+            }
+        }
+        return null;
+    }
 }

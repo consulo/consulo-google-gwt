@@ -16,12 +16,12 @@
 
 package com.intellij.gwt.jsinject.inspections;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.inspections.BaseGwtInspection;
 import com.intellij.gwt.jsinject.GwtClassMemberReference;
 import com.intellij.gwt.jsinject.JSGwtReferenceExpressionImpl;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.gwt.javascript.lang.GwtJavaScriptVersion;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
@@ -30,11 +30,12 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiRecursiveElementVisitor;
 import consulo.language.psi.PsiReference;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,72 +43,56 @@ import java.util.List;
  * @author nik
  */
 @ExtensionImpl
-public class GwtJavaScriptReferencesInspection extends BaseGwtInspection
-{
-	@Override
-	@Nls
-	@Nonnull
-	public String getDisplayName()
-	{
-		return GwtBundle.message("inspection.name.unresolved.references.in.jsni.methods");
-	}
+public class GwtJavaScriptReferencesInspection extends BaseGwtInspection {
+    @Override
+    @Nonnull
+    public LocalizeValue getDisplayName() {
+        return GwtLocalize.inspectionNameUnresolvedReferencesInJsniMethods();
+    }
 
-	@Override
-	@NonNls
-	@Nonnull
-	public String getShortName()
-	{
-		return "GwtJavaScriptReferences";
-	}
+    @Override
+    @NonNls
+    @Nonnull
+    public String getShortName() {
+        return "GwtJavaScriptReferences";
+    }
 
-	@Override
-	@Nullable
-	public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state)
-	{
-		if(!(file.getLanguageVersion() instanceof GwtJavaScriptVersion))
-		{
-			return ProblemDescriptor.EMPTY_ARRAY;
-		}
+    @Override
+    @Nullable
+    public ProblemDescriptor[] checkFile(@Nonnull final PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
+        if (!(file.getLanguageVersion() instanceof GwtJavaScriptVersion)) {
+            return ProblemDescriptor.EMPTY_ARRAY;
+        }
 
-		final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
-		file.accept(new PsiRecursiveElementVisitor()
-		{
-			@Override
-			public void visitElement(final PsiElement element)
-			{
-				if(element instanceof JSGwtReferenceExpressionImpl)
-				{
-					PsiReference[] references = element.getReferences();
-					for(PsiReference reference : references)
-					{
-						if(reference.resolve() == null)
-						{
-							if(reference instanceof GwtClassMemberReference)
-							{
-								PsiClass psiClass = ((GwtClassMemberReference) reference).resolveQualifier();
-								if(psiClass != null)
-								{
-									String message = GwtBundle.message("problem.description.cannot.resolve.symbol.0.in.1", reference.getCanonicalText(),
-											psiClass.getQualifiedName());
-									problems.add(manager.createProblemDescriptor(element, reference.getRangeInElement(), message,
-											ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
-								}
-							}
-							else
-							{
-								String message = GwtBundle.message("problem.description.cannot.resolve.0", reference.getCanonicalText());
-								problems.add(manager.createProblemDescriptor(element, reference.getRangeInElement(), message,
-										ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
-							}
-						}
-					}
-				}
-				else
-				{
-					super.visitElement(element);
-				}
-			}
-		});
-		return problems.toArray(new ProblemDescriptor[problems.size()]);
-	}
+        final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
+        file.accept(new PsiRecursiveElementVisitor() {
+            @Override
+            public void visitElement(final PsiElement element) {
+                if (element instanceof JSGwtReferenceExpressionImpl) {
+                    PsiReference[] references = element.getReferences();
+                    for (PsiReference reference : references) {
+                        if (reference.resolve() == null) {
+                            if (reference instanceof GwtClassMemberReference) {
+                                PsiClass psiClass = ((GwtClassMemberReference) reference).resolveQualifier();
+                                if (psiClass != null) {
+                                    String message = GwtLocalize.problemDescriptionCannotResolveSymbol0In1(reference.getCanonicalText(), psiClass.getQualifiedName()).get();
+                                    problems.add(manager.createProblemDescriptor(element, reference.getRangeInElement(), message,
+                                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+                                }
+                            }
+                            else {
+                                String message = GwtLocalize.problemDescriptionCannotResolve0(reference.getCanonicalText()).get();
+                                problems.add(manager.createProblemDescriptor(element, reference.getRangeInElement(), message,
+                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+                            }
+                        }
+                    }
+                }
+                else {
+                    super.visitElement(element);
+                }
+            }
+        });
+        return problems.toArray(new ProblemDescriptor[problems.size()]);
+    }
 }

@@ -1,33 +1,28 @@
 package com.intellij.gwt.impl.inspections;
 
-import com.intellij.gwt.GwtBundle;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.language.editor.inspection.LocalQuickFix;
-
+import consulo.localize.LocalizeValue;
 import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
  */
-public abstract class BaseGwtLocalQuickFix implements LocalQuickFix
-{
-	private String myName;
+public abstract class BaseGwtLocalQuickFix implements LocalQuickFix {
+    private final LocalizeValue myName;
 
-	protected BaseGwtLocalQuickFix(final String name)
-	{
-		myName = name;
-	}
+    protected BaseGwtLocalQuickFix(final LocalizeValue name) {
+        myName = name;
+    }
 
-	@Override
-	@Nonnull
-	public String getName()
-	{
-		return myName;
-	}
+    @Override
+    @Nonnull
+    public LocalizeValue getName() {
+        return myName;
+    }
 
-	@Override
-	@Nonnull
-	public String getFamilyName()
-	{
-		return GwtBundle.message("quick.fixes.gwt.family.name");
-	}
+    @Nonnull
+    public LocalizeValue getFamilyName() {
+        return GwtLocalize.quickFixesGwtFamilyName();
+    }
 }

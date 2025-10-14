@@ -16,13 +16,13 @@
 
 package com.intellij.gwt.impl;
 
-import com.intellij.gwt.GwtBundle;
 import com.intellij.gwt.base.templates.GwtTemplates;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.FileTemplateDescriptor;
 import consulo.fileTemplate.FileTemplateGroupDescriptor;
 import consulo.fileTemplate.FileTemplateGroupDescriptorFactory;
 import consulo.google.gwt.base.icon.GwtIconGroup;
+import consulo.google.gwt.localize.GwtLocalize;
 import consulo.language.file.FileTypeManager;
 
 /**
@@ -30,17 +30,14 @@ import consulo.language.file.FileTypeManager;
  * @since 14.07.14
  */
 @ExtensionImpl
-public class GwtFileTemplateGroupDescriptorFactory implements FileTemplateGroupDescriptorFactory
-{
-	@Override
-	public FileTemplateGroupDescriptor getFileTemplatesDescriptor()
-	{
-		final FileTemplateGroupDescriptor group = new FileTemplateGroupDescriptor(GwtBundle.message("file.template.group.titile.gwt"), GwtIconGroup.gwt());
-		final FileTypeManager fileTypeManager = FileTypeManager.getInstance();
-		for(String template : GwtTemplates.TEMPLATES)
-		{
-			group.addTemplate(new FileTemplateDescriptor(template, fileTypeManager.getFileTypeByFileName(template).getIcon()));
-		}
-		return group;
-	}
+public class GwtFileTemplateGroupDescriptorFactory implements FileTemplateGroupDescriptorFactory {
+    @Override
+    public FileTemplateGroupDescriptor getFileTemplatesDescriptor() {
+        final FileTemplateGroupDescriptor group = new FileTemplateGroupDescriptor(GwtLocalize.fileTemplateGroupTitileGwt().get(), GwtIconGroup.gwt());
+        final FileTypeManager fileTypeManager = FileTypeManager.getInstance();
+        for (String template : GwtTemplates.TEMPLATES) {
+            group.addTemplate(new FileTemplateDescriptor(template, fileTypeManager.getFileTypeByFileName(template).getIcon()));
+        }
+        return group;
+    }
 }
