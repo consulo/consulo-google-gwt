@@ -409,7 +409,7 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
 
     private class HtmlPageActionListener extends ComponentWithBrowseButton.BrowseFolderActionListener<JComboBox> {
         public HtmlPageActionListener() {
-            super(LocalizeValue.of(), LocalizeValue.of(), myHtmlPageBox, myProject, createHtmlFileChooserDescriptor(), new RunPageComponentAccessor());
+            super(LocalizeValue.empty(), LocalizeValue.empty(), myHtmlPageBox, myProject, createHtmlFileChooserDescriptor(), new RunPageComponentAccessor());
         }
 
         @RequiredUIAccess
