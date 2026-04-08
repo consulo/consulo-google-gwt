@@ -31,9 +31,9 @@ import consulo.language.psi.search.*;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.lang.html.HTMLLanguage;
 import consulo.xml.lang.xhtml.XHTMLLanguage;
-import consulo.xml.psi.xml.XmlAttribute;
-import consulo.xml.psi.xml.XmlAttributeValue;
-import consulo.xml.psi.xml.XmlTag;
+import consulo.xml.language.psi.XmlAttribute;
+import consulo.xml.language.psi.XmlAttributeValue;
+import consulo.xml.language.psi.XmlTag;
 import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;

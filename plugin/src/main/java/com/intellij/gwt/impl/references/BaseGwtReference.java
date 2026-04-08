@@ -22,8 +22,8 @@ import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReferenceBase;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.xml.psi.xml.XmlFile;
 
+import consulo.xml.language.psi.XmlFile;
 import jakarta.annotation.Nullable;
 
 /**

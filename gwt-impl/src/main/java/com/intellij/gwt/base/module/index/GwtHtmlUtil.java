@@ -1,8 +1,8 @@
 package com.intellij.gwt.base.module.index;
 
 import consulo.language.ast.IElementType;
+import consulo.xml.language.psi.XmlTokenType;
 import consulo.xml.lexer.HtmlLexer;
-import consulo.xml.psi.xml.XmlTokenType;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.HashMap;

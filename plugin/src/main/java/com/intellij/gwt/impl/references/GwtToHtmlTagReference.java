@@ -19,8 +19,8 @@ package com.intellij.gwt.impl.references;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
-import consulo.xml.psi.xml.XmlFile;
 
+import consulo.xml.language.psi.XmlFile;
 import jakarta.annotation.Nonnull;
 /**
  * @author nik

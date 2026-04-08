@@ -21,8 +21,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiReferenceProvider;
 import consulo.language.util.ProcessingContext;
-import consulo.xml.psi.xml.XmlAttributeValue;
 
+import consulo.xml.language.psi.XmlAttributeValue;
 import jakarta.annotation.Nonnull;
 
 /**

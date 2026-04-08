@@ -16,7 +16,7 @@
 
 package com.intellij.gwt.impl.references;
 
-import consulo.xml.psi.xml.XmlAttributeValue;
+import consulo.xml.language.psi.XmlAttributeValue;
 
 /**
  * @author nik
