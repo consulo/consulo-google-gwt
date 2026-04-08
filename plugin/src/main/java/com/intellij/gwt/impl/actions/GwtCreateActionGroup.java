@@ -41,7 +41,7 @@ import consulo.ui.ex.action.DefaultActionGroup;
 public class GwtCreateActionGroup extends DefaultActionGroup {
     public GwtCreateActionGroup() {
         super(GwtLocalize.actionGroupGwtTitle(), true);
-        getTemplatePresentation().setDescriptionValue(GwtLocalize.actionGroupGwtDescription());
+        getTemplatePresentation().setDescription(GwtLocalize.actionGroupGwtDescription());
         getTemplatePresentation().setIcon(GwtIconGroup.gwt());
     }
 

@@ -234,16 +234,16 @@ public class GwtCompilerProcessHandler {
                 }
             }
             else if (line.startsWith(ANALYSING_SOURCES_PREFIX)) {
-                myContext.getProgressIndicator().setTextValue(GwtLocalize.progressTextAnalyzingSources());
+                myContext.getProgressIndicator().setText(GwtLocalize.progressTextAnalyzingSources());
             }
             else if (line.startsWith(COPYING_PUBLIC_FILES_PREFIX)) {
-                myContext.getProgressIndicator().setTextValue(GwtLocalize.progressTextCopyingFilesFromPublicPaths());
+                myContext.getProgressIndicator().setText(GwtLocalize.progressTextCopyingFilesFromPublicPaths());
             }
             else if (line.startsWith(COMPILATION_START_PREFIX)) {
-                myContext.getProgressIndicator().setTextValue(GwtLocalize.progressTextCompilingSources());
+                myContext.getProgressIndicator().setText(GwtLocalize.progressTextCompilingSources());
             }
             else if (line.startsWith(LOADING_INHERITED_PREFIX)) {
-                myContext.getProgressIndicator().setTextValue(GwtLocalize.progressTextLoadingInheritedModules());
+                myContext.getProgressIndicator().setText(GwtLocalize.progressTextLoadingInheritedModules());
             }
             else if (line.startsWith(FINDING_ENTRY_POINTS_PREFIX)) {
                 myFindingEntryPoints = true;

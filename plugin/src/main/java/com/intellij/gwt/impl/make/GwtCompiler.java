@@ -65,7 +65,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler {
     private static final Logger LOG = Logger.getInstance(GwtCompiler.class);
     private Project myProject;
     private GwtModulesManager myGwtModulesManager;
-    
+
     public static final String LOG_LEVEL_ARGUMENT = "-logLevel";
     public static final String GEN_AGRUMENT = "-gen";
     public static final String STYLE_ARGUMENT = "-style";
@@ -185,7 +185,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler {
                 LOG.debug("GWT Compiler command line: " + commandLine.getCommandLineString());
             }
             commandLine.setWorkDirectory(outputDir);
-            context.getProgressIndicator().setTextValue(GwtLocalize.progressTextCompilingGwtModule0(gwtModuleName.get()));
+            context.getProgressIndicator().setText(GwtLocalize.progressTextCompilingGwtModule0(gwtModuleName.get()));
 
             GwtCompilerProcessHandler handler = new GwtCompilerProcessHandler(commandLine, context, gwtModuleFile.get().getUrl(), extension.getModule());
             handler.startNotify();
