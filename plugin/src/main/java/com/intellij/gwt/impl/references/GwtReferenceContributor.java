@@ -17,13 +17,13 @@ import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ArrayUtil;
-import consulo.xml.patterns.XmlAttributeValuePattern;
+import consulo.xml.language.psi.pattern.XmlAttributeValuePattern;
 
 import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.string;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
-import static consulo.xml.patterns.XmlPatterns.*;
+import static consulo.xml.language.psi.pattern.XmlPatterns.*;
 
 /**
  * @author nik

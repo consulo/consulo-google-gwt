@@ -19,9 +19,9 @@ package com.intellij.gwt.module.model;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.language.psi.XmlFile;
-import consulo.xml.util.xml.DomElement;
-import consulo.xml.util.xml.HyphenNameStrategy;
-import consulo.xml.util.xml.NameStrategyForAttributes;
+import consulo.xml.dom.DomElement;
+import consulo.xml.dom.HyphenNameStrategy;
+import consulo.xml.dom.NameStrategyForAttributes;
 
 import java.util.List;
 

@@ -30,6 +30,7 @@ import consulo.execution.ui.awt.RawCommandLineEditor;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.google.gwt.localize.GwtLocalize;
 import consulo.gwt.jakartaee.module.extension.JavaEEGoogleGwtModuleExtension;
+import consulo.html.language.HtmlFileType;
 import consulo.jakartaee.web.module.extension.JavaWebModuleExtension;
 import consulo.language.file.FileTypeManager;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -44,7 +45,6 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import consulo.xml.ide.highlighter.HtmlFileType;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

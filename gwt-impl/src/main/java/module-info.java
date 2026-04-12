@@ -8,6 +8,7 @@ module com.intellij.gwt.base
 	requires transitive consulo.java.analysis.impl;
 	requires consulo.java;
 	requires com.intellij.properties;
+	requires com.intellij.xml.html.api;
 
 	// TODO remove in future
 	requires java.desktop;

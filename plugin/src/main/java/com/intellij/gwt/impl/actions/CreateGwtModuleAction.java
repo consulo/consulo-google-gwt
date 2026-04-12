@@ -34,7 +34,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import consulo.xml.ide.highlighter.HtmlFileType;
+import consulo.html.language.HtmlFileType;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;

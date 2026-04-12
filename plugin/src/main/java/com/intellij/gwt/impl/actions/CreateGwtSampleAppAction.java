@@ -35,7 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import consulo.xml.ide.highlighter.HtmlFileType;
+import consulo.html.language.HtmlFileType;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;

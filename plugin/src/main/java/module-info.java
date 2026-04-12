@@ -11,6 +11,8 @@ module com.intellij.gwt
     requires com.intellij.properties;
     requires consulo.java.properties.impl;
 
+    requires com.intellij.xml.html.api;
+
     opens com.intellij.gwt.impl.inspections to consulo.util.xml.serializer;
 
     // TODO remove in future
