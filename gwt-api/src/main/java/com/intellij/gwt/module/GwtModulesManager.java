@@ -20,7 +20,6 @@ import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -52,7 +51,7 @@ public abstract class GwtModulesManager
 
 	public static GwtModulesManager getInstance(@Nonnull Project project)
 	{
-		return ServiceManager.getService(project, GwtModulesManager.class);
+		return project.getInstance(GwtModulesManager.class);
 	}
 
 	@Nonnull

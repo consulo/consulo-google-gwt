@@ -23,7 +23,6 @@ import com.intellij.lang.properties.psi.PropertiesFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 
 import jakarta.annotation.Nonnull;
@@ -37,7 +36,7 @@ public abstract class GwtI18nManager
 {
 	public static GwtI18nManager getInstance(Project project)
 	{
-		return ServiceManager.getService(project, GwtI18nManager.class);
+		return project.getInstance(GwtI18nManager.class);
 	}
 
 	@Nonnull

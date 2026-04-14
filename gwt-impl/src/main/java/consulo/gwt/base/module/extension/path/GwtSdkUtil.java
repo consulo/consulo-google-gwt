@@ -19,7 +19,7 @@ package consulo.gwt.base.module.extension.path;
 import com.intellij.gwt.base.i18n.GwtI18nUtil;
 import com.intellij.gwt.sdk.GwtVersion;
 import com.intellij.gwt.base.sdk.GwtVersionImpl;
-import com.intellij.java.impl.openapi.roots.libraries.LibrariesHelper;
+import com.intellij.java.language.projectRoots.LibrariesHelper;
 import com.intellij.java.language.impl.JarArchiveFileType;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
