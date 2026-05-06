@@ -1,6 +1,6 @@
 <consulo-plugin-requires>
 	<plugins>
-		<plugin>consulo.javaee</plugin>
+		<plugin>consulo.jakarta.web</plugin>
 		<plugin>org.jetbrains.idea.maven</plugin>
 	</plugins>
 </consulo-plugin-requires>
