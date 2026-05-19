@@ -99,20 +99,20 @@ public class GoogleGwtSdkType extends GwtSdkBaseType {
 
             if (Comparing.equal(extension, "jar")) {
                 if (name.endsWith("-src") || name.endsWith("-sources")) {
-                    sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), SourcesOrderRootType.getInstance());
+                    sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), SourcesOrderRootType.ID);
                 }
                 else if (!name.endsWith("+src")) {
-                    sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), BinariesOrderRootType.getInstance());
+                    sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), BinariesOrderRootType.ID);
                 }
 
                 if (name.equals("gwt-user")) {
-                    sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), SourcesOrderRootType.getInstance());
+                    sdkModificator.addRoot(ArchiveVfsUtil.getArchiveRootForLocalFile(virtualFile), SourcesOrderRootType.ID);
                 }
             }
             else if (name.equals("doc") && virtualFile.isDirectory()) {
                 VirtualFile javadoc = virtualFile.findChild("javadoc");
                 if (javadoc != null) {
-                    sdkModificator.addRoot(javadoc, DocumentationOrderRootType.getInstance());
+                    sdkModificator.addRoot(javadoc, DocumentationOrderRootType.ID);
                 }
             }
         }

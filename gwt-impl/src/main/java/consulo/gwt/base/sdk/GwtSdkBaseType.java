@@ -33,11 +33,18 @@ import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Set;
+
 /**
  * @author VISTALL
  * @since 25-May-16
  */
 public abstract class GwtSdkBaseType extends SdkType {
+    private static final Set<String> ourAllowedRootTypeIds = Set.of(
+        BinariesOrderRootType.ID,
+        SourcesOrderRootType.ID
+    );
+
     public GwtSdkBaseType(@Nonnull String id, @Nonnull LocalizeValue displayName, @Nonnull Image icon) {
         super(id, displayName, icon);
     }
@@ -66,10 +73,10 @@ public abstract class GwtSdkBaseType extends SdkType {
                     continue;
                 }
 
-                sdkModificator.addRoot(archiveRootForLocalFile, BinariesOrderRootType.getInstance());
+                sdkModificator.addRoot(archiveRootForLocalFile, BinariesOrderRootType.ID);
 
                 if (StringUtil.startsWith(name, "vaadin-client")) {
-                    sdkModificator.addRoot(archiveRootForLocalFile, SourcesOrderRootType.getInstance());
+                    sdkModificator.addRoot(archiveRootForLocalFile, SourcesOrderRootType.ID);
                 }
             }
         }
@@ -83,7 +90,7 @@ public abstract class GwtSdkBaseType extends SdkType {
                         continue;
                     }
 
-                    sdkModificator.addRoot(archiveRootForLocalFile, BinariesOrderRootType.getInstance());
+                    sdkModificator.addRoot(archiveRootForLocalFile, BinariesOrderRootType.ID);
                 }
             }
         }
@@ -92,8 +99,8 @@ public abstract class GwtSdkBaseType extends SdkType {
     }
 
     @Override
-    public boolean isRootTypeApplicable(OrderRootType type) {
-        return JavaSdkType.getDefaultJavaSdkType().isRootTypeApplicable(type);
+    public boolean isRootTypeApplicable(String type) {
+        return ourAllowedRootTypeIds.contains(type);
     }
 
     @Nonnull

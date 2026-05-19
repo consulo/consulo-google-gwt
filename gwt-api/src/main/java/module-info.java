@@ -18,4 +18,5 @@ module com.intellij.gwt.api
     exports consulo.gwt.module.extension;
     exports consulo.gwt.module.extension.path;
     exports consulo.google.gwt.localize;
+
 }
