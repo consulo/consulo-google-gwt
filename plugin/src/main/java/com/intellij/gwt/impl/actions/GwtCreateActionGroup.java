@@ -24,6 +24,7 @@ import consulo.google.gwt.base.icon.GwtIconGroup;
 import consulo.google.gwt.localize.GwtLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.AnSeparator;
 import consulo.ui.ex.action.DefaultActionGroup;
 
@@ -38,7 +39,7 @@ import consulo.ui.ex.action.DefaultActionGroup;
     @ActionRef(type = AnSeparator.class),
     @ActionRef(type = CreateGwtSampleAppAction.class),
 }, parents = @ActionParentRef(@ActionRef(id = "NewGroup")))
-public class GwtCreateActionGroup extends DefaultActionGroup {
+public class GwtCreateActionGroup extends DefaultActionGroup implements AnActionWithSyncUpdate {
     public GwtCreateActionGroup() {
         super(GwtLocalize.actionGroupGwtTitle(), true);
         getTemplatePresentation().setDescription(GwtLocalize.actionGroupGwtDescription());
