@@ -46,7 +46,6 @@ public class GwtCreateActionGroup extends DefaultActionGroup implements AnAction
         getTemplatePresentation().setIcon(GwtIconGroup.gwt());
     }
 
-    @RequiredUIAccess
     @Override
     public void update(AnActionEvent e) {
         e.getPresentation().setVisible(GwtCreateActionBase.isUnderSourceRootsOfModuleWithGwtFacet(e));
