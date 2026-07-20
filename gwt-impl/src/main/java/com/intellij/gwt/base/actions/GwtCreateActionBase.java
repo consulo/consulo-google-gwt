@@ -23,6 +23,7 @@ import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.CommonBundle;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
@@ -44,8 +45,13 @@ import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithAsyncUpdate;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.Presentation;
+import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
 import consulo.ui.ex.awt.Messages;
+import consulo.util.concurrent.coroutine.Coroutine;
+import consulo.util.concurrent.coroutine.step.CallSubroutine;
 import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
@@ -112,16 +118,18 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase {
     }
 
     @Override
-    public final void update(final AnActionEvent e) {
-        final Presentation presentation = e.getPresentation();
-        super.update(e);
-
-        if (presentation.isEnabled() && !isUnderSourceRootsOfModuleWithGwtFacet(e)) {
-            presentation.setEnabled(false);
-            presentation.setVisible(false);
-        }
+    public Coroutine<?, ?> updateAsync(AnActionEvent e) {
+        return CallSubroutine.call(() -> super.updateAsync(e))
+            .toCoroutine()
+            .then(ActionSafeReadLock.run(e, presentation -> {
+                if (presentation.isEnabled() && !isUnderSourceRootsOfModuleWithGwtFacet(e)) {
+                    presentation.setEnabled(false);
+                    presentation.setVisible(false);
+                }
+            }));
     }
 
+    @RequiredReadAction
     public static boolean isUnderSourceRootsOfModuleWithGwtFacet(final AnActionEvent e) {
         Module module = e.getData(LangDataKeys.MODULE);
         if (module == null) {
