@@ -24,6 +24,7 @@ import consulo.compiler.CompilerMessageCategory;
 import consulo.google.gwt.localize.GwtLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.process.ExecutionException;
@@ -104,13 +105,13 @@ public class GwtCompilerProcessHandler {
                 String text = event.getText();
 
                 if (outputType.equals(ProcessOutputTypes.STDERR) && text.contains(OutOfMemoryError.class.getName())) {
-                    myContext.addMessage(CompilerMessageCategory.ERROR, text.trim(), null, -1, -1);
+                    myContext.newError(LocalizeValue.of(text.trim())).add();
                     event.getProcessHandler().destroyProcess();
                     return;
                 }
 
                 if (text.startsWith("Error: ")) {
-                    myContext.addMessage(CompilerMessageCategory.ERROR, text, null, -1, -1);
+                    myContext.newError(LocalizeValue.of(text)).add();
                 }
 
                 if (outputType == ProcessOutputTypes.STDERR) {
@@ -190,7 +191,7 @@ public class GwtCompilerProcessHandler {
             }
             else if (line.startsWith(WARNING_PREFIX)) {
                 String message = line.substring(WARNING_PREFIX.length());
-                myContext.addMessage(CompilerMessageCategory.WARNING, message, myCurrentFileUrl, -1, -1);
+                myContext.newWarning(LocalizeValue.of(message)).optionalUrl(myCurrentFileUrl).add();
             }
             else if (line.startsWith(ERROR_PREFIX)) {
                 myStackTraceExpected = false;
@@ -212,7 +213,7 @@ public class GwtCompilerProcessHandler {
                         try {
                             int lineNumber = Integer.parseInt(line.substring(start, end));
                             String message = line.substring(end + ERROR_LINE_SUFFIX.length());
-                            myContext.addMessage(CompilerMessageCategory.ERROR, message, myCurrentFileUrl, lineNumber, 0);
+                            myContext.newError(LocalizeValue.of(message)).optionalUrl(myCurrentFileUrl).position(lineNumber, 0).add();
                             errorLineParsed = true;
                         }
                         catch (NumberFormatException e) {
@@ -224,12 +225,12 @@ public class GwtCompilerProcessHandler {
                 }
 
                 if (MODULE_FILE_ERRORS.contains(line) || myFindingEntryPoints) {
-                    myContext.addMessage(CompilerMessageCategory.ERROR, line, myModuleFileUrl, -1, -1);
+                    myContext.newError(LocalizeValue.of(line)).url(myModuleFileUrl).add();
                     errorLineParsed = true;
                 }
 
                 if (!errorLineParsed && !BUILD_FAILED_MESSAGE.equals(line)) {
-                    myContext.addMessage(CompilerMessageCategory.ERROR, line, null, -1, -1);
+                    myContext.newError(LocalizeValue.of(line)).add();
                     myStackTraceExpected = true;
                 }
             }
@@ -249,7 +250,7 @@ public class GwtCompilerProcessHandler {
                 myFindingEntryPoints = true;
             }
             else if (line.startsWith(STACKTRACE_PREFIX) && myStackTraceExpected) {
-                myContext.addMessage(CompilerMessageCategory.ERROR, line, null, -1, -1);
+                myContext.newError(LocalizeValue.of(line)).add();
             }
             else if (myErrorStream) {
                 processStderrLine(line);
@@ -281,7 +282,7 @@ public class GwtCompilerProcessHandler {
                 category = CompilerMessageCategory.WARNING;
                 myCurrentMessageIsWarning = false;
             }
-            myContext.addMessage(category, line, null, -1, -1);
+            myContext.newMessage(category, LocalizeValue.of(line)).add();
         }
 
         private void setClassName(final String className) {

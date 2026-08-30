@@ -30,7 +30,6 @@ import consulo.module.content.layer.extension.ModuleExtensionWithSdkBase;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.PathsList;
-import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jdom.Element;
 
 import jakarta.annotation.Nonnull;
@@ -86,7 +85,7 @@ public abstract class GoogleGwtModuleExtensionImpl<T extends GoogleGwtModuleExte
 		}
 		else
 		{
-			result.add(new GwtModuleFileProcessingItem(extension, module, VirtualFileUtil.virtualToIoFile(file)));
+			result.add(new GwtModuleFileProcessingItem(extension, module, file.toNioPath()));
 		}
 	}
 

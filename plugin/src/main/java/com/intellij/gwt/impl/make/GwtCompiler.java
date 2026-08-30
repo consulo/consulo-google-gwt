@@ -35,6 +35,7 @@ import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
@@ -119,7 +120,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler {
 						}*/
 
                         VirtualFile moduleFile = gwtModule.getModuleFile();
-                        if (compilerConfiguration.isExcludedFromCompilation(moduleFile)) {
+                        if (compilerConfiguration.isExcludedFromCompilation(moduleFile.toNioPath())) {
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug("GWT module '" + gwtModule.getQualifiedName() + "' is excluded from compilation.");
                             }
@@ -175,7 +176,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler {
             GwtLibraryPathProvider.Info pathInfo = GwtLibraryPathProvider.EP_NAME.computeSafeIfAny(it -> it.resolveInfo(extension));
             assert pathInfo != null;
             if (pathInfo.getDevJarPath() == null) {
-                context.addMessage(CompilerMessageCategory.ERROR, "gwt-dev.jar is not resolved", null, -1, -1);
+                context.newError(LocalizeValue.localizeTODO("gwt-dev.jar is not resolved")).add();
                 return false;
             }
 
@@ -192,12 +193,12 @@ public class GwtCompiler implements ClassInstrumentingCompiler {
             handler.waitFor();
             Integer exitCode = handler.getExitCode();
             if (exitCode == null || exitCode != 0) {
-                context.addMessage(CompilerMessageCategory.ERROR, "Compiler process exited with code: " + exitCode, null, -1, 1);
+                context.newError(LocalizeValue.localizeTODO("Compiler process exited with code: " + exitCode)).add();
             }
         }
         catch (Exception e) {
             LOG.warn(e);
-            context.addMessage(CompilerMessageCategory.ERROR, ExceptionUtil.getThrowableText(e), null, -1, -1);
+            context.newError(LocalizeValue.of(ExceptionUtil.getThrowableText(e))).add();
             return false;
         }
 

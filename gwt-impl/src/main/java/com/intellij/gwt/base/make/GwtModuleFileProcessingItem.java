@@ -20,50 +20,41 @@ import com.intellij.gwt.module.model.GwtModule;
 import consulo.compiler.FileProcessingCompiler;
 import consulo.compiler.ValidityState;
 import consulo.gwt.module.extension.GoogleGwtModuleExtension;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import java.io.File;
+import java.nio.file.Path;
 
 /**
  * @author nik
  */
-public class GwtModuleFileProcessingItem implements FileProcessingCompiler.ProcessingItem
-{
-	private GwtModule myModule;
-	private File myFile;
-	private ValidityState myValidityState;
-	private GoogleGwtModuleExtension myFacet;
+public class GwtModuleFileProcessingItem implements FileProcessingCompiler.ProcessingItem {
+    private final GwtModule myModule;
+    private final Path myFile;
+    private final ValidityState myValidityState;
+    private final GoogleGwtModuleExtension myFacet;
 
-	public GwtModuleFileProcessingItem(final GoogleGwtModuleExtension facet, final GwtModule module, File file)
-	{
-		myModule = module;
-		myFile = file;
-		myFacet = facet;
-		myValidityState = new GwtItemValidityState(myFacet.getOutputStyle(), GwtCompilerPaths.getOutputDirectory(facet));
-	}
+    public GwtModuleFileProcessingItem(GoogleGwtModuleExtension facet, GwtModule module, Path file) {
+        myModule = module;
+        myFile = file;
+        myFacet = facet;
+        myValidityState = new GwtItemValidityState(myFacet.getOutputStyle(), GwtCompilerPaths.getOutputDirectory(facet));
+    }
 
-	@Override
-	@Nonnull
-	public File getFile()
-	{
-		return myFile;
-	}
+    @Override
+    public Path getFile() {
+        return myFile;
+    }
 
-	@Override
-	@Nullable
-	public ValidityState getValidityState()
-	{
-		return myValidityState;
-	}
+    @Override
+    public @Nullable ValidityState getValidityState() {
+        return myValidityState;
+    }
 
-	public GwtModule getModule()
-	{
-		return myModule;
-	}
+    public GwtModule getModule() {
+        return myModule;
+    }
 
-	public GoogleGwtModuleExtension getFacet()
-	{
-		return myFacet;
-	}
+    public GoogleGwtModuleExtension getFacet() {
+        return myFacet;
+    }
 }
