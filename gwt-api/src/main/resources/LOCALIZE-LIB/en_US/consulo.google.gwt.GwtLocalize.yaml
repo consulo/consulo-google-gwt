@@ -228,6 +228,8 @@ progress.title.building.gwt.indices:
   text: Building GWT Indices
 label.html.to.open.text:
   text: '&Html to open:'
+action.text.choose.html.page:
+  text: Choose HTML Page
 dialog.caption.vm.parameters:
   text: VM Parameters
 label.text.vm.parameters:
@@ -237,7 +239,7 @@ label.text.gwt.shell.parameters:
 dialog.caption.gwt.shell.parameters:
   text: GWT Shell Parameters
 checkbox.text.use.custom.web.xml:
-  text: 'Use content from custom ''''&web.xml'''' descriptor '
+  text: 'Use content from custom ''&web.xml'' descriptor'
 choose.text.select.gwt.module:
   text: 'Select GWT module:'
 dialog.title.choose.gwt.module:

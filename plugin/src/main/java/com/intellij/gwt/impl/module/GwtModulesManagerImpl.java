@@ -86,7 +86,7 @@ public class GwtModulesManagerImpl extends GwtModulesManager
 
 	private GwtModule[] getGwtModules(@Nonnull GlobalSearchScope scope)
 	{
-		if(!DumbService.isDumb(myProject))
+		if(DumbService.isDumb(myProject))
 		{
 			return new GwtModule[0];
 		}

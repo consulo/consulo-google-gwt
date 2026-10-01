@@ -45,6 +45,8 @@ module com.intellij.gwt
     requires consulo.util.xml.serializer;
     requires consulo.virtual.file.system.api;
 
+    exports com.intellij.gwt.impl.module.model.impl to consulo.proxy;
+
     opens com.intellij.gwt.impl.inspections to consulo.util.xml.serializer;
 
     // TODO remove in future
