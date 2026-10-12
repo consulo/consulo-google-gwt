@@ -24,6 +24,7 @@ module com.intellij.gwt.base
 	requires consulo.logging.api;
 	requires consulo.module.api;
 	requires consulo.module.content.api;
+	requires consulo.module.ui.api;
 	requires consulo.platform.api;
 	requires consulo.project.api;
 	requires consulo.ui.api;
@@ -35,7 +36,6 @@ module com.intellij.gwt.base
 
 	// TODO remove in future
 	requires java.desktop;
-	requires forms.rt;
 
 	exports com.intellij.gwt.base.actions;
 	exports com.intellij.gwt.base.i18n;

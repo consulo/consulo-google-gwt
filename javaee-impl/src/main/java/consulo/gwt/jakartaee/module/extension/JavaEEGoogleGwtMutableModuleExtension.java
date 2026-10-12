@@ -20,27 +20,20 @@ import consulo.content.bundle.Sdk;
 import consulo.disposer.Disposable;
 import consulo.gwt.base.module.extension.GwtModuleExtensionPanel;
 import consulo.gwt.module.extension.GoogleGwtMutableModuleExtension;
-import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
 import consulo.module.content.layer.ModuleRootLayer;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
-import consulo.module.extension.swing.SwingMutableModuleExtension;
-import consulo.module.ui.extension.ModuleExtensionSdkBoxBuilder;
 import consulo.ui.Component;
-import consulo.ui.Label;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.awt.VerticalFlowLayout;
-import consulo.ui.layout.VerticalLayout;
 import consulo.util.lang.Comparing;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import javax.swing.*;
 
 /**
  * @author VISTALL
  * @since 14.07.14
  */
-public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModuleExtension implements GoogleGwtMutableModuleExtension<JavaEEGoogleGwtModuleExtension>, SwingMutableModuleExtension
+public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModuleExtension implements GoogleGwtMutableModuleExtension<JavaEEGoogleGwtModuleExtension>
 {
 	public JavaEEGoogleGwtMutableModuleExtension(@Nonnull String id, @Nonnull ModuleRootLayer rootModel)
 	{
@@ -59,21 +52,7 @@ public class JavaEEGoogleGwtMutableModuleExtension extends JavaEEGoogleGwtModule
 	@Override
 	public Component createConfigurationComponent(@Nonnull Disposable disposable, @Nonnull Runnable runnable)
 	{
-		return VerticalLayout.create().add(Label.create("Unsupported platform"));
-	}
-
-	@RequiredUIAccess
-	@Nullable
-	@Override
-	public JComponent createConfigurablePanel(@Nonnull Disposable disposable, @Nonnull Runnable runnable)
-	{
-		JPanel panel = new JPanel(new VerticalFlowLayout(true, false));
-		if(GwtLibraryPathProvider.EP_NAME.findFirstSafe(it -> it.canChooseBundle(getModuleRootLayer())) != null)
-		{
-			panel.add(ModuleExtensionSdkBoxBuilder.createAndDefine(this, runnable).build());
-		}
-		panel.add(new GwtModuleExtensionPanel(this));
-		return panel;
+		return GwtModuleExtensionPanel.create(this, getModuleRootLayer(), disposable, runnable);
 	}
 
 	@Override

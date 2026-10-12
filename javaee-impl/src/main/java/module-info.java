@@ -26,16 +26,12 @@ module com.intellij.gwt.jakartaee.impl {
     requires consulo.project.api;
     requires consulo.ui.api;
     requires consulo.ui.ex.api;
-    requires consulo.ui.ex.awt.api;
     requires consulo.util.concurrent.coroutine;
     requires consulo.util.io;
     requires consulo.util.jdom;
     requires consulo.util.lang;
     requires consulo.util.xml.serializer;
     requires consulo.virtual.file.system.api;
-
-    // TODO remove in future
-    requires java.desktop;
 
     exports com.intellij.gwt.jakartaee;
     exports com.intellij.gwt.jakartaee.actions;

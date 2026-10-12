@@ -19,437 +19,187 @@ package consulo.gwt.base.module.extension;
 import com.intellij.gwt.facet.GwtJavaScriptOutputStyle;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.concurrent.coroutine.ReadLock;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.fileChooser.FileChooserTextBoxBuilder;
 import consulo.google.gwt.localize.GwtLocalize;
 import consulo.gwt.module.extension.GoogleGwtMutableModuleExtension;
+import consulo.gwt.module.extension.path.GwtLibraryPathProvider;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
-import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.ModuleRootLayer;
+import consulo.module.ui.extension.ModuleExtensionBundleBoxBuilder;
 import consulo.project.Project;
-import consulo.ui.ex.awt.*;
-import consulo.ui.ex.awt.event.DocumentAdapter;
-import consulo.ui.ex.awt.table.ListTableModel;
-import consulo.ui.ex.awt.table.TableView;
+import consulo.ui.CheckBox;
+import consulo.ui.ComboBox;
+import consulo.ui.Component;
+import consulo.ui.IntBox;
+import consulo.ui.Label;
+import consulo.ui.Table;
+import consulo.ui.TextBox;
+import consulo.ui.UIAccess;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.layout.DockLayout;
+import consulo.ui.layout.ScrollableLayout;
+import consulo.ui.layout.VerticalLayout;
+import consulo.ui.model.FlatDataModel;
+import consulo.ui.model.MutableFlatDataModel;
+import consulo.ui.util.FormBuilder;
+import consulo.util.concurrent.coroutine.Coroutine;
+import consulo.util.concurrent.coroutine.CoroutineScope;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.NumberFormatter;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author nik
  */
-public class GwtModuleExtensionPanel extends JPanel {
-    private JComboBox myOutputStyleBox;
-    private JPanel myMainPanel;
-    private JCheckBox myRunGwtCompilerCheckbox;
-    private JFormattedTextField myCompilerHeapSizeField;
-    private JLabel myCompilerHeapSizeLabel;
-    private JPanel myPackagingPathsPanel;
-    private JTextField myAdditionalCompilerParametersField;
-    private JTextField myAdditionalCompilerVmParametersField;
-    private JLabel myAdditionalCompilerParametersLabel;
-    private TextFieldWithBrowseButton myCompilerOutputDirField;
-    private JLabel myCompilerOutputDirLabel;
+public final class GwtModuleExtensionPanel {
+    private GwtModuleExtensionPanel() {
+    }
 
-    private final TableView<ModulePackagingInfo> myTableView;
-    private ArrayList<ModulePackagingInfo> myModulePackagingInfos;
-    private final ListTableModel<ModulePackagingInfo> myTableModel;
-    private GoogleGwtMutableModuleExtension myExtension;
+    @RequiredUIAccess
+    public static Component create(
+        GoogleGwtMutableModuleExtension<?> extension,
+        ModuleRootLayer moduleRootLayer,
+        Disposable uiDisposable,
+        Runnable updater
+    ) {
+        ComboBox<GwtJavaScriptOutputStyle> outputStyleBox = ComboBox.create(GwtJavaScriptOutputStyle.values());
+        outputStyleBox.setTextRenderer(style -> style == null ? LocalizeValue.empty() : style.getPresentableName());
+        outputStyleBox.setValue(extension.getOutputStyle());
+        outputStyleBox.addValueListener(event -> {
+            GwtJavaScriptOutputStyle style = event.getValue();
+            if (style != null) {
+                extension.setOutputStyle(style);
+            }
+        });
 
-    public GwtModuleExtensionPanel(final GoogleGwtMutableModuleExtension extension) {
-        myExtension = extension;
-        $$$setupUI$$$();
-        myCompilerOutputDirLabel.setLabelFor(myCompilerOutputDirField.getTextField());
-        final Module module = extension.getModule();
-        myCompilerOutputDirField.addBrowseFolderListener(extension.getProject(), new CompilerOutputBrowseFolderActionListener(extension.getProject(),
-            module,
-            myCompilerOutputDirField));
-
-        for (GwtJavaScriptOutputStyle style : GwtJavaScriptOutputStyle.values()) {
-            myOutputStyleBox.addItem(style);
-        }
-        myOutputStyleBox.setSelectedItem(extension.getOutputStyle());
-        myRunGwtCompilerCheckbox.setSelected(extension.isRunGwtCompilerOnMake());
-        myAdditionalCompilerParametersField.setText(extension.getAdditionalCompilerParameters());
-        myAdditionalCompilerVmParametersField.setText(extension.getAdditionalVmCompilerParameters());
+        FileChooserTextBoxBuilder.Controller outputDirBox = FileChooserTextBoxBuilder.create(extension.getProject())
+            .fileChooserDescriptor(FileChooserDescriptorFactory.createSingleFolderDescriptor())
+            .dialogDescription(GwtLocalize.fileChooserDescriptionSelectOutputDirectoryForFilesGeneratedByGwtCompiler())
+            .uiDisposable(uiDisposable)
+            .build();
         String compilerOutputUrl = extension.getCompilerOutputUrl();
-        myCompilerOutputDirField.setText(StringUtil.isEmpty(compilerOutputUrl) ? null : VirtualFileManager.extractPath(compilerOutputUrl));
-        myCompilerOutputDirField.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
-            @Override
-            protected void textChanged(DocumentEvent documentEvent) {
-                String path = StringUtil.nullize(myCompilerOutputDirField.getText(), true);
-
-                extension.setCompilerOutputUrl(path == null ? null : VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL, FileUtil.toSystemIndependentName(path)));
-            }
+        outputDirBox.setValue(StringUtil.isEmpty(compilerOutputUrl) ? "" : VirtualFileManager.extractPath(compilerOutputUrl), false);
+        outputDirBox.getComponent().addValueListener(event -> {
+            String path = StringUtil.nullize(outputDirBox.getValue(), true);
+            extension.setCompilerOutputUrl(
+                path == null ? null : VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL, FileUtil.toSystemIndependentName(path))
+            );
         });
-        myCompilerHeapSizeField.setText(String.valueOf(extension.getCompilerMaxHeapSize()));
-        myCompilerHeapSizeField.getDocument().addDocumentListener(new DocumentAdapter() {
-            @Override
-            protected void textChanged(DocumentEvent documentEvent) {
-                Object value = myCompilerHeapSizeField.getValue();
-                if (value == null) {
-                    return;
-                }
-                extension.setCompilerMaxHeapSize(((Number) value).intValue());
+
+        IntBox heapSizeBox = IntBox.create(extension.getCompilerMaxHeapSize());
+        heapSizeBox.addValueListener(event -> {
+            Integer value = event.getValue();
+            if (value != null) {
+                extension.setCompilerMaxHeapSize(value);
             }
         });
 
-        myAdditionalCompilerParametersField.getDocument().addDocumentListener(new DocumentAdapter() {
-            @Override
-            protected void textChanged(DocumentEvent documentEvent) {
-                Document document = documentEvent.getDocument();
-                try {
-                    extension.setAdditionalCompilerParameters(document.getText(0, document.getLength()));
-                }
-                catch (BadLocationException ignored) {
-                    //
-                }
+        TextBox additionalParametersBox = TextBox.create(extension.getAdditionalCompilerParameters());
+        additionalParametersBox.addValueListener(event ->
+            extension.setAdditionalCompilerParameters(StringUtil.notNullize(event.getValue())));
+
+        TextBox additionalVmParametersBox = TextBox.create(extension.getAdditionalVmCompilerParameters());
+        additionalVmParametersBox.addValueListener(event ->
+            extension.setAdditionalCompilerVmParameters(StringUtil.notNullize(event.getValue())));
+
+        Label outputDirLabel = Label.create(GwtLocalize.labelTextCompilerOutputDirectory());
+        Label heapSizeLabel = Label.create(GwtLocalize.labelTextGwtCompilerHeapSize());
+        Label additionalParametersLabel = Label.create(GwtLocalize.labelTextAdditionalCompilerParameters());
+        Label additionalVmParametersLabel = Label.create(GwtLocalize.labelTextAdditionalVmCompilerParameters());
+
+        FormBuilder formBuilder = FormBuilder.create();
+        formBuilder.addLabeled(GwtLocalize.labelSelectScriptOutputStyleText(), outputStyleBox);
+        formBuilder.addLabeled(outputDirLabel, outputDirBox.getComponent());
+        formBuilder.addLabeled(heapSizeLabel, heapSizeBox);
+        formBuilder.addLabeled(additionalParametersLabel, additionalParametersBox);
+        formBuilder.addLabeled(additionalVmParametersLabel, additionalVmParametersBox);
+
+        MutableFlatDataModel<GwtModulePackagingItem> packagingModel = FlatDataModel.of(List.of());
+        Table<GwtModulePackagingItem> packagingTable = Table.create(packagingModel);
+        packagingTable.addColumn(GwtLocalize.tableColumnNameGwtModule(), GwtModulePackagingItem::moduleName);
+        packagingTable.addColumn(GwtLocalize.tableColumnNameOutputRelativePath(), GwtModulePackagingItem::outputPath);
+        loadPackagingItems(extension, packagingModel, uiDisposable);
+
+        List<Component> compilerComponents = List.of(
+            outputDirLabel,
+            outputDirBox.getComponent(),
+            heapSizeLabel,
+            heapSizeBox,
+            additionalParametersLabel,
+            additionalParametersBox,
+            additionalVmParametersLabel,
+            additionalVmParametersBox,
+            packagingTable
+        );
+
+        CheckBox runCompilerBox = CheckBox.create(GwtLocalize.checkboxRunGwtCompilerOnMake(), extension.isRunGwtCompilerOnMake());
+        runCompilerBox.addValueListener(event -> {
+            boolean enabled = Boolean.TRUE.equals(event.getValue());
+            extension.setRunGwtCompilerOnMake(enabled);
+            for (Component component : compilerComponents) {
+                component.setEnabled(enabled);
             }
         });
+        for (Component component : compilerComponents) {
+            component.setEnabled(extension.isRunGwtCompilerOnMake());
+        }
 
-        myAdditionalCompilerVmParametersField.getDocument().addDocumentListener(new DocumentAdapter() {
-            @Override
-            protected void textChanged(DocumentEvent documentEvent) {
-                Document document = documentEvent.getDocument();
-                try {
-                    extension.setAdditionalCompilerVmParameters(document.getText(0, document.getLength()));
+        VerticalLayout topLayout = VerticalLayout.create();
+        if (GwtLibraryPathProvider.EP_NAME.findFirstSafe(it -> it.canChooseBundle(moduleRootLayer)) != null) {
+            topLayout.add(ModuleExtensionBundleBoxBuilder.createAndDefine(extension, uiDisposable, updater).build());
+        }
+        topLayout.add(runCompilerBox);
+        topLayout.add(formBuilder.build());
+
+        DockLayout layout = DockLayout.create();
+        layout.top(topLayout);
+        layout.center(ScrollableLayout.create(packagingTable));
+        return layout;
+    }
+
+    @RequiredUIAccess
+    private static void loadPackagingItems(
+        GoogleGwtMutableModuleExtension<?> extension,
+        MutableFlatDataModel<GwtModulePackagingItem> packagingModel,
+        Disposable uiDisposable
+    ) {
+        Project project = extension.getProject();
+        Module module = extension.getModule();
+
+        UIAccess uiAccess = UIAccess.current();
+        CoroutineScope scope = CoroutineScope.of(project.coroutineContext());
+        Disposer.register(uiDisposable, scope::cancel);
+
+        Coroutine.first(ReadLock.<Object, List<GwtModulePackagingItem>>apply(ignored -> collectPackagingItems(extension, project, module)))
+            .runAsync(scope, null)
+            .toFuture()
+            .whenCompleteAsync((items, error) -> {
+                if (error == null && items != null && !project.isDisposed() && !Disposer.isDisposed(uiDisposable)) {
+                    packagingModel.replaceAll(items);
                 }
-                catch (BadLocationException ignored) {
-                    //
-                }
-            }
-        });
-
-        myRunGwtCompilerCheckbox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                onCompilerCheckboxChanged();
-            }
-        });
-
-        final ColumnInfo[] columns = {
-            MODULE_NAME_COLUMN,
-            OUTPUT_PATH_COLUMN
-        };
-        myModulePackagingInfos = new ArrayList<ModulePackagingInfo>();
-        myModulePackagingInfos = getPackagingInfos(module);
-        myTableModel = new ListTableModel<ModulePackagingInfo>(columns, myModulePackagingInfos, 0);
-        myTableView = new TableView<ModulePackagingInfo>(myTableModel);
-        myPackagingPathsPanel.add(ScrollPaneFactory.createScrollPane(myTableView), BorderLayout.CENTER);
-
-        int gwtModulesCount = GwtModulesManager.getInstance(module.getProject()).getGwtModules(module).length;
-        int height = (myTableView.getRowHeight() + myTableView.getRowMargin()) * gwtModulesCount + myTableView.getTableHeader().getPreferredSize().height
-            + 2;
-        height = Math.max(height, myPackagingPathsPanel.getMinimumSize().height);
-        height = Math.min(height, 300);
-        myPackagingPathsPanel.setPreferredSize(new Dimension(myPackagingPathsPanel.getPreferredSize().width, height));
-
-        myOutputStyleBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                extension.setOutputStyle((GwtJavaScriptOutputStyle) myOutputStyleBox.getSelectedItem());
-            }
-        });
+            }, uiAccess);
     }
 
-    public JComboBox getOutputStyleBox() {
-        return myOutputStyleBox;
-    }
-
-    public JTextField getCompilerHeapSizeField() {
-        return myCompilerHeapSizeField;
-    }
-
-    private GwtJavaScriptOutputStyle getOutputStyle() {
-        return (GwtJavaScriptOutputStyle) myOutputStyleBox.getSelectedItem();
-    }
-
-    private JPanel getMainPanel() {
-        return myMainPanel;
-    }
-
-    public JComponent createComponent() {
-        return getMainPanel();
-    }
-
-    private void onCompilerCheckboxChanged() {
-        boolean enabled = myRunGwtCompilerCheckbox.isSelected();
-
-        myExtension.setRunGwtCompilerOnMake(enabled);
-        myCompilerHeapSizeLabel.setEnabled(enabled);
-        myCompilerHeapSizeField.setEnabled(enabled);
-        myAdditionalCompilerParametersLabel.setEnabled(enabled);
-        myAdditionalCompilerParametersField.setEnabled(enabled);
-        myAdditionalCompilerVmParametersField.setEnabled(enabled);
-        myCompilerOutputDirLabel.setEnabled(enabled);
-        myCompilerOutputDirField.setEnabled(enabled);
-
-        updatePackagingTable();
-    }
-
-    private void updatePackagingTable() {
-        boolean enable = myRunGwtCompilerCheckbox.isSelected();
-        myTableView.setEnabled(enable);
-    }
-
-/*	private boolean isPackagingSettingsModified()
-    {
-		Module module = myEditorContext.getModule();
-		if(module == null)
-		{
-			return false;
-		}
-
-		ArrayList<ModulePackagingInfo> list = getPackagingInfos(module);
-		return !Comparing.haveEqualElements(list, myModulePackagingInfos);
-	}
-         */
-/*	public void apply() throws ConfigurationException
-    {
-		String gwtUrl = myGwtPathEditor.getUrl();
-
-		myConfiguration.setGwtSdkUrl(gwtUrl);
-		GwtSdkManager.getInstance().registerGwtSdk(gwtUrl);
-		myConfiguration.setOutputStyle(getOutputStyle());
-		myConfiguration.setWebFacetName(getSelectedWebFacet());
-		myConfiguration.setRunGwtCompilerOnMake(myRunGwtCompilerCheckbox.isSelected());
-		myConfiguration.setAdditionalCompilerParameters(myAdditionalCompilerVmParametersField.getText().trim());
-		myConfiguration.setCompilerOutputPath(FileUtil.toSystemIndependentName(myCompilerOutputDirField.getText().trim()));
-		try
-		{
-			myConfiguration.setCompilerMaxHeapSize(Integer.parseInt(myCompilerHeapSizeField.getText().trim()));
-		}
-		catch(NumberFormatException e)
-		{
-			//todo[nik] show warning
-		}
-		Module module = myEditorContext.getModule();
-		if(module != null)
-		{
-			for(ModulePackagingInfo packagingInfo : myModulePackagingInfos)
-			{
-				myConfiguration.setPackagingRelativePath(packagingInfo.myModuleName, packagingInfo.myOutputPath);
-			}
-		}
-	}     */
-
-
-    private ArrayList<ModulePackagingInfo> getPackagingInfos(final Module module) {
-        ArrayList<ModulePackagingInfo> list = new ArrayList<ModulePackagingInfo>();
-        GwtModule[] modules = GwtModulesManager.getInstance(module.getProject()).getGwtModules(module);
-        for (GwtModule gwtModule : modules) {
-            list.add(new ModulePackagingInfo(gwtModule.getQualifiedName(), myExtension.getPackagingRelativePath(gwtModule)));
+    @RequiredReadAction
+    private static List<GwtModulePackagingItem> collectPackagingItems(
+        GoogleGwtMutableModuleExtension<?> extension,
+        Project project,
+        Module module
+    ) {
+        List<GwtModulePackagingItem> items = new ArrayList<>();
+        for (GwtModule gwtModule : GwtModulesManager.getInstance(project).getGwtModules(module)) {
+            items.add(new GwtModulePackagingItem(gwtModule.getQualifiedName(), extension.getPackagingRelativePath(gwtModule)));
         }
-        return list;
-    }
-
-    /**
-     * Method generated by Consulo GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
-     */
-    private void $$$setupUI$$$() {
-        createUIComponents();
-        myMainPanel.setLayout(new GridLayoutManager(7, 3, new Insets(0, 0, 0, 0), -1, -1));
-        final JLabel label1 = new JLabel();
-        this.$$$loadLabelText$$$(label1, GwtLocalize.labelSelectScriptOutputStyleText().get());
-        myMainPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        myOutputStyleBox = new JComboBox();
-        myMainPanel.add(myOutputStyleBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(100, -1), null, 0, false));
-        myRunGwtCompilerCheckbox = new JCheckBox();
-        myRunGwtCompilerCheckbox.setSelected(true);
-        this.$$$loadButtonText$$$(myRunGwtCompilerCheckbox, GwtLocalize.checkboxRunGwtCompilerOnMake().get());
-        myMainPanel.add(myRunGwtCompilerCheckbox, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        myCompilerHeapSizeLabel = new JLabel();
-        this.$$$loadLabelText$$$(myCompilerHeapSizeLabel, GwtLocalize.labelTextGwtCompilerHeapSize().get());
-        myMainPanel.add(myCompilerHeapSizeLabel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        myMainPanel.add(myCompilerHeapSizeField, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(25, -1), null, 0, false));
-        myPackagingPathsPanel = new JPanel();
-        myPackagingPathsPanel.setLayout(new BorderLayout(0, 0));
-        myMainPanel.add(myPackagingPathsPanel, new GridConstraints(6, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(-1, 50), null, null, 0, false));
-        myAdditionalCompilerParametersLabel = new JLabel();
-        this.$$$loadLabelText$$$(myAdditionalCompilerParametersLabel, GwtLocalize.labelTextAdditionalVmCompilerParameters().get());
-        myMainPanel.add(myAdditionalCompilerParametersLabel, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        myAdditionalCompilerVmParametersField = new JTextField();
-        myMainPanel.add(myAdditionalCompilerVmParametersField, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final Spacer spacer1 = new Spacer();
-        myMainPanel.add(spacer1, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        myCompilerOutputDirLabel = new JLabel();
-        myCompilerOutputDirLabel.setText("Output directory:");
-        myMainPanel.add(myCompilerOutputDirLabel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        myCompilerOutputDirField = new TextFieldWithBrowseButton();
-        myMainPanel.add(myCompilerOutputDirField, new GridConstraints(2, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        this.$$$loadLabelText$$$(label2, GwtLocalize.labelTextAdditionalCompilerParameters().get());
-        myMainPanel.add(label2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        myAdditionalCompilerParametersField = new JTextField();
-        myMainPanel.add(myAdditionalCompilerParametersField, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        label1.setLabelFor(myOutputStyleBox);
-        myCompilerHeapSizeLabel.setLabelFor(myCompilerHeapSizeField);
-        myAdditionalCompilerParametersLabel.setLabelFor(myAdditionalCompilerVmParametersField);
-        label2.setLabelFor(myAdditionalCompilerVmParametersField);
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    private void $$$loadLabelText$$$(JLabel component, String text) {
-        StringBuffer result = new StringBuffer();
-        boolean haveMnemonic = false;
-        char mnemonic = '\0';
-        int mnemonicIndex = -1;
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '&') {
-                i++;
-                if (i == text.length()) {
-                    break;
-                }
-                if (!haveMnemonic && text.charAt(i) != '&') {
-                    haveMnemonic = true;
-                    mnemonic = text.charAt(i);
-                    mnemonicIndex = result.length();
-                }
-            }
-            result.append(text.charAt(i));
-        }
-        component.setText(result.toString());
-        if (haveMnemonic) {
-            component.setDisplayedMnemonic(mnemonic);
-            component.setDisplayedMnemonicIndex(mnemonicIndex);
-        }
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    private void $$$loadButtonText$$$(AbstractButton component, String text) {
-        StringBuffer result = new StringBuffer();
-        boolean haveMnemonic = false;
-        char mnemonic = '\0';
-        int mnemonicIndex = -1;
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '&') {
-                i++;
-                if (i == text.length()) {
-                    break;
-                }
-                if (!haveMnemonic && text.charAt(i) != '&') {
-                    haveMnemonic = true;
-                    mnemonic = text.charAt(i);
-                    mnemonicIndex = result.length();
-                }
-            }
-            result.append(text.charAt(i));
-        }
-        component.setText(result.toString());
-        if (haveMnemonic) {
-            component.setMnemonic(mnemonic);
-            component.setDisplayedMnemonicIndex(mnemonicIndex);
-        }
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    public JComponent $$$getRootComponent$$$() {
-        return myMainPanel;
-    }
-
-    private static class ModulePackagingInfo {
-        private final String myModuleName;
-        private String myOutputPath;
-
-        private ModulePackagingInfo(final String moduleName, final String outputPath) {
-            myModuleName = moduleName;
-            myOutputPath = outputPath;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            final ModulePackagingInfo that = (ModulePackagingInfo) o;
-            return myModuleName.equals(that.myModuleName) && myOutputPath.equals(that.myOutputPath);
-
-        }
-
-        @Override
-        public int hashCode() {
-            return 31 * myModuleName.hashCode() + myOutputPath.hashCode();
-        }
-    }
-
-    private static final ColumnInfo<ModulePackagingInfo, String> MODULE_NAME_COLUMN = new ColumnInfo<ModulePackagingInfo,
-        String>(GwtLocalize.tableColumnNameGwtModule().get()) {
-        @Override
-        public String valueOf(final ModulePackagingInfo modulePackagingInfo) {
-            return modulePackagingInfo.myModuleName;
-        }
-    };
-
-    private static final ColumnInfo<ModulePackagingInfo, String> OUTPUT_PATH_COLUMN = new ColumnInfo<ModulePackagingInfo,
-        String>(GwtLocalize.tableColumnNameOutputRelativePath().get()) {
-        @Override
-        public String valueOf(final ModulePackagingInfo modulePackagingInfo) {
-            return modulePackagingInfo.myOutputPath;
-        }
-
-        @Override
-        public boolean isCellEditable(final ModulePackagingInfo modulePackagingInfo) {
-            return true;
-        }
-
-        @Override
-        public void setValue(final ModulePackagingInfo modulePackagingInfo, final String value) {
-            modulePackagingInfo.myOutputPath = value;
-        }
-    };
-
-    private static class CompilerOutputBrowseFolderActionListener extends ComponentWithBrowseButton.BrowseFolderActionListener<JTextField> {
-        private final Module myModule;
-
-        public CompilerOutputBrowseFolderActionListener(final Project project, final Module module, final TextFieldWithBrowseButton textField) {
-            super(null, GwtLocalize.fileChooserDescriptionSelectOutputDirectoryForFilesGeneratedByGwtCompiler().get(), textField, project,
-                FileChooserDescriptorFactory.createSingleFolderDescriptor(), TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
-            myModule = module;
-        }
-
-        @Override
-        protected VirtualFile getInitialFile() {
-            if (StringUtil.isEmpty(getComponentText())) {
-                VirtualFile[] roots = ModuleRootManager.getInstance(myModule).getContentRoots();
-                if (roots.length > 0) {
-                    return roots[0];
-                }
-            }
-            return super.getInitialFile();
-        }
-    }
-
-    private void createUIComponents() {
-        myMainPanel = this;
-        myCompilerHeapSizeField = new JFormattedTextField(new NumberFormatter());
+        return items;
     }
 }
