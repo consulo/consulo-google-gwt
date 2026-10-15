@@ -106,7 +106,7 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
     @RequiredUIAccess
     protected Component createUIComponent() {
         ComboBox<Module> modulesBox = ComboBox.create(myModulesModel);
-        modulesBox.setRender((presentation, item) -> {
+        modulesBox.setRenderer((presentation, item) -> {
             Module module = item.getValue();
             if (module != null) {
                 presentation.withIcon(PlatformIconGroup.nodesModule());
@@ -190,8 +190,12 @@ public class GwtRunConfigurationEditor extends SettingsEditor<GwtRunConfiguratio
         TextBoxWithExpandAction gwtShellParameters = myGwtShellParameters;
         CheckBox patchWebXmlCheckBox = myPatchWebXmlCheckBox;
         FileChooserTextBoxBuilder.Controller webXmlField = myWebXmlField;
-        if (modulesBox == null || htmlPageBox == null || vmParameters == null || gwtShellParameters == null
-            || patchWebXmlCheckBox == null || webXmlField == null) {
+        if (modulesBox == null
+            || htmlPageBox == null
+            || vmParameters == null
+            || gwtShellParameters == null
+            || patchWebXmlCheckBox == null
+            || webXmlField == null) {
             return;
         }
 
