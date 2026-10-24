@@ -17,7 +17,6 @@
 package consulo.gwt.jakartaee.run;
 
 import com.intellij.gwt.jakartaee.run.GwtRunConfiguration;
-import com.intellij.gwt.jakartaee.run.GwtRunConfigurationEditor;
 import com.intellij.gwt.jakartaee.run.GwtRunConfigurationType;
 import com.intellij.gwt.module.GwtModulesManager;
 import com.intellij.gwt.module.model.GwtModule;
@@ -58,7 +57,7 @@ public class GwtRunConfigurationProducer extends RunConfigurationProducer<GwtRun
         Pair<GwtModule, String> pair = findGwtModule(configurationContext.getLocation());
         if (pair != null) {
             GwtModule gwtModule = pair.getFirst();
-            String path = GwtRunConfigurationEditor.getPath(gwtModule, pair.getSecond());
+            String path = GwtRunConfiguration.getPagePath(gwtModule, pair.getSecond());
             runConfiguration.setModule(gwtModule.getModule());
             runConfiguration.setPage(path);
             return true;
@@ -74,7 +73,7 @@ public class GwtRunConfigurationProducer extends RunConfigurationProducer<GwtRun
             Module module1 = runConfiguration.getModule();
 
             GwtModule gwtModule = pair.getFirst();
-            String pagePath2 = GwtRunConfigurationEditor.getPath(gwtModule, pair.getSecond());
+            String pagePath2 = GwtRunConfiguration.getPagePath(gwtModule, pair.getSecond());
             Module module2 = gwtModule.getModule();
             return pagePath2.equals(pagePath1) && Comparing.equal(module1, module2);
         }

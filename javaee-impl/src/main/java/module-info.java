@@ -40,4 +40,6 @@ module com.intellij.gwt.jakartaee.impl {
     exports com.intellij.gwt.jakartaee.run;
     exports consulo.gwt.jakartaee.module.extension;
     exports consulo.gwt.jakartaee.run;
+
+    opens com.intellij.gwt.jakartaee.run to consulo.util.xml.serializer, consulo.execution.api;
 }

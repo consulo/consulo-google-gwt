@@ -334,3 +334,11 @@ ant.target.name.run.gwt.compiler:
   text: Run GWT compiler
 ant.target.comment.run.gwt.compiler.for.gwt.module.0:
   text: Run GWT compiler for GWT module {0}
+run.configuration.fragment.html.page:
+  text: HTML page
+run.configuration.fragment.vm.parameters:
+  text: VM parameters
+run.configuration.fragment.shell.parameters:
+  text: GWT shell parameters
+run.configuration.fragment.custom.web.xml:
+  text: Custom web.xml

@@ -16,15 +16,16 @@
 
 package com.intellij.gwt.jakartaee.run;
 
+import com.intellij.gwt.module.model.GwtModule;
 import com.intellij.java.execution.configurations.JavaCommandLineState;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
 import consulo.content.bundle.Sdk;
 import consulo.execution.CantRunException;
 import consulo.execution.RuntimeConfigurationException;
+import consulo.execution.configuration.LegacyRunConfigurationConverter;
 import consulo.execution.configuration.ModuleBasedConfiguration;
-import consulo.execution.configuration.RunConfiguration;
 import consulo.execution.configuration.RunProfileState;
-import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.configuration.fragment.RunConfigurationFragment;
 import consulo.execution.executor.Executor;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.console.TextConsoleBuilderFactory;
@@ -36,25 +37,17 @@ import consulo.module.Module;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import consulo.util.xml.serializer.DefaultJDOMExternalizer;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> {
-    @NonNls
     private static final String MODULE = "module";
-    @NonNls
     private static final String PAGE = "page";
-    public String VM_PARAMETERS = "";
-    public String SHELL_PARAMETERS = "";
-    public String RUN_PAGE = "";
-    public String CUSTOM_WEB_XML;
 
     public GwtRunConfiguration(String name, Project project, GwtRunConfigurationFactory configurationFactory) {
         super(name, new JavaRunConfigurationModule(project, true), configurationFactory);
@@ -64,10 +57,47 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
         this(GwtLocalize.defaultGwtRunConfigurationName().get(), project, configurationFactory);
     }
 
-    @Nonnull
     @Override
-    public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new GwtRunConfigurationEditor(getProject());
+    protected Class<GwtRunConfigurationOptions> getOptionsClass() {
+        return GwtRunConfigurationOptions.class;
+    }
+
+    @Override
+    public GwtRunConfigurationOptions getOptions() {
+        return (GwtRunConfigurationOptions) super.getOptions();
+    }
+
+    @Override
+    protected void convertLegacyState(LegacyRunConfigurationConverter converter) {
+        super.convertLegacyState(converter);
+
+        GwtRunConfigurationLegacyState old = converter.readXml(GwtRunConfigurationLegacyState.class);
+
+        String page = old.RUN_PAGE;
+        Element module = converter.getElement().getChild(MODULE);
+        if (module != null) {
+            String modulePage = module.getAttributeValue(PAGE);
+            if (!StringUtil.isEmpty(modulePage)) {
+                page = modulePage;
+            }
+        }
+
+        GwtRunConfigurationOptions options = new GwtRunConfigurationOptions();
+        options.setPage(page);
+        options.setVmParameters(old.VM_PARAMETERS);
+        options.setShellParameters(old.SHELL_PARAMETERS);
+        options.setCustomWebXml(old.CUSTOM_WEB_XML);
+        converter.setOptions(options);
+    }
+
+    @Override
+    public List<RunConfigurationFragment<?>> createFragments() {
+        return List.of(
+            new GwtHtmlPageFragment(),
+            new GwtVmParametersFragment(),
+            new GwtShellParametersFragment(),
+            new GwtCustomWebXmlFragment()
+        );
     }
 
     @Override
@@ -88,7 +118,14 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
             throw CantRunException.noJdkForModule(getModule());
         }
 
-        final JavaCommandLineState state = new GwtCommandLineState(extension, env, RUN_PAGE, VM_PARAMETERS, SHELL_PARAMETERS, CUSTOM_WEB_XML);
+        final JavaCommandLineState state = new GwtCommandLineState(
+            extension,
+            env,
+            StringUtil.notNullize(getPage()),
+            StringUtil.notNullize(getVmParameters()),
+            StringUtil.notNullize(getShellParameters()),
+            getCustomWebXml()
+        );
 
         state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject()));
         return state;
@@ -99,29 +136,20 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
         getConfigurationModule().checkForWarning();
     }
 
-
     @Override
     public Collection<Module> getValidModules() {
-        return getAllModules();
+        List<Module> modules = new ArrayList<>();
+        for (Module module : getAllModules()) {
+            if (ModuleUtilCore.getExtension(module, JavaEEGoogleGwtModuleExtension.class) != null) {
+                modules.add(module);
+            }
+        }
+        return modules;
     }
 
     @Nullable
-    public
-    Module getModule() {
+    public Module getModule() {
         return getConfigurationModule().getModule();
-    }
-
-    @Override
-    public void readExternal(Element element) throws InvalidDataException {
-        DefaultJDOMExternalizer.readExternal(this, element);
-        Element module = element.getChild(MODULE);
-        if (module != null) {
-            final String page = module.getAttributeValue(PAGE);
-            if (!StringUtil.isEmpty(page)) {
-                RUN_PAGE = page;
-            }
-        }
-        super.readExternal(element);
     }
 
     @Override
@@ -129,21 +157,46 @@ public class GwtRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
         return super.clone();
     }
 
-    @Override
-    public void writeExternal(Element element) throws WriteExternalException {
-        DefaultJDOMExternalizer.writeExternal(this, element);
-        super.writeExternal(element);
+    public void setPage(@Nullable String page) {
+        getOptions().setPage(page);
     }
 
-    public void setPage(String runPage) {
-        if (runPage == null) {
-            runPage = "";
-        }
-        RUN_PAGE = runPage;
-    }
-
+    @Nullable
     public String getPage() {
-        return RUN_PAGE;
+        return getOptions().getPage();
     }
 
+    @Nullable
+    public String getVmParameters() {
+        return getOptions().getVmParameters();
+    }
+
+    public void setVmParameters(@Nullable String vmParameters) {
+        getOptions().setVmParameters(vmParameters);
+    }
+
+    @Nullable
+    public String getShellParameters() {
+        return getOptions().getShellParameters();
+    }
+
+    public void setShellParameters(@Nullable String shellParameters) {
+        getOptions().setShellParameters(shellParameters);
+    }
+
+    /**
+     * @return the URL of the web.xml whose content replaces the module one, {@code null} for the module web.xml
+     */
+    @Nullable
+    public String getCustomWebXml() {
+        return getOptions().getCustomWebXml();
+    }
+
+    public void setCustomWebXml(@Nullable String customWebXml) {
+        getOptions().setCustomWebXml(customWebXml);
+    }
+
+    public static String getPagePath(GwtModule gwtModule, String relativePath) {
+        return gwtModule.getQualifiedName() + "/" + relativePath;
+    }
 }
