@@ -215,7 +215,7 @@ public class GwtCompiler implements ClassInstrumentingCompiler {
             }
         });
 
-        CompilerUtil.refreshIODirectories(Collections.singletonList(outputDir));
+        CompilerUtil.refreshDirectories(Collections.singletonList(outputDir.toPath()));
 
         return context.getMessageCount(CompilerMessageCategory.ERROR) == 0;
     }

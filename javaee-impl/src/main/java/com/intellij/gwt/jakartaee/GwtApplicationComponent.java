@@ -21,8 +21,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.disposer.Disposable;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.virtualFileSystem.FileWatchService;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -34,14 +33,14 @@ import jakarta.inject.Singleton;
 @Singleton
 public class GwtApplicationComponent implements Disposable
 {
-	private final LocalFileSystem myLocalFileSystem;
-	private final LocalFileSystem.WatchRequest myWatchRequest;
+	private final FileWatchService myFileWatchService;
+	private final FileWatchService.WatchRequest myWatchRequest;
 
 	@Inject
-	public GwtApplicationComponent(VirtualFileManager virtualFileManager)
+	public GwtApplicationComponent(FileWatchService fileWatchService)
 	{
-		myLocalFileSystem = LocalFileSystem.get(virtualFileManager);
-		myWatchRequest = myLocalFileSystem.addRootToWatch(GwtCompilerPaths.getOutputRoot().getAbsolutePath(), true);
+		myFileWatchService = fileWatchService;
+		myWatchRequest = myFileWatchService.addRootToWatch(GwtCompilerPaths.getOutputRoot().toPath().toAbsolutePath(), true);
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class GwtApplicationComponent implements Disposable
 	{
 		if(myWatchRequest != null)
 		{
-			myLocalFileSystem.removeWatchedRoot(myWatchRequest);
+			myFileWatchService.removeWatchedRoot(myWatchRequest);
 		}
 	}
 }
