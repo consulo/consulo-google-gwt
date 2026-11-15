@@ -42,6 +42,7 @@ import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
+import consulo.module.extension.ModuleExtensionHelper;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
@@ -122,7 +123,16 @@ public abstract class GwtCreateActionBase extends CreateElementActionBase {
         return CallSubroutine.call(() -> super.updateAsync(e))
             .toCoroutine()
             .then(ActionSafeReadLock.run(e, presentation -> {
-                if (presentation.isEnabled() && !isUnderSourceRootsOfModuleWithGwtFacet(e)) {
+                // no module with the GWT extension: no directory can be under one. Otherwise what the base class update
+                // decided stands, and a presentation it disabled skips the part under the lock
+                Project project = e.getData(Project.KEY);
+                if (project == null || project.isDisposed()
+                    || !ModuleExtensionHelper.getInstance(project).hasModuleExtension(GoogleGwtModuleExtension.class)) {
+                    presentation.setEnabled(false);
+                    presentation.setVisible(false);
+                }
+            }, presentation -> {
+                if (!isUnderSourceRootsOfModuleWithGwtFacet(e)) {
                     presentation.setEnabled(false);
                     presentation.setVisible(false);
                 }
